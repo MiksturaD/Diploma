@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Проект Гурман</title>
+    <meta name="keywords" content="Поесть в Красноярске, отзывы о рестроранах, кафе и рестрораны Красноярск">
+    <meta name="description" content="Отзывы и обзоры ресторанов и кафе в г. Красноярске">
+    <meta name="author" content="Губанов Алексей">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- owl css -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- responsive-->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<!-- body -->
+
+<body class="main-layout">
+    <!-- loader  -->
+    <div class="loader_bg">
+        <div class="loader"><img src="images/animated_logo.gif" alt="" /></div>
+    </div>
+
+    <div class="wrapper">
+    <!-- end loader -->
+
+     <div class="sidebar">
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+
+                <div id="dismiss">
+                    <i class="fa fa-arrow-left"><img src="images/icon.jpg"></i>
+                </div>
+
+                <ul class="list-unstyled components">
+
+                    <li class="active">
+                        <a href="index.html">Главная</a>
+                    </li>
+                    <li>
+                        <a href="about.html">О нас</a>
+                    </li>
+                    <li>
+                        <a href="reviews.html">Наши Гурманы</a>
+                    </li>
+                    <li>
+                        <a href="poster.html">Афиша мероприятий</a>
+                    </li>
+                    <li>
+                        <a href="contact.html">Свяжитесь с нами</a>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+
+    <div id="content">
+    <!-- header -->
+    <header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="full">
+                        <a class="logo" href="index.html"><img src="images/logo.png" alt="#" width="70wh" height="70wh" /></a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="full">
+                        <div class="right_header_info">
+                            <ul>
+                                <li class="dinone">Свяжитесь с нами : <img style="margin-right: 15px;margin-left: 15px;" src="images/phone_icon.png" alt="#"><a href="#">+7 923 555 55 55</a></li>
+                                <li class="dinone"><img style="margin-right: 15px;" src="images/mail_icon.png" alt="#"><a href="#">pochta@mail.ru</a></li>
+                                <li class="dinone"><img style="margin-right: 15px;height: 21px;position: relative;top: -2px;" src="images/location_icon.png" alt="#"><a href="#">г. Красноярск</a></li>
+                                <li class="button_user"><a class="button active" href="#">Вход</a><a class="button" href="#">Регистрация</a></li>
+                                <li>
+                                    <button type="button" id="sidebarCollapse">
+                                        <img src="images/menu_icon.png" alt="#">
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- end header -->
+    <!-- start slider section -->
+    <div class="slider_section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="full">
+                        <div id="main_slider" class="carousel vert slide" data-ride="carousel" data-interval="5000">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="slider_cont">
+                                                <h3>Изучай обзоры на рестораны и кафе<br>В любимом Красноярске</h3>
+                                                <p>Отзывы составлены людьми, которые искушены в еде и знают места, где поесть</p>
+                                                <a class="main_bt_border" href="#">Отзывы</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="slider_image full text_align_center">
+                                                <img class="img-responsive" src="images/Rest_interior.png" alt="#" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="slider_cont">
+                                                <h3>Афиша мероприятий<br>События в заведениях города</h3>
+                                                <p>Здесь вы увидите афишу мероприятий в кафе и ресторанах города Красноярска</p>
+                                                <a class="main_bt_border" href="#">Афиша</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 full text_align_center">
+                                            <div class="slider_image">
+                                                <img class="img-responsive" src="images/Rest_interior_2.png" alt="#" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+                                <i class="fa fa-angle-up"><img src="images/up.jpg"></i>
+                            </a>
+                            <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+                                <i class="fa fa-angle-down"><img src="images/down.jpg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end slider section -->
+    <!-- section -->
+    <section class="resip_section">
+        <div class="container">
+            <div class="row">
+         <div class="col-md-12">
+       <div class="ourheading">
+    <h2>Топ Гурманов</h2>
+  </div>
+</div>    
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="owl-carousel owl-theme">
+
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs1.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Петруха</h3>
+                        <h4><span class="theme_color">★★★★★</span>123</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs2.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Надюха</h3>
+                        <h4><span class="theme_color">★★★★</span>100</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs3.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Илюха</h3>
+                        <h4><span class="theme_color">★★★★</span>80</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs4.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Катюха</h3>
+                        <h4><span class="theme_color">★★★</span>50</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs5.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Чань-юха</h3>
+                        <h4><span class="theme_color">★★★</span>4000</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs1.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Петруха</h3>
+                        <h4><span class="theme_color">★★★★★</span>312</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs2.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Надюха</h3>
+                        <h4><span class="theme_color">$</span>212</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs3.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Илюха</h3>
+                        <h4><span class="theme_color">★★</span>30</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs4.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Катюха</h3>
+                        <h4><span class="theme_color">★</span>10</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="product_blog_img">
+                        <img src="images/rs5.png" alt="#" />
+                    </div>
+                    <div class="product_blog_cont">
+                        <h3>Чань-хуа</h3>
+                        <h4><span class="theme_color">★★</span>50</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</section>
+<div class="bg_bg">
+<!-- about -->
+<div class="about">
+    <div class="container">
+      <div class="row">
+         <div class="col-md-12">
+             <div class="title">
+                <i><img src="images/title.png" alt="#"/></i>
+                <h2>Афиша мероприятий и событий в мире еды</h2>
+                <span>
+                    Здесь собраны анонсы всех мероприятий города
+                </span>
+             </div>
+          </div>
+       </div>
+       <div class="row">
+         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+             <div class="about_box">
+                 <h3>Винный вечер в 0,75 please</h3>
+                 <p>Винный ужин – одно из наиболее популярных развлечений для элитной публики. Поэтому мероприятия такого формата стремятся регулярно проводить самые различные рестораны, гостиницы, а также ивент-агентства. Суть данного развлечения заключается в дегустации изысканных престижных вин с тщательно подобранными закусками в шикарной атмосфере. Его можно провести как просто для привлечения клиентов, так и в качестве приятного бонуса для определенной аудитории или как развлекательный элемент какого-либо празднования. </p>
+                 <a href="#">Перейти к мероприятию <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+             </div>
+         </div>
+          <div class="col-xl-5 col-lg-5 col-md-10 col-sm-12 about_img_boxpdnt">
+             <div class="about_img">
+                 <figure><img src="images/about-img.jpg" alt="#/"></figure>
+             </div>
+         </div>      
+       </div> 
+    </div>
+</div>
+<!-- end about -->
+
+<!-- poster -->
+<div class="poster">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="title">
+          <i><img src="images/title.png" alt="#"/></i>
+          <h2>Недавние отзывы</h2>
+          <span>Ребята недавно покушали и делятся с нами своим опытом</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mar_bottom">
+        <div class="blog_box">
+          <div class="blog_img_box">
+            <figure><img src="images/blog_img1.png" alt="#"/>
+             <span>10 октября 2024</span>
+            </figure>
+          </div>
+          <h3>0,75 Please</h3>
+          <p>Несколько раз были в 0,75 — ВСЕГДА очень вкусно и обслуживание на высшем уровне, начиная от приветливых хостес и заканчивая прекрасными официантками (Агата просто лапочка) </p>
+        </div>
+      </div>
+       <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mar_bottom">
+        <div class="blog_box">
+          <div class="blog_img_box">
+            <figure><img src="images/blog_img2.png" alt="#"/>
+             <span>09 октября 2024</span>
+            </figure>
+          </div>
+          <h3>Хозяин тайги</h3>
+          <p>Вкусные настойки, интересные коктейли.
+            Пельмени из оленины - просто бомба. А вот солянка была так себе, совершенно тусклый вкус, за такую цену было желание вернуть. Уха вкусная, но рыбы маловато.
+            Рекомендую зайти и взять пельмешек с кедровой настойкой. </p>
+        </div>
+      </div>
+       <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+        <div class="blog_box">
+          <div class="blog_img_box">
+            <figure><img src="images/blog_img3.png" alt="#"/>
+             <span>05 октября 2024</span>
+            </figure>
+          </div>
+          <h3>Тунгуска</h3>
+          <p>На мой взгляд - лучшее заведение города. вкусно, изыскано, чисто, просто удивительно! однозначно рекомендую. Главное - забронировать стол, иначе можно не попасть (пару раз было) </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end poster -->
+
+<!-- Наш создатель -->
+<div class="Client">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="title">
+          <i><img src="images/title.png" alt="#"/></i>
+          <h2>Гурман недели</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+         <div class="Client_box">
+           <img src="images/client.jpg" alt="#"/>
+           <h3>Алексей Губанов</h3>
+           <p>Мы сами создаем истории и помогаем найти то, что подарит вам массу воспоминаний о приятном вечере.</p>
+           <i><img src="images/client_icon.png" alt="#"/></i>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>  
+<!-- конец наш создатель -->
+</div>
+    <!-- footer -->
+    <fooetr>
+        <div class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                  <div class=" col-md-12">
+                    <h2>Свяжитесь<strong class="white"> с нами</strong></h2>
+                  </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                      
+                        <form class="main_form">
+                            <div class="row">
+                             
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <input class="form-control" placeholder="Имя" type="text" name="Name">
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <input class="form-control" placeholder="Email" type="text" name="Email">
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <input class="form-control" placeholder="Телефон" type="text" name="Phone">
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <textarea class="textarea" placeholder="Сообщение" type="text" name="Message"></textarea>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <button class="send">Отправить</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <div class="img-box">
+                            <figure><img src="images/img.jpg" alt="img" /></figure>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="footer_logo">
+                          <a href="index.html"><img src="images/logo1.jpg" height="100wh" width="100wh" alt="logo" /></a>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="lik">
+                            <li class="active"> <a href="index.html">Главная</a></li>
+                            <li> <a href="about.html">О нас</a></li>
+                            <li> <a href="reviews.html">Отзывы</a></li>
+                            <li> <a href="poster.html">Афиша</a></li>
+                            <li> <a href="contact.html">Свяжитесь с нами</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="new">
+                            <h3>Новости</h3>
+                            <form class="newtetter">
+                                <input class="tetter" placeholder="Твой email" type="text" name="Your email">
+                                <button class="submit">Подписаться</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <div class="container">
+                    <p>© 2024 Все права защищены! MiksturaD</p>
+                </div>
+            </div>
+        </div>
+    </fooetr>
+    <!-- end footer -->
+
+    </div>
+    </div>
+    <div class="overlay"></div>
+    <!-- Javascript files-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/custom.js"></script>
+     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    
+     <script src="js/jquery-3.0.0.min.js"></script>
+   <script type="text/javascript">
+        $(document).ready(function() {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function() {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+
+    <style>
+    #owl-demo .item{
+        margin: 3px;
+    }
+    #owl-demo .item img{
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    </style>
+
+     
+      <script>
+         $(document).ready(function() {
+           var owl = $('.owl-carousel');
+           owl.owlCarousel({
+             margin: 10,
+             nav: true,
+             loop: true,
+             responsive: {
+               0: {
+                 items: 1
+               },
+               600: {
+                 items: 2
+               },
+               1000: {
+                 items: 5
+               }
+             }
+           })
+         })
+      </script>
+
+</body>
+
+</html>

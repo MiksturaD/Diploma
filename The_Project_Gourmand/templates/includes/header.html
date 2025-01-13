@@ -1,0 +1,29 @@
+{% load static %}
+<header>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="full">
+                    <a class="logo" href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="#" width="70wh" height="70wh" /></a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="full">
+                    <div class="right_header_info">
+                        <ul>
+                            <li class="dinone">Свяжитесь с нами : <img style="margin-right: 15px;margin-left: 15px;" src="{% static 'img/phone_icon.png' %}" alt="#"><a href="#">+7 923 555 55 55</a></li>
+                            <li class="dinone"><img style="margin-right: 15px;" src="{% static 'img/mail_icon.png' %}" alt="#"><a href="#">pochta@mail.ru</a></li>
+                            <li class="dinone"><img style="margin-right: 15px;height: 21px;position: relative;top: -2px;" src="{% static 'img/location_icon.png' %}" alt="#"><a href="#">г. Красноярск</a></li>
+                            <li class="button_user"><a class="button active" href="#">Вход</a><a class="button" href="#">Регистрация</a></li>
+                            <li>
+                                <button type="button" id="sidebarCollapse">
+                                    <img src="{% static 'img/menu_icon.png' %}" alt="#">
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

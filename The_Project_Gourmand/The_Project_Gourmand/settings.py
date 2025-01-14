@@ -100,7 +100,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+AUTH_USER_MODEL = 'gourmand.User'  # Изменяем базовую модель на нашу
 
+LOGIN_URL = '/signin/'  #  Автоматический редирект на эту страницу, если для отображения страницы нужна авторизация
+LOGIN_REDIRECT_URL = '/index/'  #  Автоматический редирект, когда пользователь произвел аутентификацию
+LOGOUT_REDIRECT_URL = '/index/'  #  Автоматический редирект, если пользователь произвел выход из системы
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

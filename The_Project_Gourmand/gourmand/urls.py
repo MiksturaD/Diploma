@@ -20,4 +20,6 @@ urlpatterns = [
     path('reviews', views.reviews, name='reviews'),
     path('review/<int:review_id>/', views.review, name='review'),
     path('review/create/', views.create_review, name='create_review'),
+    path('about/', views.about, name='about'),
+    path('contacts/', views.contacts, name='contacts'),
 ]

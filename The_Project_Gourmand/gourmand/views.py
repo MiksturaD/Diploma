@@ -1,8 +1,11 @@
 from django.shortcuts import render
 
+from gourmand.models import Review
+
+
 def index(request):
-  #category_list = Category.objects.all()
-  return render(request, 'gourmand/index.html')#, context={'categories': category_list})
+  review_list = Review.objects.all()
+  return render(request, 'gourmand/index.html', context={'reviews': review_list})
 
 
 def main(request):
@@ -62,4 +65,12 @@ def review(request):
 
 
 def create_review(request):
+  return None
+
+
+def about(request):
+  return None
+
+
+def contacts(request):
   return None

@@ -1,0 +1,17 @@
+{% include 'gourmand/base.html' %}
+{% include 'includes/header.html' %}
+
+{% block carousel %}
+  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
+    {% block content %}{% endblock %} <!-- Здесь будет контент каждого шаблона -->
+  </section>
+
+{% endblock %}
+
+<section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
+    {% include 'gourmand/reviews.html' %}
+</section>
+
+
+
+{% include 'includes/footer.html' %}

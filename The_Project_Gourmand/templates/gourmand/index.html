@@ -2,11 +2,7 @@
 
 
 {% block content %}
-{#  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">#}
-{#    {% block carousel %}#}
-{#        {% include 'gourmand/carousel.html' %}#}
-{#    {% endblock %}#}
-{#  </section>#}
+
   <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
     {% block events %}
         {% include 'gourmand/events.html' %}
@@ -35,11 +31,5 @@
     
 
 {% endblock %}
-
-<section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
-    {% include 'gourmand/reviews.html' %}
-</section>
-
-
 
 {% include 'includes/footer.html' %}

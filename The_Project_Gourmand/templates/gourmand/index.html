@@ -3,27 +3,27 @@
 
 {% block content %}
 
-  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
-    {% block events %}
-        {% include 'gourmand/events.html' %}
+  <section class="container" style="min-height: calc(100vh - 56px - 56px);">
+    {% block carousel %}
+        {% include 'gourmand/carousel.html' %}
     {% endblock %}
   </section>
-  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
+  <section class="container" style="min-height: calc(100vh - 56px - 56px);">
     {% block places %}
         {% include 'gourmand/places.html' %}
     {% endblock %}
   </section>
-  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
+  <section class="container" style="min-height: calc(100vh - 56px - 56px);">
     {% block reviews %}
         {% include 'gourmand/reviews.html' %}
     {% endblock %}
   </section>
-  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
+  <section class="container" style="min-height: calc(100vh - 56px - 56px);">
     {% block top_users %}
         {% include 'gourmand/top_user.html' %}
     {% endblock %}
   </section>
-  <section class="container py-5" style="min-height: calc(100vh - 56px - 56px);">
+  <section class="container" style="min-height: calc(100vh - 56px - 56px);">
     {% block contacts %}
         {% include 'gourmand/top_user.html' %}
     {% endblock %}

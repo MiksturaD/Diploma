@@ -1,0 +1,22 @@
+{% load static %}
+<div class="right_header_info fixed-top navbar-light bg-dark fixed-top">
+    <ul class="nav nav-link justify-content-end contact-info">
+      <li class="d-none d-md-block">Свяжитесь с нами : <img src="{% static 'img/phone_icon.png' %}" alt="#"><a href="#">+7 923 555 55 55</a></li>
+      <li class="d-none d-md-block"><img src="{% static 'img/mail_icon.png' %}" alt="#"><a href="#">pochta@mail.ru</a></li>
+      <li class="d-none d-md-block"><img src="{% static 'img/location_icon.png' %}" alt="#"><a href="#">г. Красноярск</a></li>
+      <li class="button_user">
+        <a class="button" href="#">Вход</a>
+        <a class="button" href="#">Регистрация</a>
+      </li>
+      <li class="nav-item dropdown d-md-none">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="{% static 'img/menu_icon.png' %}" alt="#"></a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{% url 'index' %}">Главная</a></li>
+          <li><a class="dropdown-item" href="{% url 'contacts' %}">О нас</a></li>
+          <li><a class="dropdown-item" href="{% url 'reviews' %}">Наши Гурманы</a></li>
+          <li><a class="dropdown-item" href="{% url 'events' %}">Афиша мероприятий</a></li>
+          <li><a class="dropdown-item" href="{% url 'contacts' %}">Свяжитесь с нами</a></li>
+        </ul>
+      </li>  
+    </ul>
+</div>

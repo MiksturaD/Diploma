@@ -1,6 +1,29 @@
 {% load static %}
-<div class="right_header_info fixed-top navbar-light bg-dark fixed-top">
-    <ul class="nav nav-link justify-content-end contact-info">
+
+<div class="container">
+<div class="right_header_info fixed-top navbar-light bg-dark">
+
+    <ul class="nav nav-tabs nav nav-link  contact-info">
+
+  <li class="nav-item">
+    <a class="button nav-link active nav-tabs-border-color:yellow" aria-current="page" href="#">Главная</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Афиша</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Места</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Гурманы</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Отзывы</a>
+  </li>      
+  <li class="nav-item">
+    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+  </li>
+
       <li class="d-none d-md-block">Свяжитесь с нами : <img src="{% static 'img/phone_icon.png' %}" alt="#"><a href="#">+7 923 555 55 55</a></li>
       <li class="d-none d-md-block"><img src="{% static 'img/mail_icon.png' %}" alt="#"><a href="#">pochta@mail.ru</a></li>
       <li class="d-none d-md-block"><img src="{% static 'img/location_icon.png' %}" alt="#"><a href="#">г. Красноярск</a></li>
@@ -17,6 +40,7 @@
           <li><a class="dropdown-item" href="{% url 'events' %}">Афиша мероприятий</a></li>
           <li><a class="dropdown-item" href="{% url 'contacts' %}">Свяжитесь с нами</a></li>
         </ul>
-      </li>  
+      </li>
     </ul>
+</div>
 </div>

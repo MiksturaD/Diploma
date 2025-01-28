@@ -133,3 +133,26 @@ body {
 .dropdown-toggle::after {
     display: none;
 }
+/* Кастомные стили для шапки */
+.navbar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.contact-info .nav-link {
+  color: rgba(255,255,255,0.8) !important;
+  font-size: 0.9rem;
+}
+
+.contact-info .nav-link:hover {
+  color: white !important;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 767px) {
+  .navbar-collapse {
+    background-color: #343a40; /* Цвет фона меню в мобильной версии */
+    padding: 1rem;
+  }
+}

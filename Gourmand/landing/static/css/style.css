@@ -132,7 +132,7 @@ header .container-fluid {
 .right_header_info {
     width: 100%;
     float: left;
-    padding: 20px 0 0;
+    padding: 10px 0 5px;
 }
 
 .right_header_info ul {
@@ -223,23 +223,27 @@ header .container-fluid {
 
 #main_slider a.carousel-control-prev {
     position: absolute;
-    left: 15%;
-    top: 70%;
+    left: 12%;
+    top: 90%;
 }
 
 #main_slider a.carousel-control-next {
     position: absolute;
-    left: 15%;
-    top: 80%;
+    left: 25%;
+    top: 86%;
 }
 
 .main_bt_border {
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-size: 18px;
     font-weight: 300;
     min-width: 150px;
     border: solid #fff 1px;
-    float: left;
+    /*float: left;*/
     text-align: center;
     min-height: 50px;
     line-height: 50px;
@@ -367,3 +371,12 @@ header .container-fluid {
     max-height: 50px;
     max-width: 50px;
 }
+.hero-section {
+  min-height: 60vh; /* Высота блока */
+  display: flex;
+  align-items: center; /* Вертикальное центрирование */
+  justify-content: center; /* Горизонтальное центрирование */
+  color: white; /* Цвет текста */
+  padding: 2rem;
+}
+

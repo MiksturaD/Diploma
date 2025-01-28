@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'The_Project_Gourmand.wsgi.application'
+WSGI_APPLICATION = 'DiplomaVer2.wsgi.application'
 
 
 # Database

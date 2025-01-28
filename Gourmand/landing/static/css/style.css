@@ -1,4 +1,10 @@
 {% load static %}
+
+/*.nav-tabs {*/
+/*    --bs-nav-tabs-link-active-bg: red !important;*/
+/*}*/
+
+
 body {
     background-color: #1c1c1c;
     color: white;
@@ -58,13 +64,7 @@ h6 {
     margin-right: 15px;
 }
 
-.contact-info img {
-    margin-right: 10px;
-}
 
-.logo {
-    width: 100px;
-}
 
 .hero-section {
     display: flex;
@@ -109,7 +109,6 @@ button {
     text-align: center;
     line-height: 35px;
     position: relative;
-    top: -3px;
     padding: 0 15px;
     margin: 0 2px;
 }
@@ -131,15 +130,13 @@ header .container-fluid {
 
 .right_header_info {
     width: 100%;
-    float: left;
-    padding: 10px 0 5px;
 }
 
 .right_header_info ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    float: right;
+
 }
 
 .right_header_info ul li {
@@ -148,7 +145,6 @@ header .container-fluid {
     margin-left: 45px;
     color: #eaeaea;
     font-weight: 400;
-    float: left;
 }
 
 .right_header_info ul li a {
@@ -156,23 +152,15 @@ header .container-fluid {
     font-weight: 300;
 }
 
-.dropdown-menu {
-    color: #1c1c1c;
-    background-color: #1c1c1c;
-}
-
-.dropdown-toggle::after {
-    display: none;
-}
-
 /** slider section **/
 #main_slider {
-    padding: 90px 0 30px;
+    padding: 45px 0 30px;
 }
 
 .slider_section .container {
-    width: 100%;
+    width: 90%;
     max-width: 1920px;
+    max-height: 90vh;
 }
 
 .vert .carousel-item-next.carousel-item-left, .vert .carousel-item-prev.carousel-item-right {

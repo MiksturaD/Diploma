@@ -5,41 +5,30 @@
 
     <ul class="nav nav-tabs nav nav-link  contact-info">
 
-  <li class="nav-item">
-    <a class="button nav-link active nav-tabs-border-color:yellow" aria-current="page" href="#">Главная</a>
+  <li class="nav-item button_user">
+    <a class="button nav-link" aria-current="page" href="#">Главная</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Афиша</a>
+  <li class="nav-item button_user">
+    <a class="button nav-link" href="#">Афиша</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Места</a>
+  <li class="nav-item button_user">
+    <a class="button nav-link" href="#">Места</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Гурманы</a>
+  <li class="nav-item button_user">
+    <a class="button nav-link" href="#">Гурманы</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Отзывы</a>
-  </li>      
-  <li class="nav-item">
+  <li class="nav-item button_user">
+    <a class="button nav-link" href="#">Отзывы</a>
+  </li>
+    <li class="nav-item button_user">
+    <a class="button nav-link" href="#">Контакты</a>
+  </li>
+  <li class="nav-item button_user">
     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
   </li>
-
-      <li class="d-none d-md-block">Свяжитесь с нами : <img src="{% static 'img/phone_icon.png' %}" alt="#"><a href="#">+7 923 555 55 55</a></li>
-      <li class="d-none d-md-block"><img src="{% static 'img/mail_icon.png' %}" alt="#"><a href="#">pochta@mail.ru</a></li>
-      <li class="d-none d-md-block"><img src="{% static 'img/location_icon.png' %}" alt="#"><a href="#">г. Красноярск</a></li>
       <li class="button_user">
-        <a class="button" href="#">Вход</a>
-        <a class="button" href="#">Регистрация</a>
-      </li>
-      <li class="nav-item dropdown d-md-none">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="{% static 'img/menu_icon.png' %}" alt="#"></a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{% url 'index' %}">Главная</a></li>
-          <li><a class="dropdown-item" href="{% url 'contacts' %}">О нас</a></li>
-          <li><a class="dropdown-item" href="{% url 'reviews' %}">Наши Гурманы</a></li>
-          <li><a class="dropdown-item" href="{% url 'events' %}">Афиша мероприятий</a></li>
-          <li><a class="dropdown-item" href="{% url 'contacts' %}">Свяжитесь с нами</a></li>
-        </ul>
+        <a class="button nav-link" href="#">Вход</a>
+        <a class="button nav-link" href="#">Регистрация</a>
       </li>
     </ul>
 </div>

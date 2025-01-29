@@ -367,4 +367,8 @@ header .container-fluid {
   color: white; /* Цвет текста */
   padding: 2rem;
 }
+.event-image:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+}
 

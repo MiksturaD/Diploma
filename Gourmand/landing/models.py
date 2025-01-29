@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 class Place(models.Model):
   name = models.CharField(max_length=100)
@@ -7,6 +8,13 @@ class Place(models.Model):
   place_email = models.EmailField()
   location = models.TextField()
   rating = models.DecimalField(max_digits=10, decimal_places=0)
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Фото заведения",
+    upload_to="places/",
+    blank=True,
+    null=True
+  )
 
   def __str__(self):
     return f'{self.name}, {self.description}, {self.place_email}, {self.location}, {self.rating}'
@@ -44,6 +52,13 @@ class Event(models.Model):
   description = models.TextField()
   event_date = models.DateField()
   place = models.ManyToManyField(Place)
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Изображение события",
+    upload_to="events/",
+    blank=True,
+    null=True
+  )
 
   def __str__(self):
     return f'{self.name}, {self.description}, {self.place}'

@@ -1,51 +1,88 @@
 {% extends 'landing/base.html' %}
 {% load static %}
 
-
 {% block content %}
-приветосы
+<div class="container my-5">
+    {% if events %}
+    <h2 class="mb-4">Афиша мероприятий</h2>
 
-    
-    
-        {% if events %}
-            
-            <div class="container text-center">
-                <div class="row">
-                    <div class="col">
-                        Column
+    <div class="accordion" id="eventsAccordion">
+        {% for event in events %}
+        <div class="accordion-item bg-dark">
+            <h2 class="accordion-header bg-dark">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse{{ forloop.counter }}"
+                        aria-expanded="false"
+                        aria-controls="collapse{{ forloop.counter }}">
+                    {{ event.name }}
+                    <span class="badge bg-primary ms-2">
+                        {{ event.event_date }}
+                    </span>
+                </button>
+            </h2>
+
+            <div id="collapse{{ forloop.counter }}"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#eventsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            {% if event.image %}
+                                <img
+                                    src="{% if event.image %}{{ event.image.url }}
+                                    {% else %}{% static 'img/default.png' %}{% endif %}"
+                                    alt="{{ event.name }}"
+                                    class="img-fluid rounded"
+                                    style="max-height: 250px; object-fit: cover;"
+                                >
+                            {% else %}
+                                <div class="text-muted">Нет изображения</div>
+                            {% endif %}
+                        <div class="col-md-8">
+                            <h5>Описание:</h5>
+                            <p>{{ event.description }}</p>
+
+                            <h5 class="mt-4">Места проведения:</h5>
+                            <ul class="list-group">
+                                {% for place in event.place.all %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ place.name }}
+                                    <span class="badge bg-secondary">
+                                        ★ {{ place.rating }}
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Детали</h5>
+                                    <p class="card-text">
+                                        <i class="bi bi-calendar-event me-2"></i>
+                                        {{ event.event_date }}<br>
+                                        <i class="bi bi-clock me-2"></i>
+                                        {{ event.event_date }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                <div class="col">
-                        Column
-                </div>
-                <div class="col">
-                        Column
-                </div>
                 </div>
             </div>
-             <div class="row flex-column gap-4 align-items-center">   
-                {% for event in events %}
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">{{ event.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">{{ event.name }}</h6>
-                        <p class="card-text">Посмотреть детальнее</p>
-                        <a href="{% url 'event' event.id  %}" class="card-link">Посмотреть</a>
-                      </div>
-                    </div>
-                  </div>
-                {% endfor %}
-                </div>   
-                {% else %}
-                <p>Событий нет.</p>
-                  {% endif %}
-                  <div class="row flex-column gap-4 align-items-center">
-                      <div class="col-12">
-                          <a href="{% url 'create_event' %}" class="card-link">Создать новое событие</a>
-                      </div>
-                  </div>
+        </div>
+        {% endfor %}
+    </div>
 
-
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        На данный момент мероприятий нет. Следите за обновлениями!
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
 
 {% include 'includes/footer.html' %}

@@ -18,8 +18,10 @@ urlpatterns = [
     path('place/<int:place_id>/', views.place, name='place'),
     path('places/create/', views.create_places, name='create_places'),
     path('reviews', views.reviews, name='reviews'),
-    path('review/<int:review_id>/', views.review, name='review'),
-    path('review/create/', views.create_review, name='create_review'),
+    path('reviews/<int:review_id>/', views.review, name='review'),
+    path('reviews/create/', views.create_review, name='create_review'),
     path('about/', views.about, name='about'),
     path('contacts/', views.contacts, name='contacts'),
+    path('gourmands/', views.gourmands, name='gourmands'),
+    path('gourmands/<int:gourmand_id>/', views.gourmand, name='gourmand'),
 ]

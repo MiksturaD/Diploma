@@ -1,0 +1,51 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+
+{% block content %}
+приветосы
+
+    
+    
+        {% if events %}
+            
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        Column
+                    </div>
+                <div class="col">
+                        Column
+                </div>
+                <div class="col">
+                        Column
+                </div>
+                </div>
+            </div>
+             <div class="row flex-column gap-4 align-items-center">   
+                {% for event in events %}
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ event.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">{{ event.name }}</h6>
+                        <p class="card-text">Посмотреть детальнее</p>
+                        <a href="{% url 'event' event.id  %}" class="card-link">Посмотреть</a>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+                </div>   
+                {% else %}
+                <p>Событий нет.</p>
+                  {% endif %}
+                  <div class="row flex-column gap-4 align-items-center">
+                      <div class="col-12">
+                          <a href="{% url 'create_event' %}" class="card-link">Создать новое событие</a>
+                      </div>
+                  </div>
+
+
+{% endblock %}
+
+{% include 'includes/footer.html' %}

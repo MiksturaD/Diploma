@@ -12,12 +12,12 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="slider_cont">
-                                                <div class="hero-section"> <!-- Добавь этот контейнер -->
+                                                <div class="hero-section"> 
                                                     <div class="content-wrapper text-center">
                                                         <h3>Изучай обзоры на рестораны и кафе<br>В любимом Красноярске</h3>
                                                         <p>Отзывы составлены людьми, которые искушены в еде и знают места, где поесть</p>
                                                             <div class="d-flex align-items-center justify-content-center gap-3">
-                                                                <a class="main_bt_border" href="#">Отзывы</a>
+                                                                <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -25,7 +25,7 @@
                                         </div>
                                         <div class="col-md-7">
                                             <div class="slider_image full text_align_center">
-                                                <img class="img-responsive" src="{% static 'img/Rest_interior.png' %}" alt="#" />
+                                                <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" />
                                             </div>
                                         </div>
                                     </div>
@@ -34,12 +34,12 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="slider_cont">
-                                                <div class="hero-section"> <!-- Добавь этот контейнер -->
+                                                <div class="hero-section"> 
                                                     <div class="content-wrapper text-center">
                                                 <h3>Афиша мероприятий<br>События в заведениях города</h3>
                                                 <p>Здесь вы увидите афишу мероприятий в кафе и ресторанах города Красноярска</p>
                                                         <div class="d-flex align-items-center justify-content-center gap-3">
-                                                            <a class="main_bt_border" href="#">Афиша</a>
+                                                            <a class="main_bt_border" href="{% url 'events' %}">Афиша</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -56,12 +56,12 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="slider_cont">
-                                                <div class="hero-section"> <!-- Добавь этот контейнер -->
+                                                <div class="hero-section"> 
                                                     <div class="content-wrapper text-center">
                                                 <h3>Места для посиделок<br>Приятные места для поедания пищи и бесед</h3>
                                                 <p>Здесь вы увидите самые классные кафе и рестораны города Красноярска</p>
                                                         <div class="d-flex align-items-center justify-content-center gap-3">
-                                                            <a class="main_bt_border" href="#">Места</a>
+                                                            <a class="main_bt_border" href="{% url 'places' %}">Места</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="col-md-7 full text_align_center">
                                             <div class="slider_image">
-                                                <img class="img-responsive" src="{% static 'img/places.png.png' %}" alt="#" />
+                                                <img class="img-responsive" src="{% static 'img/places.png' %}" alt="#" />
                                             </div>
                                         </div>
                                     </div>
@@ -78,12 +78,12 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="slider_cont">
-                                                <div class="hero-section"> <!-- Добавь этот контейнер -->
+                                                <div class="hero-section"> 
                                                     <div class="content-wrapper text-center">
                                                 <h3>Гурманы в городе<br>Ребята, которые знаю толк в еде</h3>
                                                 <p>Здесь вы увидите Гурманов города Красноярска</p>
                                                         <div class="d-flex align-items-center justify-content-center gap-3">
-                                                            <a class="main_bt_border" href="#">Гурманы</a>
+                                                            <a class="main_bt_border" href="{% url 'gourmands' %}">Гурманы</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -100,7 +100,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="slider_cont">
-                                                <div class="hero-section"> <!-- Добавь этот контейнер -->
+                                                <div class="hero-section"> 
                                                     <div class="content-wrapper text-center">
                                                 <h3>Отзывы<br>Обзоры на заведения</h3>
                                                 <p>Здесь вы увидите отзывы наших гурманов о кафе и ресторанах города Красноярска</p>
@@ -122,7 +122,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="slider_cont">
-                                                <div class="hero-section"> <!-- Добавь этот контейнер -->
+                                                <div class="hero-section">
                                                     <div class="content-wrapper text-center">
                                                 <h3>О сайте<br>А также о создателе</h3>
                                                 <p>Здесь вы увидите кто все это построил и на чем</p>
@@ -135,7 +135,7 @@
                                         </div>
                                         <div class="col-md-7 full text_align_center">
                                             <div class="slider_image">
-                                                <img class="img-responsive" src="{% static 'img/author.jpg' %}" alt="#" />
+                                                <img class="img-responsive" src="{% static 'img/author.png' %}" alt="#" />
                                             </div>
                                         </div>
                                     </div>

@@ -12,17 +12,6 @@ class Place(models.Model):
     return f'{self.name}, {self.description}, {self.place_email}, {self.location}, {self.rating}'
 
 
-class Review(models.Model):
-  name = models.CharField(max_length=50)
-  review_date = models.DateTimeField(auto_now_add=True)
-  description = models.TextField()
-  positive_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  negative_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
-
-  def __str__(self):
-    return (f'{self.name}, {self.description}, {self.review_date}, {self.positive_rating}, {self.negative_rating}, '
-            f'{self.place}')
 
 
 class Gourmand(models.Model):
@@ -34,6 +23,20 @@ class Gourmand(models.Model):
 
   def __str__(self):
     return f'{self.first_name}, {self.last_name}, {self.description}, {self.rating}'
+
+class Review(models.Model):
+  name = models.CharField(max_length=50)
+  review_date = models.DateTimeField(auto_now_add=True)
+  description = models.TextField()
+  positive_rating = models.DecimalField(max_digits=10, decimal_places=0)
+  negative_rating = models.DecimalField(max_digits=10, decimal_places=0)
+  gourmand =models.ForeignKey(Gourmand, on_delete=models.DO_NOTHING)
+  place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
+
+  def __str__(self):
+    return (f'{self.name}, {self.gourmand} {self.description}, {self.review_date}, {self.positive_rating}, '
+            f'{self.negative_rating}, '
+            f'{self.place}')
 
 
 class Event(models.Model):

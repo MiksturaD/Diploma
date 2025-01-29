@@ -1,11 +1,10 @@
 from django.shortcuts import render
 
-from landing.models import Review
+from landing.models import Review, Event
 
 
 def index(request):
-  review_list = Review.objects.all()
-  return render(request, 'landing/index.html', context={'reviews': review_list})
+  return render(request, 'landing/index.html')
 
 
 def main(request):
@@ -33,7 +32,8 @@ def profile(request):
 
 
 def events(request):
-  return None
+  event_list = Event.objects.all()
+  return render(request, 'events/events.html', context={'events': event_list})
 
 
 def event(request):
@@ -57,7 +57,8 @@ def create_places(request):
 
 
 def reviews(request):
-  return None
+  review_list = Review.objects.all()
+  return render(request, 'landing/index.html', context={'reviews': review_list})
 
 
 def review(request):
@@ -73,4 +74,12 @@ def about(request):
 
 
 def contacts(request):
+  return None
+
+
+def gourmands(request):
+  return None
+
+
+def gourmand(request):
   return None

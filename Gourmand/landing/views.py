@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from landing.models import Review, Event
+from landing.models import Review, Event, Place
 
 
 def index(request):
@@ -45,7 +45,8 @@ def create_event(request):
 
 
 def places(request):
-  return None
+  places_list = Place.objects.all()
+  return render(request, 'places/places.html', context={'places': places_list})
 
 
 def place(request):

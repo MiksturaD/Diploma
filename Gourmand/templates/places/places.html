@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'landing/base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Заведения в городе Красноярске</h1>
+    
+    {% if places %}
+        <div class="row row-cols-1 row-cols-md-3 g-4"> 
+            {% for place in places %}
+            <div class="col">
+                <div class="card h-100 shadow">
+                    <img src="{% if place.image %}{{ place.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" 
+                         class="card-img-top img-fluid" 
+                         alt="{{ place.name }}"
+                         style="height: 200px; object-fit: cover;">
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ place.name }}★{{ place.rating }}</h5>
+                        <p class="card-text text-muted">{{ place.description|truncatechars:100 }}</p>
+                    </div>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="bi bi-geo-alt me-2"></i>
+                                <span class="badge bg-secondary me-1">
+                                    {{ place.location }} 
+                                </span>
+                        </li>
+                        
+                        <li class="list-group-item">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            {{ place.email }}
+                        </li>
+                    </ul>
+                    
+                    <div class="card-body text-center">
+                        <a href="{% url 'place' place.id %}" class="btn btn-primary">
+                            Подробнее <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            На данный момент заведений нет. Следите за обновлениями!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% include 'includes/footer.html' %}

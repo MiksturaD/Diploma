@@ -1,4 +1,11 @@
 {% load static %}
+{% url 'events' as events_url %}
+{% url 'places' as places_url %}
+{% url 'index' as index_url %}
+{% url 'reviews' as reviews_url %}
+{% url 'gourmands' as gourmands_url %}
+{% url 'contacts' as contacts_url %}
+
 
 <div class="container">
 <div class="right_header_info fixed-top navbar-light bg-dark">
@@ -6,22 +13,22 @@
     <ul class="nav nav-tabs nav nav-link  contact-info">
 
   <li class="nav-item button_user">
-    <a class="button nav-link" aria-current="page" href="{% url 'index' %}">Главная</a>
+    <a class="button nav-link {% if request.path == index_url %}active{% endif %}" aria-current="page" href="{% url 'index' %}">Главная</a>
   </li>
   <li class="nav-item button_user">
-    <a class="button nav-link" href="{% url 'events' %}">Афиша</a>
+    <a class="button nav-link {% if request.path == events_url %}active{% endif %}" href="{% url 'events' %}">Афиша</a>
   </li>
   <li class="nav-item button_user">
-    <a class="button nav-link" href="{% url 'places' %}">Места</a>
+    <a class="button nav-link {% if request.path == places_url %}active{% endif %}" href="{% url 'places' %}">Места</a>
   </li>
   <li class="nav-item button_user">
-    <a class="button nav-link" href="#">Гурманы</a>
+    <a class="button nav-link {% if request.path == gourmands_url %}active{% endif %}" href="#">Гурманы</a>
   </li>
   <li class="nav-item button_user">
-    <a class="button nav-link" href="#">Отзывы</a>
+    <a class="button nav-link {% if request.path == reviews_url_url %}active{% endif %}" href="#">Отзывы</a>
   </li>
     <li class="nav-item button_user">
-    <a class="button nav-link" href="#">Контакты</a>
+    <a class="button nav-link {% if request.path == contacts_url_url %}active{% endif %}" href="#">Контакты</a>
   </li>
   <li class="nav-item button_user">
     <a class="nav-link disabled" aria-disabled="true">Disabled</a>

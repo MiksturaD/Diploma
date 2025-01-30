@@ -15,32 +15,33 @@
                          alt="{{ event.name }}"
                          style="height: 200px; object-fit: cover;">
                     
-                    <div class="card-body">
-                        <h5 class="card-title">{{ event.name }}</h5>
-                        <p class="card-text text-muted">{{ event.description|truncatechars:100 }}</p>
+                    <div class="card-body bg-dark">
+                        <h5 class="card-title bg-dark custom-text-color">{{ event.name }}</h5>
+                        <p class="card-text custom-text-color">{{ event.description|truncatechars:100 }}</p>
                     </div>
                     
-                    <ul class="list-group list-group-flush">
-                        <!-- Места проведения -->
-                        <li class="list-group-item">
+                    <ul class="list-group list-group-flush bg-dark">
+                        <li class="list-group-item bg-dark">
                             <i class="bi bi-geo-alt me-2"></i>
                             {% for place in event.place.all %}
-                                <span class="badge bg-secondary me-1">
+                                <span class="badge bg-secondary me-1 bg-dark">
                                     {{ place.name }} ★{{ place.rating }}
                                 </span>
                             {% endfor %}
                         </li>
                         
-                        <li class="list-group-item">
+                        <li class="list-group-item bg-dark custom-text-color">
                             <i class="bi bi-calendar-event me-2"></i>
                             {{ event.event_date|date:"d E Y" }}
                         </li>
                     </ul>
                     
-                    <div class="card-body text-center">
-                        <a href="{% url 'event' event.id %}" class="btn btn-primary">
-                            Подробнее <i class="bi bi-arrow-right"></i>
-                        </a>
+                    <div class="card-body text-center bg-dark">
+                        <div class="button_user">
+                            <a href="{% url 'event' event.id %}" class="custom-button">
+                                Подробнее <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

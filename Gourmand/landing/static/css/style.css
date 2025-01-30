@@ -371,4 +371,33 @@ header .container-fluid {
     transform: scale(1.03);
     transition: transform 0.3s ease;
 }
+.button_user .custom-button {
+    display: inline-block;
+    min-width: 120px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    padding: 0 20px;
+    margin: 0 5px;
+    color: #eaeaea;
+    border: 2px solid #eaeaea;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
 
+.button_user .custom-button:hover {
+    background: #e3d105;
+    color: #222;
+    border-color: #e3d105;
+    transform: translateY(-2px);
+}
+.custom-text-color {
+    color: #eaeaea;
+}
+.nav-link.active {
+    background: #e3d105 !important;
+    color: #222 !important;
+    border-color: #e3d105 !important;
+}

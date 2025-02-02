@@ -1,8 +1,5 @@
 {% load static %}
 
-/*.nav-tabs {*/
-/*    --bs-nav-tabs-link-active-bg: red !important;*/
-/*}*/
 
 
 body {
@@ -129,6 +126,7 @@ header .container-fluid {
 }
 
 .right_header_info {
+    padding-top: 10px;
     width: 100%;
 }
 
@@ -211,14 +209,14 @@ header .container-fluid {
 
 #main_slider a.carousel-control-prev {
     position: absolute;
-    left: 12%;
-    top: 90%;
+    /*left: 12%;*/
+    /*top: 90%;*/
 }
 
 #main_slider a.carousel-control-next {
     position: absolute;
-    left: 25%;
-    top: 86%;
+    /*left: 25%;*/
+    /*top: 86%;*/
 }
 
 .main_bt_border {
@@ -290,30 +288,10 @@ header .container-fluid {
     color: #000;
 }
 
-.carousel-control-prev {
-    left: -1200px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #000;
-    opacity: 1;
-    width: 55px;
-    height: 55px;
-    background: #fcfcfc;
-}
 
 .carousel-control-next:focus, .carousel-control-next:hover {
     background: #e3d105;
     color: #000;
-}
-
-.carousel-control-next {
-    right: -100px;
-    color: #000;
-    opacity: 1;
-    width: 55px;
-    height: 55px;
-    background: #fcfcfc;
-    top: 75%;
 }
 
 .owl-prev span {
@@ -400,4 +378,54 @@ header .container-fluid {
     background: #e3d105 !important;
     color: #222 !important;
     border-color: #e3d105 !important;
+}
+
+.carousel-controls-bottom {
+    position: relative;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+    display: inline-block;
+    background-color: #fcfcfc;
+    margin: 0 100px;
+    transition: all 2s ease;
+}
+
+.carousel-control-prev:hover i,
+.carousel-control-next:hover i   {
+    transform: scale(1.1);
+    color: #e3d105;
+    border-color: #e3d105;
+}
+
+
+.carousel-control-prev i,
+.carousel-control-next i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.carousel-controls-bottom {
+    position: absolute;
+    bottom: 14%;
+    left: 20%;
+    transform: translateX(-80%);
+    z-index: 10;
+}
+@media (max-width: 768px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-controls-bottom {
+        margin-top: 10px;
+    }
 }

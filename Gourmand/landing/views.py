@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from landing.models import Review, Event, Place
+from landing.models import Review, Event, Place, Gourmand
 
 
 def index(request):
@@ -79,7 +79,8 @@ def contacts(request):
 
 
 def gourmands(request):
-  return None
+  gourmands_list = Gourmand.objects.all()
+  return render(request, 'gourmands/gourmands.html', context={'gourmands': gourmands_list})
 
 
 def gourmand(request):

@@ -27,6 +27,13 @@ class Gourmand(models.Model):
   last_name = models.CharField(max_length=100)
   description = models.TextField()
   rating = models.DecimalField(max_digits=10, decimal_places=0)
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Фото гурмана",
+    upload_to="gourmands/",
+    blank=True,
+    null=True
+  )
 
 
   def __str__(self):

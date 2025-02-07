@@ -1,0 +1,44 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4 pt-4 custom-text-color">{{ place.name }}</h1>
+  <div class="row">
+    <!-- Левая колонка: изображение заведения -->
+    <div class="col-md-4">
+      {% if place.image %}
+        <img src="{{ place.image.url }}" alt="{{ place.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
+      {% else %}
+        <img src="{% static 'img/default.png' %}" alt="{{ place.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
+      {% endif %}
+    </div>
+    <!-- Правая колонка: детали заведения -->
+    <div class="col-md-6">
+      <div class="card bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">Описание</h4>
+          <p class="card-text">{{ place.description }}</p>
+          <p class="card-text">
+            <strong>Email:</strong> {{ place.place_email }}<br>
+            <strong>Местоположение:</strong> {{ place.location }}<br>
+            <strong>Рейтинг:</strong> {{ place.rating }} ★
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Блок для кнопки просмотра отзывов -->
+  <div class="mt-4 button_user">
+    <a href="{% url 'place_reviews' place.id %}" class="custom-button">Посмотреть отзывы</a>
+  </div>
+
+  <!-- Кнопка возврата к списку заведений -->
+  <div class="mt-4 button_user">
+    <a href="{% url 'places' %}" class="custom-button">Назад к заведениям</a>
+  </div>
+</div>
+{% endblock %}
+
+{% include 'includes/footer.html' %}

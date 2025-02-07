@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 28px;
 }
 
 h2 {
@@ -281,13 +281,15 @@ header .container-fluid {
 
 .carousel-control-prev:focus, .carousel-control-prev:hover {
     background: #e3d105;
-    color: #000;
+    /*color: #000;*/
+    /*border-radius: 100%;*/
 }
 
 
 .carousel-control-next:focus, .carousel-control-next:hover {
     background: #e3d105;
-    color: #000;
+    /*color: #000;*/
+    /*border-radius: 100%;*/
 }
 
 .owl-prev span {
@@ -396,6 +398,8 @@ header .container-fluid {
     transform: scale(1.1);
     color: #e3d105;
     border-color: #e3d105;
+    background: #111111;
+
 }
 
 
@@ -425,52 +429,10 @@ header .container-fluid {
         margin-top: 10px;
     }
 }
-
-.btn-flip {
-  opacity: 1;
-  outline: 0;
-  color: #fff;
-  line-height: 40px;
-  position: relative;
-  text-align: center;
-  letter-spacing: 1px;
-  display: inline-block;
-  text-decoration: none;
-  font-family: "Open Sans";
-  text-transform: uppercase;
-}
-.btn-flip:hover:after {
-  opacity: 1;
-  transform: translateY(0) rotateX(0);
-}
-.btn-flip:hover:before {
-  opacity: 0;
-  transform: translateY(50%) rotateX(90deg);
-}
-.btn-flip:after {
-  top: 0;
-  left: 0;
-  opacity: 0;
-  width: 100%;
-  color: #323237;
-  display: block;
-  transition: 0.5s;
-  position: absolute;
-  background: #adadaf;
-  content: attr(data-back);
-  transform: translateY(-50%) rotateX(90deg);
-}
-.btn-flip:before {
-  top: 0;
-  left: 0;
-  opacity: 1;
-  color: #adadaf;
-  display: block;
-  padding: 0 30px;
-  line-height: 40px;
-  transition: 0.5s;
-  position: relative;
-  background: #323237;
-  content: attr(data-front);
-  transform: translateY(0) rotateX(0);
+.button_user a:hover,
+.button_user a:focus,
+.button_user a.active {
+    background: #e3d105;
+    color: #000000;
+    border: none !important;
 }

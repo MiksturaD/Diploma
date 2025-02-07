@@ -1,0 +1,40 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4 custom-text-color">Отзывы от Гурмана {{ gourmand.first_name }} {{ gourmand.last_name }}</h1>
+
+  <!-- Проверяем, есть ли отзывы -->
+  {% if reviews %}
+    <div class="row">
+      {% for review in reviews %}
+        <div class="col-md-6 mb-4">
+          <div class="card bg-dark text-white shadow">
+            <div class="card-body">
+              <h5 class="card-title">{{ review.name }}</h5>
+              <p class="card-text">{{ review.description }}</p>
+              <p><strong>Дата:</strong> {{ review.review_date|date:"d.m.Y" }}</p>
+              <p>
+                <strong>Положительная оценка:</strong> <span class="text-success">{{ review.positive_rating }} ★</span><br>
+                <strong>Отрицательная оценка:</strong> <span class="text-danger">{{ review.negative_rating }} ★</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info" role="alert">
+      Пока нет отзывов о {{ gourmand.first_name }}. Будьте первым, кто оставит отзыв!
+    </div>
+  {% endif %}
+
+  <!-- Кнопка возврата -->
+  <div class="mt-4 button_user">
+    <a href="{% url 'gourmand' gourmand.id %}" class="custom-button">Назад</a>
+  </div>
+</div>
+{% endblock %}
+
+{% include 'includes/footer.html' %}

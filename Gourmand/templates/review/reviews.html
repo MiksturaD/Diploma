@@ -1,25 +1,59 @@
- <h1>Проект Гурман</h1>
-  <p class="mb-5 text-body-secondary">Хэй хо</p>
- {% if reviews %}
-  <div class="row flex-column gap-4 align-items-center">   
-  {% for review in reviews %}
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ review.name }}</h5>
-          <h6 class="card-subtitle mb-2 text-body-secondary">{{ review.name }}</h6>
-          <p class="card-text">Посмотреть детальнее</p>
-          <a href="{% url 'review' review.id  %}" class="card-link">Посмотреть</a>
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 pt-4 custom-text-color">Отзывы о ресторанах</h1>
+    
+    {% if reviews %}
+        <div class="row row-cols-1 row-cols-md-3 g-4"> 
+            {% for review in reviews %}
+            <div class="col">
+                <div class="card h-100 shadow">
+                    <img src="{% if review.image %}{{ review.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
+                         class="card-img-top img-fluid" 
+                         alt="{{ review.name }}"
+                         style="height: 200px; object-fit: cover;">
+                    
+                    <div class="card-body bg-dark">
+                        <h5 class="card-title bg-dark custom-text-color">{{ review.gourmand }}</h5>
+                        <h5 class="card-title bg-dark custom-text-color">{{ review.name }}</h5>
+                        <h2 class="card-title bg-dark custom-text-color">{{ review.place.name }} {{ review.place.rating }}<span class="text-warning">★{{ place.rating }}</span></h2>
+                        <p class="card-text custom-text-color">{{ review.description|truncatechars:100 }}</p>
+                    </div>
+                    
+                    <ul class="list-group list-group-flush bg-dark">
+                        <li class="list-group-item bg-dark">
+                            <i class="bi bi-geo-alt me-2">
+                                     <span class="badge bg-secondary me-1 bg-dark">
+                                    Позитивный рейтинг отзыва - {{ review.positive_rating }} <span class="text-warning">★{{ place.rating }}</span>
+                                </span>
+                            </i>
+                            <i class="bi bi-geo-alt me-2">
+                                <span class="badge bg-secondary me-1 bg-dark">
+                                    Негативный рейтинг отзыва - {{ review.negative_rating }} <span class="text-warning">★{{ place.rating }}</span>
+                                </span>
+                            </i>
+                        </li>
+                    </ul>
+                    
+                    <div class="card-body text-center bg-dark">
+                        <div class="button_user bg-dark">
+                            <a href="{% url 'review' review.id %}" class="custom-button">
+                                Подробнее
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-      </div>
-    </div>
-  {% endfor %}
-  </div>   
-  {% else %}
-<p>Отзывов нет.</p>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            На данный момент отзывов нет. Следите за обновлениями!
+        </div>
     {% endif %}
-<div class="row flex-column gap-4 align-items-center">
-<div class="col-12">
-    <a href="{% url 'create_review' %}" class="card-link">Написать новый отзыв</a>
 </div>
-</div>
+{% endblock %}
+
+{% include 'includes/footer.html' %}

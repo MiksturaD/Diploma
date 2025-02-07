@@ -1,21 +1,61 @@
+{% extends 'landing/base.html' %}
+{% load static %}
 
-    <form class="main_form">
-        <div class="row">
-         
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <input class="form-control" placeholder="Имя" type="text" name="Name">
-            </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <input class="form-control" placeholder="Email" type="text" name="Email">
-            </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <input class="form-control" placeholder="Телефон" type="text" name="Phone">
-            </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <textarea class="textarea" placeholder="Сообщение" type="text" name="Message"></textarea>
-            </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <button class="send">Отправить</button>
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 pt-4 custom-text-color">Контакты</h1>
+    <div class="row">
+        
+        <div class="col-md-6">
+            <h4 class="custom-text-color">Свяжитесь с нами</h4>
+            <p class="custom-text-color">Если у вас возникли вопросы или предложения, заполните форму ниже – мы обязательно свяжемся с вами!</p>
+            <form method="post" action="{% url 'contacts' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label custom-text-color">Ваше имя</label>
+                    <input type="text" class="form-control bg-dark text-white" id="name" name="name" placeholder="Введите ваше имя" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label custom-text-color">Ваш Email</label>
+                    <input type="email" class="form-control bg-dark text-white" id="email" name="email" placeholder="Введите email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label custom-text-color">Сообщение</label>
+                    <textarea class="form-control bg-dark text-white" id="message" name="message" rows="5" placeholder="Введите сообщение" required></textarea>
+                </div>
+                      <div class="button_user bg-dark">
+                            <a href="#" class="custom-button">
+                                Подробнее
+                            </a>
+                        </div>
+            </form>
+        </div>
+
+        
+        <div class="col-md-6">
+            <h2 class="custom-text-color">Наши контакты</h2>
+            <ul class="list-unstyled custom-text-color">
+                <li class="mb-2">
+                    <i class="bi bi-geo-alt-fill me-2"></i>
+                    Адрес: г. Красноярск, ул. Примерная, 1
+                </li>
+                <li class="mb-2">
+                    <i class="bi bi-telephone-fill me-2"></i>
+                    Телефон: +7 923 555 55 55
+                </li>
+                <li class="mb-2">
+                    <i class="bi bi-envelope-fill me-2"></i>
+                    Email: <a href="mailto:pochta@mail.ru" class="text-decoration-none custom-text-color">pochta@mail.ru</a>
+                </li>
+            </ul>
+            
+            <div class="mt-4">
+                <iframe src="https://www.google.com/maps/embed?pb=..."
+                        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
-    </form>
+    </div>
+</div>
+{% endblock %}
+
+{% include 'includes/footer.html' %}

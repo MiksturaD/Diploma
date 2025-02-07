@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-4 custom-text-color">Афиша мероприятий</h1>
+    <h1 class="mb-4 pt-4 custom-text-color">Афиша мероприятий</h1>
     
     {% if events %}
         <div class="row row-cols-1 row-cols-md-3 g-4"> 
@@ -25,7 +25,7 @@
                             <i class="bi bi-geo-alt me-2"></i>
                             {% for place in event.place.all %}
                                 <span class="badge bg-secondary me-1 bg-dark">
-                                    {{ place.name }} ★{{ place.rating }}
+                                    {{ place.name }} <span class="text-warning">★{{ place.rating }}</span>
                                 </span>
                             {% endfor %}
                         </li>
@@ -39,7 +39,7 @@
                     <div class="card-body text-center bg-dark">
                         <div class="button_user">
                             <a href="{% url 'event' event.id %}" class="custom-button">
-                                Подробнее <i class="bi bi-arrow-right"></i>
+                                Подробнее
                             </a>
                         </div>
                     </div>
@@ -55,4 +55,3 @@
 </div>
 {% endblock %}
 
-{% include 'includes/footer.html' %}

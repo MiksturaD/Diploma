@@ -16,6 +16,7 @@ urlpatterns = [
     path('event/create/', views.create_event, name='create_event'),
     path('places', views.places, name='places'),
     path('place/<int:place_id>/', views.place, name='place'),
+    path('place/<int:place_id>/reviews/', views.place_reviews, name='place_reviews'),
     path('places/create/', views.create_places, name='create_places'),
     path('reviews', views.reviews, name='reviews'),
     path('reviews/<int:review_id>/', views.review, name='review'),
@@ -24,4 +25,6 @@ urlpatterns = [
     path('contacts/', views.contacts, name='contacts'),
     path('gourmands/', views.gourmands, name='gourmands'),
     path('gourmands/<int:gourmand_id>/', views.gourmand, name='gourmand'),
+    path('gourmand/<int:gourmand_id>/reviews/', views.gourmand_reviews, name='gourmand_reviews'),
+
 ]

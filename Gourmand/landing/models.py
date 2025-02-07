@@ -37,7 +37,7 @@ class Gourmand(models.Model):
 
 
   def __str__(self):
-    return f'{self.first_name}, {self.last_name}, {self.description}, {self.rating}'
+    return f'{self.first_name} {self.last_name}, рейтинг гурмана {self.rating}'
 
 class Review(models.Model):
   name = models.CharField(max_length=50)
@@ -47,6 +47,13 @@ class Review(models.Model):
   negative_rating = models.DecimalField(max_digits=10, decimal_places=0)
   gourmand =models.ForeignKey(Gourmand, on_delete=models.DO_NOTHING)
   place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Фото отзыва",
+    upload_to="reviews/",
+    blank=True,
+    null=True
+  )
 
   def __str__(self):
     return (f'{self.name}, {self.gourmand} {self.description}, {self.review_date}, {self.positive_rating}, '

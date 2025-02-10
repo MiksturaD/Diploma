@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 from landing.models import User, Review, Place, Event
 
@@ -65,103 +65,111 @@ class CustomUserChangeForm(UserChangeForm):
       fields = ['first_name', 'last_name', 'username', 'email']
 
 
-class ReviewCreateForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ['name', 'review_date', 'description', 'place']
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'review_date': forms.DateField(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'description': forms.TextInput(attrs={
-                'class': 'form-select',
-                'required': True
-            }),
-            'place': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-        }
-        labels = {
-            'name': 'Название отзыва',
-        }
+class CustomUserCreationForm(UserCreationForm):
+  role = forms.ChoiceField(choices=User.ROLE_CHOICES, label="Выберите роль")
 
-    def __init__(self, *args, **kwargs):
-        super(ReviewCreateForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'aria-label': 'Название отзыва'})
-        self.fields['review_date'].widget.attrs.update({'aria-label': 'Дата отзыва'})
-        self.fields['description'].widget.attrs.update({'aria-label': 'Детали отзыва'})
-        self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения'})
+  class Meta:
+    model = User
+    fields = ('username', 'email', 'role', 'password1', 'password2')
 
 
-class PlaceCreateForm(forms.ModelForm):
-    class Meta:
-        model = Place
-        fields = ['name', 'description', 'place_email', 'location', 'rating']
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'description': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'place_email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'location': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'rating': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-        }
-        labels = {
-            'name': 'Название отзыва',
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(PlaceCreateForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'aria-label': 'Название отзыва'})
-        self.fields['description'].widget.attrs.update({'aria-label': 'Описание заведения'})
-        self.fields['place_email'].widget.attrs.update({'aria-label': 'Емайл заведения'})
-        self.fields['location'].widget.attrs.update({'aria-label': 'Адрес заведения'})
-        self.fields['rating'].widget.attrs.update({'aria-label': 'Рейтинг заведения'})
-
-
-class EvenCreateForm(forms.ModelForm):
-    class Meta:
-        model = Event
-        fields = ['name', 'description', 'place']
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'description': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'place': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-        }
-        labels = {
-            'name': 'Название ивента',
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(EvenCreateForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'aria-label': 'Название ивента'})
-        self.fields['description'].widget.attrs.update({'aria-label': 'Описание ивента'})
-        self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения в котором будет ивент'})
+# class ReviewCreateForm(forms.ModelForm):
+#     class Meta:
+#         model = Review
+#         fields = ['name', 'review_date', 'description', 'place']
+#         widgets = {
+#             'name': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'review_date': forms.DateField(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'description': forms.TextInput(attrs={
+#                 'class': 'form-select',
+#                 'required': True
+#             }),
+#             'place': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#         }
+#         labels = {
+#             'name': 'Название отзыва',
+#         }
+#
+#     def __init__(self, *args, **kwargs):
+#         super(ReviewCreateForm, self).__init__(*args, **kwargs)
+#         self.fields['name'].widget.attrs.update({'aria-label': 'Название отзыва'})
+#         self.fields['review_date'].widget.attrs.update({'aria-label': 'Дата отзыва'})
+#         self.fields['description'].widget.attrs.update({'aria-label': 'Детали отзыва'})
+#         self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения'})
+#
+#
+# class PlaceCreateForm(forms.ModelForm):
+#     class Meta:
+#         model = Place
+#         fields = ['name', 'description', 'place_email', 'location', 'rating']
+#         widgets = {
+#             'name': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'description': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'place_email': forms.EmailInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'location': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'rating': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#         }
+#         labels = {
+#             'name': 'Название отзыва',
+#         }
+#
+#     def __init__(self, *args, **kwargs):
+#         super(PlaceCreateForm, self).__init__(*args, **kwargs)
+#         self.fields['name'].widget.attrs.update({'aria-label': 'Название отзыва'})
+#         self.fields['description'].widget.attrs.update({'aria-label': 'Описание заведения'})
+#         self.fields['place_email'].widget.attrs.update({'aria-label': 'Емайл заведения'})
+#         self.fields['location'].widget.attrs.update({'aria-label': 'Адрес заведения'})
+#         self.fields['rating'].widget.attrs.update({'aria-label': 'Рейтинг заведения'})
+#
+#
+# class EvenCreateForm(forms.ModelForm):
+#     class Meta:
+#         model = Event
+#         fields = ['name', 'description', 'place']
+#         widgets = {
+#             'name': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'description': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#             'place': forms.TextInput(attrs={
+#                 'class': 'form-control',
+#                 'required': True
+#             }),
+#         }
+#         labels = {
+#             'name': 'Название ивента',
+#         }
+#
+#     def __init__(self, *args, **kwargs):
+#         super(EvenCreateForm, self).__init__(*args, **kwargs)
+#         self.fields['name'].widget.attrs.update({'aria-label': 'Название ивента'})
+#         self.fields['description'].widget.attrs.update({'aria-label': 'Описание ивента'})
+#         self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения в котором будет ивент'})

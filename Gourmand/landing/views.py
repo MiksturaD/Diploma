@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, get_object_or_404, redirect
 
-from landing.models import Review, Event, Place, Gourmand
+from landing.models import Review, Event, Place, Gourmand, User
 
 
 def index(request):
@@ -16,15 +17,34 @@ def edit_profile(request):
 
 
 def signup(request):
-  return None
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        if User.objects.filter(username=username).exists():
+            return render(request, "landing/index.html", {"signup_error": "Имя пользователя занято"})
+        user = User.objects.create_user(username=username, email=email, password=password)
+        login(request, user)
+        return redirect("index")
+    return redirect("index")
 
 
 def signin(request):
-  return None
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("index")
+        else:
+            return render(request, "landing/index.html", {"login_error": "Неверные учетные данные"})
+    return redirect("index")
 
 
 def signout(request):
-  return None
+    logout(request)
+    return redirect("index")
 
 
 def profile(request):

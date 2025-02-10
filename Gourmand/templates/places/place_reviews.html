@@ -3,13 +3,17 @@
 
 {% block content %}
 <div class="container my-5">
-  <h1 class="mb-4 custom-text-color">Отзывы о {{ place.name }}</h1>
+  <h1 class="mb-4 pt-4 custom-text-color">Отзывы о {{ place.name }}</h1>
 
   {% if reviews %}
     {% for review in reviews %}
       <div class="card bg-dark text-white mb-3">
         <div class="card-body">
-          <h5 class="card-title">{{ review.name }}</h5>
+          <h5 class="card-title"><a class="link_yellow" href="{% url 'gourmand' review.gourmand_id %}">{{ review.gourmand }}</a>
+          </h5>  
+            <h5 class="card-title"><a class="link_yellow" href="{% url 'review' review.id %}">{{ review.name }}</a>
+            <h5 class="card-title">Оценка заведения от гурмана {{ review.gourmand_rating }}<span class="text-warning">★</span>
+          </h5>
           <p class="card-text">{{ review.description }}</p>
           <p class="card-text">
             <small>{{ review.review_date|date:"d M Y" }}</small>
@@ -21,6 +25,7 @@
     <div class="alert alert-info" role="alert">
       Отзывов пока нет.
     </div>
+      
   {% endif %}
 
   <!-- Кнопка возврата к заведению -->

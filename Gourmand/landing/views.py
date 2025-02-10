@@ -67,7 +67,7 @@ def place_reviews(request, place_id):
     'place': place_obj,
     'reviews': reviews,
   }
-  return render(request, 'places/place_reviews.html', context)
+  return render(request, 'places/place_reviews.html', context={'place': place_obj, 'reviews': reviews})
 
 def create_places(request):
   return None

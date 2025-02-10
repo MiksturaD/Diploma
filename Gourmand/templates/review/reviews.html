@@ -18,6 +18,7 @@
                     <div class="card-body bg-dark">
                         <h5 class="card-title bg-dark custom-text-color">{{ review.gourmand }}</h5>
                         <h5 class="card-title bg-dark custom-text-color">{{ review.name }}</h5>
+                        <h5 class="card-title bg-dark custom-text-color">Оценка от гурмана {{ review.gourmand_rating }} <span class="text-warning">★</span> </h5>
                         <h2 class="card-title bg-dark custom-text-color">{{ review.place.name }} {{ review.place.rating }}<span class="text-warning">★{{ place.rating }}</span></h2>
                         <p class="card-text custom-text-color">{{ review.description|truncatechars:100 }}</p>
                     </div>

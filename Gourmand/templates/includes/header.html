@@ -6,37 +6,112 @@
 {% url 'gourmands' as gourmands_url %}
 {% url 'contacts' as contacts_url %}
 
-
 <div class="container">
-<div class="right_header_info fixed-top navbar-light bg-dark">
-
-    <ul class="nav nav-tabs nav nav-link  contact-info">
-
-  <li class="nav-item button_user">
-    <a class="button nav-link {% if request.path == index_url %}active{% endif %}" aria-current="page" href="{% url 'index' %}">Главная</a>
-  </li>
-  <li class="nav-item button_user">
-    <a class="button nav-link {% if request.path == events_url %}active{% endif %}" href="{% url 'events' %}">Афиша</a>
-  </li>
-  <li class="nav-item button_user">
-    <a class="button nav-link {% if request.path == places_url %}active{% endif %}" href="{% url 'places' %}">Места</a>
-  </li>
-  <li class="nav-item button_user">
-    <a class="button nav-link {% if request.path == gourmands_url %}active{% endif %}" href="{% url 'gourmands' %}">Гурманы</a>
-  </li>
-  <li class="nav-item button_user">
-    <a class="button nav-link {% if request.path == reviews_url %}active{% endif %}" href="{% url 'reviews' %}">Отзывы</a>
-  </li>
-    <li class="nav-item button_user">
-    <a class="button nav-link {% if request.path == contacts_url %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
-  </li>
-  <li class="nav-item button_user">
-    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-  </li>
-      <li class="button_user">
-        <a class="button nav-link" href="#">Вход</a>
-        <a class="button nav-link" href="#">Регистрация</a>
+  <div class="right_header_info fixed-top navbar-light bg-dark">
+    <ul class="nav nav-tabs nav nav-link contact-info">
+      <li class="nav-item button_user">
+        <a class="button nav-link {% if request.path == index_url %}active{% endif %}" href="{% url 'index' %}">Главная</a>
       </li>
+      <li class="nav-item button_user">
+        <a class="button nav-link {% if request.path == events_url %}active{% endif %}" href="{% url 'events' %}">Афиша</a>
+      </li>
+      <li class="nav-item button_user">
+        <a class="button nav-link {% if request.path == places_url %}active{% endif %}" href="{% url 'places' %}">Места</a>
+      </li>
+      <li class="nav-item button_user">
+        <a class="button nav-link {% if request.path == gourmands_url %}active{% endif %}" href="{% url 'gourmands' %}">Гурманы</a>
+      </li>
+      <li class="nav-item button_user">
+        <a class="button nav-link {% if request.path == reviews_url %}active{% endif %}" href="{% url 'reviews' %}">Отзывы</a>
+      </li>
+      <li class="nav-item button_user">
+        <a class="button nav-link {% if request.path == contacts_url %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
+      </li>
+
+      {% if request.user.is_authenticated %}
+        <li class="nav-item button_user">
+          <a class="button nav-link active" href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+          <a class="button nav-link" href="{% url 'signout' %}">Выход</a>
+        </li>
+      {% else %}
+        <li class="button_user">
+          <a class="button nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Вход</a>
+          <a class="button nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</a>
+        </li>
+      {% endif %}
     </ul>
+  </div>
 </div>
+
+<!-- Модальное окно Входа -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Вход</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'signin' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="username" class="form-label">Никнэйм</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Войти</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно Регистрации -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h2 class="modal-title custom-text-color" id="registerModalLabel">Регистрация</h2>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="mb-3">
+          <label for="reg-role" class="form-label">Выберите роль</label>
+          <select class="form-control" id="reg-role" name="role" required>
+            <option value="gourmand">Гурман</option>
+            <option value="owner">Владелец заведения</option>
+          </select>
+          </div>    
+      </div>  
+      <div class="modal-body">
+        <form method="POST" action="{% url 'signup' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="reg-username" class="form-label">Никнэйм</label>
+            <input type="text" class="form-control" id="reg-username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-first_name" class="form-label">Имя</label>
+             <input type="text" class="form-control" id="reg-first_name" name="first_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-last_name" class="form-label">Фамилия</label>
+             <input type="text" class="form-control" id="reg-last_name" name="last_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="reg-email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="reg-password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

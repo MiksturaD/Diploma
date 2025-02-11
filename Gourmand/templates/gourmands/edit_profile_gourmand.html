@@ -1,0 +1,27 @@
+{% extends "landing/base.html" %}
+
+{% block content %}
+<div class="container text-white">
+  <h2>Редактирование профиля гурмана</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="first_name" class="form-label">Имя</label>
+      <input type="text" class="form-control" id="first_name" name="first_name" value="{{ profile.first_name }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="last_name" class="form-label">Фамилия</label>
+      <input type="text" class="form-control" id="last_name" name="last_name" value="{{ profile.last_name }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Описание</label>
+      <textarea class="form-control" id="description" name="description" rows="3">{{ profile.description }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Фото профиля</label>
+      <input type="file" class="form-control" id="image" name="image">
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+  </form>
+</div>
+{% endblock %}

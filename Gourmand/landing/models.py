@@ -20,6 +20,8 @@ class User(AbstractUser):
 
 class GourmandProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gourmand_profile')
+  first_name = models.CharField(max_length=100, null=False)  # ❌ Ошибка, если не передаем значение
+  last_name = models.CharField(max_length=100, null=False)
   description = models.TextField()
   rating = models.DecimalField(max_digits=10, decimal_places=0)
   image = models.ImageField(
@@ -53,6 +55,8 @@ class Place(models.Model):
 
 class OwnerProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='owner_profile')
+  first_name = models.CharField(max_length=100, null=False)  # ❌ Ошибка, если не передаем значение
+  last_name = models.CharField(max_length=100, null=False)
   description = models.TextField()
   places = models.ForeignKey(Place, on_delete=models.CASCADE)
   image = models.ImageField(

@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 
-
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
 
@@ -18,12 +17,19 @@ def main(request):
 @login_required
 def profile(request):
     user = request.user
+
     if user.is_gourmand():
-        profile = GourmandProfile.objects.get(user=user)
+        profile = GourmandProfile.objects.filter(user=user).first()  # Без ошибки, если нет профиля
+        if not profile:
+            return redirect("index")  # Или можно создать профиль, если так задумано
         return render(request, "gourmands/gourmand_profile.html", {"profile": profile})
+
     elif user.is_owner():
-        profile = OwnerProfile.objects.get(user=user)
+        profile = OwnerProfile.objects.filter(user=user).first()
+        if not profile:
+            return redirect("index")
         return render(request, "places/owner_profile.html", {"profile": profile})
+
     return redirect("index")
 
 @login_required
@@ -60,19 +66,26 @@ def signup(request):
         last_name = request.POST["last_name"]
         email = request.POST["email"]
         password = request.POST["password"]
-        role = request.POST.get("role")  # Получаем роль из формы
+        role = request.POST.get("role", "gourmand")  # По умолчанию гурман
+
         if User.objects.filter(username=username).exists():
             return render(request, "landing/index.html", {"signup_error": "Этот никнэйм занят"})
-        user = User.objects.create_user(username=username,first_name=first_name, last_name=last_name, email=email, password=password)
-        # Создаем профиль в зависимости от роли
+
+        user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password, role=role)
+
+        # **Гарантированное создание профиля**
         if role == "gourmand":
-            GourmandProfile.objects.create(user=user)
+            GourmandProfile.objects.get_or_create(user=user,
+                first_name=first_name,
+                last_name=last_name)
         elif role == "owner":
-            OwnerProfile.objects.create(user=user)
+            OwnerProfile.objects.get_or_create(user=user,
+                first_name=first_name,
+                last_name=last_name)
+
         login(request, user)
         return redirect("index")
     return redirect("index")
-
 
 def signin(request):
     if request.method == "POST":

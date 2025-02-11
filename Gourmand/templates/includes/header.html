@@ -30,7 +30,7 @@
 
       {% if request.user.is_authenticated %}
         <li class="nav-item button_user">
-          <a class="button nav-link active" href="#">{{ request.user.username }}</a>
+          <a class="button nav-link active" href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>
           <a class="button nav-link" href="{% url 'signout' %}">Выход</a>
         </li>
       {% else %}
@@ -55,7 +55,7 @@
         <form method="POST" action="{% url 'signin' %}">
           {% csrf_token %}
           <div class="mb-3">
-            <label for="username" class="form-label">Имя пользователя</label>
+            <label for="username" class="form-label">Никнэйм</label>
             <input type="text" class="form-control" id="username" name="username" required>
           </div>
           <div class="mb-3">
@@ -74,15 +74,32 @@
   <div class="modal-dialog">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">
-        <h5 class="modal-title" id="registerModalLabel">Регистрация</h5>
+        <h2 class="modal-title custom-text-color" id="registerModalLabel">Регистрация</h2>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+          <div class="mb-3">
+          <label for="reg-role" class="form-label">Выберите роль</label>
+          <select class="form-control" id="reg-role" name="role" required>
+            <option value="gourmand">Гурман</option>
+            <option value="owner">Владелец заведения</option>
+          </select>
+          </div>    
+      </div>  
       <div class="modal-body">
         <form method="POST" action="{% url 'signup' %}">
           {% csrf_token %}
           <div class="mb-3">
-            <label for="reg-username" class="form-label">Имя пользователя</label>
+            <label for="reg-username" class="form-label">Никнэйм</label>
             <input type="text" class="form-control" id="reg-username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-first_name" class="form-label">Имя</label>
+             <input type="text" class="form-control" id="reg-first_name" name="first_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-last_name" class="form-label">Фамилия</label>
+             <input type="text" class="form-control" id="reg-last_name" name="last_name" required>
           </div>
           <div class="mb-3">
             <label for="reg-email" class="form-label">Email</label>

@@ -1,6 +1,38 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.db.models import CASCADE
+
+
+class User(AbstractUser):
+  ROLE_CHOICES = (
+    ('gourmand', 'Гурман'),
+    ('owner', 'Владелец заведения'),
+  )
+  role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='gourmand')
+
+  def is_gourmand(self):
+    return self.role == 'gourmand'
+
+  def is_owner(self):
+    return self.role == 'owner'
+
+
+class GourmandProfile(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gourmand_profile')
+  description = models.TextField()
+  rating = models.DecimalField(max_digits=10, decimal_places=0)
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Фото гурмана",
+    upload_to="gourmands/",
+    blank=True,
+    null=True
+  )
+
+  def __str__(self):
+    return f'{User.first_name} {User.last_name}, рейтинг гурмана {self.rating}'
+
 
 class Place(models.Model):
   name = models.CharField(max_length=100)
@@ -19,14 +51,10 @@ class Place(models.Model):
   def __str__(self):
     return f'{self.name}, {self.description}, {self.place_email}, {self.location}, {self.rating}'
 
-
-
-
-class Gourmand(models.Model):
-  first_name = models.CharField(max_length=100)
-  last_name = models.CharField(max_length=100)
+class OwnerProfile(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='owner_profile')
   description = models.TextField()
-  rating = models.DecimalField(max_digits=10, decimal_places=0)
+  places = models.ForeignKey(Place, on_delete=models.CASCADE)
   image = models.ImageField(
     validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
     verbose_name="Фото гурмана",
@@ -35,9 +63,9 @@ class Gourmand(models.Model):
     null=True
   )
 
-
   def __str__(self):
-    return f'{self.first_name} {self.last_name}, рейтинг гурмана {self.rating}'
+    return f'Профиль владельца {self.user.username}'
+
 
 class Review(models.Model):
   name = models.CharField(max_length=50)
@@ -45,7 +73,7 @@ class Review(models.Model):
   description = models.TextField()
   positive_rating = models.DecimalField(max_digits=10, decimal_places=0)
   negative_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  gourmand =models.ForeignKey(Gourmand, on_delete=models.DO_NOTHING)
+  gourmand =models.ForeignKey(User, on_delete=models.DO_NOTHING)
   place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
   image = models.ImageField(
     validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
@@ -78,41 +106,5 @@ class Event(models.Model):
     return f'{self.name}, {self.description}, {self.place}'
 
 
-class User(AbstractUser):
-  ROLE_CHOICES = (
-    ('gourmand', 'Гурман'),
-    ('owner', 'Владелец заведения'),
-  )
-  role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='gourmand')
-
-  def is_gourmand(self):
-    return self.role == 'gourmand'
-
-  def is_owner(self):
-    return self.role == 'owner'
-
-class GourmandProfile(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
-  first_name = models.CharField(max_length=100)
-  last_name = models.CharField(max_length=100)
-  description = models.TextField()
-  rating = models.DecimalField(max_digits=10, decimal_places=0)
-  image = models.ImageField(
-    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-    verbose_name="Фото гурмана",
-    upload_to="gourmands/",
-    blank=True,
-    null=True
-  )
-
-  def __str__(self):
-    return f'{self.first_name} {self.last_name}, рейтинг гурмана {self.rating}'
 
 
-class OwnerProfile(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-  # Добавьте дополнительные поля для владельца заведения, если необходимо
-
-  def __str__(self):
-    return f'Профиль владельца {self.user.username}'

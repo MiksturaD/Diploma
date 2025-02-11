@@ -1,7 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.defaultfilters import first
 
-from landing.models import Review, Event, Place, Gourmand, User
+
+from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
 
 def index(request):
@@ -12,18 +15,60 @@ def main(request):
   return None
 
 
-def edit_profile(request):
-  return None
+@login_required
+def profile(request):
+    user = request.user
+    if user.is_gourmand():
+        profile = GourmandProfile.objects.get(user=user)
+        return render(request, "gourmands/gourmand_profile.html", {"profile": profile})
+    elif user.is_owner():
+        profile = OwnerProfile.objects.get(user=user)
+        return render(request, "places/owner_profile.html", {"profile": profile})
+    return redirect("index")
 
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == "POST":
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        if user.is_gourmand():
+            profile = GourmandProfile.objects.get(user=user)
+            profile.first_name = first_name
+            profile.last_name = last_name
+            profile.description = request.POST["description"]
+            if "image" in request.FILES:
+                profile.image = request.FILES["image"]
+            profile.save()
+        elif user.is_owner():
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+        return redirect("profile")
+
+    if user.is_gourmand():
+        profile = GourmandProfile.objects.get(user=user)
+        return render(request, "gourmands/edit_profile_gourmand.html", {"profile": profile})
+    elif user.is_owner():
+        return render(request, "places/edit_profile_owner.html", {"user": user})
+    return redirect("index")
 
 def signup(request):
     if request.method == "POST":
         username = request.POST["username"]
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
         email = request.POST["email"]
         password = request.POST["password"]
+        role = request.POST.get("role")  # Получаем роль из формы
         if User.objects.filter(username=username).exists():
-            return render(request, "landing/index.html", {"signup_error": "Имя пользователя занято"})
-        user = User.objects.create_user(username=username, email=email, password=password)
+            return render(request, "landing/index.html", {"signup_error": "Этот никнэйм занят"})
+        user = User.objects.create_user(username=username,first_name=first_name, last_name=last_name, email=email, password=password)
+        # Создаем профиль в зависимости от роли
+        if role == "gourmand":
+            GourmandProfile.objects.create(user=user)
+        elif role == "owner":
+            OwnerProfile.objects.create(user=user)
         login(request, user)
         return redirect("index")
     return redirect("index")
@@ -45,11 +90,6 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect("index")
-
-
-def profile(request):
-  return None
-
 
 def events(request):
   event_list = Event.objects.all()
@@ -129,3 +169,5 @@ def gourmand_reviews(request, gourmand_id):
     reviews = Review.objects.filter(gourmand=gourmand_obj)
     context = {'gourmand': gourmand_obj, 'reviews': reviews}
     return render(request, 'gourmands/gourmand_reviews.html', context)
+
+

@@ -1,21 +1,55 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.db.models import CASCADE
 
 
-class User(AbstractUser):
+class UserManager(BaseUserManager):
+  def create_user(self, email, password=None, **extra_fields):
+    if not email:
+      raise ValueError("Email обязателен")
+    email = self.normalize_email(email)
+    user = self.model(email=email, **extra_fields)
+    user.set_password(password)
+    user.save(using=self._db)
+    return user
+
+  def create_superuser(self, email, password=None, **extra_fields):
+    extra_fields.setdefault("is_staff", True)
+    extra_fields.setdefault("is_superuser", True)
+
+    return self.create_user(email, password, **extra_fields)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+  """Кастомная модель пользователя"""
+
   ROLE_CHOICES = (
-    ('gourmand', 'Гурман'),
-    ('owner', 'Владелец заведения'),
+    ("gourmand", "Гурман"),
+    ("owner", "Владелец заведения"),
   )
-  role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='gourmand')
+  username = models.CharField(max_length=20)
+  email = models.EmailField(unique=True)
+  first_name = models.CharField(max_length=30, blank=True)
+  last_name = models.CharField(max_length=30, blank=True)
+  role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="gourmand")
+  is_active = models.BooleanField(default=True)  # Нужно для аутентификации
+  is_staff = models.BooleanField(default=False)  # Нужно для Django Admin
+
+  objects = UserManager()
+
+  USERNAME_FIELD = "email"  # Поле для логина
+  REQUIRED_FIELDS = ["first_name", "last_name"]  # Поля, обязательные при `createsuperuser`
+
+  def __str__(self):
+    return self.email
 
   def is_gourmand(self):
-    return self.role == 'gourmand'
+    return self.role == "gourmand"
 
   def is_owner(self):
-    return self.role == 'owner'
+    return self.role == "owner"
 
 
 class GourmandProfile(models.Model):

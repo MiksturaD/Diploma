@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 
+from landing.forms import SignupForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
 
@@ -59,34 +60,26 @@ def edit_profile(request):
         return render(request, "places/edit_profile_owner.html", {"user": user})
     return redirect("index")
 
+
 def signup(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        email = request.POST["email"]
-        password = request.POST["password"]
-        role = request.POST.get("role", "gourmand")  # По умолчанию гурман
+  if request.method == "POST":
+    form = SignupForm(request.POST)
+    if form.is_valid():
+      user = form.save(commit=False)  # Создаем пользователя, но пока не сохраняем
+      user.save()  # Теперь сохраняем
 
-        if User.objects.filter(username=username).exists():
-            return render(request, "landing/index.html", {"signup_error": "Этот никнэйм занят"})
+      # Создаем профиль
+      if user.role == "gourmand":
+        GourmandProfile.objects.create(user=user, first_name=user.first_name, last_name=user.last_name)
+      elif user.role == "owner":
+        OwnerProfile.objects.create(user=user, first_name=user.first_name, last_name=user.last_name)
 
-        user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password, role=role)
-
-        # **Гарантированное создание профиля**
-        if role == "gourmand":
-            GourmandProfile.objects.get_or_create(user=user,
-                first_name=first_name,
-                last_name=last_name)
-        elif role == "owner":
-            OwnerProfile.objects.get_or_create(user=user,
-                first_name=first_name,
-                last_name=last_name)
-
-        login(request, user)
-        return redirect("index")
+      login(request, user)
+      return redirect("index")
+  else:
+    form = SignupForm()
     return redirect("index")
-
+  return redirect("index")
 def signin(request):
     if request.method == "POST":
         username = request.POST["username"]

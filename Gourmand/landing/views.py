@@ -62,29 +62,34 @@ def edit_profile(request):
 
 
 def signup(request):
-  if request.method == "POST":
-    form = SignupForm(request.POST)
-    if form.is_valid():
-      user = form.save(commit=False)  # Создаем пользователя, но пока не сохраняем
-      user.save()  # Теперь сохраняем
+    if request.method == "POST":
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
 
-      # Создаем профиль
-      if user.role == "gourmand":
-        GourmandProfile.objects.create(user=user, first_name=user.first_name, last_name=user.last_name)
-      elif user.role == "owner":
-        OwnerProfile.objects.create(user=user, first_name=user.first_name, last_name=user.last_name)
+            # Создаем профиль
+            if user.is_gourmand():
+                GourmandProfile.objects.create(user=user)
+            elif user.is_owner():
+                OwnerProfile.objects.create(user=user)
 
-      login(request, user)
-      return redirect("index")
-  else:
-    form = SignupForm()
+            login(request, user)
+            return redirect("index")
+        else:
+            return render(request, "landing/index.html", {"signup_error": "Ошибка при регистрации", "form": form})
+
     return redirect("index")
-  return redirect("index")
+
+
 def signin(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        email = request.POST.get("email")  # Теперь берем email
+        password = request.POST.get("password")
+
+        if not email or not password:
+            return render(request, "landing/index.html", {"login_error": "Введите email и пароль"})
+
+        user = authenticate(request, email=email, password=password)  # Используем email
         if user is not None:
             login(request, user)
             return redirect("index")

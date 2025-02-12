@@ -51,20 +51,20 @@
         <h5 class="modal-title" id="loginModalLabel">Вход</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form method="POST" action="{% url 'signin' %}">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="username" class="form-label">Никнэйм</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Пароль</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Войти</button>
-        </form>
-      </div>
+        <div class="modal-body">
+          <form method="POST" action="{% url 'signin' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Пароль</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Войти</button>
+          </form>
+        </div>
     </div>
   </div>
 </div>
@@ -105,14 +105,14 @@
             <label for="reg-email" class="form-label">Email</label>
             <input type="email" class="form-control" id="reg-email" name="email" required>
           </div>
-          <div class="mb-3">
-            <label for="reg-password" class="form-label">Пароль</label>
-            <input type="password" class="form-control" id="reg-password" name="password" required>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Подтвердите пароль</label>
-            <input type="password" class="form-control" id="floatingPasswordConfirm" name="password" required>
-          </div>  
+            <div class="mb-3">
+              <label for="reg-password" class="form-label">Пароль</label>
+              <input type="password" class="form-control" id="reg-password" name="password" required>
+            </div>
+            <div class="mb-3">
+              <label for="reg-password-confirm" class="form-label">Подтвердите пароль</label>
+              <input type="password" class="form-control" id="reg-password-confirm" name="confirm_password" required>
+            </div>
           <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
         </form>
       </div>

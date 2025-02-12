@@ -6,12 +6,10 @@ from django.core.exceptions import ValidationError
 from landing.models import User, Review, Place, Event
 
 
-
 class SignupForm(forms.ModelForm):
   confirm_password = forms.CharField(
     widget=forms.PasswordInput(attrs={
       'class': 'form-control',
-      'id': 'floatingPasswordConfirm',
       'placeholder': 'Подтверждение пароля',
       'required': True
     })
@@ -19,49 +17,17 @@ class SignupForm(forms.ModelForm):
 
   role = forms.ChoiceField(
     choices=User.ROLE_CHOICES,
-    widget=forms.Select(attrs={
-      'class': 'form-control',
-      'id': 'floatingRole',
-      'required': True
-    })
+    widget=forms.Select(attrs={'class': 'form-control', 'required': True})
   )
 
   class Meta:
     model = User
-    fields = ['first_name', 'last_name', 'username', 'email', 'password', 'role']
+    fields = ['first_name', 'last_name', 'email', 'password', 'role']
     widgets = {
-      'first_name': forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingTitle',
-        'placeholder': 'Имя',
-        'required': True
-      }),
-      'last_name': forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingLastname',
-        'aria-label': 'Фамилия',
-        'placeholder': 'Фамилия',
-        'required': True
-      }),
-      'username': forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingUsername',
-        'placeholder': 'Логин пользователя',
-        'aria-label': 'Логин пользователя',
-        'required': True
-      }),
-      'email': forms.EmailInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingEmail',
-        'placeholder': 'Почта',
-        'required': True
-      }),
-      'password': forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingPassword',
-        'placeholder': 'Пароль',
-        'required': True
-      }),
+      'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
+      'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
+      'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+      'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'}),
     }
 
   def clean_email(self):
@@ -69,12 +35,6 @@ class SignupForm(forms.ModelForm):
     if User.objects.filter(email=email).exists():
       raise ValidationError("Этот email уже зарегистрирован.")
     return email
-
-  def clean_username(self):
-    username = self.cleaned_data.get("username")
-    if User.objects.filter(username=username).exists():
-      raise ValidationError("Этот логин уже занят.")
-    return username
 
   def clean(self):
     cleaned_data = super().clean()
@@ -88,7 +48,7 @@ class SignupForm(forms.ModelForm):
 
   def save(self, commit=True):
     user = super().save(commit=False)
-    user.set_password(self.cleaned_data["password"])  # Хешируем пароль!
+    user.set_password(self.cleaned_data["password"])
     if commit:
       user.save()
     return user
@@ -96,7 +56,7 @@ class SignupForm(forms.ModelForm):
 class CustomUserChangeForm(UserChangeForm):
   class Meta:
       model = User
-      fields = ['first_name', 'last_name', 'username', 'email']
+      fields = ['first_name', 'last_name', 'email']
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -104,7 +64,7 @@ class CustomUserCreationForm(UserCreationForm):
 
   class Meta:
     model = User
-    fields = ('username', 'email', 'role', 'password1', 'password2')
+    fields = ('email', 'role', 'password1', 'password2')
 
 
 # class ReviewCreateForm(forms.ModelForm):
@@ -180,7 +140,7 @@ class CustomUserCreationForm(UserCreationForm):
 #         self.fields['rating'].widget.attrs.update({'aria-label': 'Рейтинг заведения'})
 #
 #
-# class EvenCreateForm(forms.ModelForm):
+# class EventCreateForm(forms.ModelForm):
 #     class Meta:
 #         model = Event
 #         fields = ['name', 'description', 'place']

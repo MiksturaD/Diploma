@@ -439,3 +439,8 @@ header .container-fluid {
 .link_yellow {
     color: #e3d105;
 }
+
+.bg_dark {
+    color: #eaeaea;
+    background: #111111;
+}

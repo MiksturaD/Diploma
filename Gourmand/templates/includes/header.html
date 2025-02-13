@@ -55,12 +55,12 @@
           <form method="POST" action="{% url 'signin' %}">
             {% csrf_token %}
             <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email" required>
+                <label for="login-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="login-email" name="email" required>
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label">Пароль</label>
-              <input type="password" class="form-control" id="password" name="password" required>
+                <label for="login-password" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="login-password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Войти</button>
           </form>
@@ -78,6 +78,9 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+          <form method="POST" action="{% url 'signup' %}">
+          {% csrf_token %}
+              
           <div class="mb-3">
           <label for="reg-role" class="form-label">Выберите роль</label>
           <select class="form-control" id="reg-role" name="role" required>
@@ -87,12 +90,6 @@
           </div>    
       </div>  
       <div class="modal-body">
-        <form method="POST" action="{% url 'signup' %}">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="reg-username" class="form-label">Никнэйм</label>
-            <input type="text" class="form-control" id="reg-username" name="username" required>
-          </div>
           <div class="mb-3">
             <label for="reg-first_name" class="form-label">Имя</label>
              <input type="text" class="form-control" id="reg-first_name" name="first_name" required>

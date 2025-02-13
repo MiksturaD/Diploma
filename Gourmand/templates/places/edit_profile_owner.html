@@ -1,23 +1,32 @@
-{% extends "landing/base.html" %}
+{% extends 'landing/base.html' %}
 
 {% block content %}
-<div class="container text-white">
-  <h2>Редактирование профиля владельца</h2>
-  <form method="POST">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="first_name" class="form-label">Имя</label>
-      <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
-    </div>
-    <div class="mb-3">
-      <label for="last_name" class="form-label">Фамилия</label>
-      <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
-    </div>
-    <button type="submit" class="btn btn-success">Сохранить изменения</button>
-  </form>
+<div class="container my-5">
+    <h2>Редактирование профиля владельца</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_first_name" class="form-label">Имя</label>
+            {{ user_form.first_name }}
+        </div>
+        <div class="mb-3">
+            <label for="id_last_name" class="form-label">Фамилия</label>
+            {{ user_form.last_name }}
+        </div>
+        <div class="mb-3">
+            <label for="id_description" class="form-label">Описание</label>
+            {{ profile_form.description }}
+        </div>
+        <div class="mb-3">
+            <label for="id_places" class="form-label">Ваши заведения</label>
+            {{ profile_form.places }}
+        </div>
+        <div class="mb-3">
+            <label for="id_image" class="form-label">Фото</label>
+            {{ profile_form.image }}
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
 </div>
 {% endblock %}

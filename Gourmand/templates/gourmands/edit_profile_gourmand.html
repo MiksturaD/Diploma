@@ -1,27 +1,36 @@
 {% extends "landing/base.html" %}
-
+{% load static %}
 {% block content %}
-<div class="container text-white">
+<div class="container my-5 pt-4">
+ <div class="row gx-1">
   <h2>Редактирование профиля гурмана</h2>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="mb-3">
+        {% if profile.image %}
+            <img src="{{ profile.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
+        {% else %}
+            <img src="{% static 'img/default.png' %}" alt="Фото гурмана" class="img-thumbnail" width="150">
+        {% endif %}
+    <div class="col-md-3">
       <label for="first_name" class="form-label">Имя</label>
       <input type="text" class="form-control" id="first_name" name="first_name" value="{{ profile.first_name }}" required>
     </div>
-    <div class="mb-3">
+    <div class="col-md-3">
       <label for="last_name" class="form-label">Фамилия</label>
       <input type="text" class="form-control" id="last_name" name="last_name" value="{{ profile.last_name }}" required>
     </div>
-    <div class="mb-3">
+    <div class="col-md-3">
       <label for="description" class="form-label">Описание</label>
       <textarea class="form-control" id="description" name="description" rows="3">{{ profile.description }}</textarea>
     </div>
-    <div class="mb-3">
+    <div class="col-md-3">
       <label for="image" class="form-label">Фото профиля</label>
       <input type="file" class="form-control" id="image" name="image">
     </div>
-    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    <div class="mt-4 button_user">
+        <button type="submit" class="custom-button bg_dark">Сохранить изменения</button>
+    </div>
   </form>
+ </div>
 </div>
 {% endblock %}

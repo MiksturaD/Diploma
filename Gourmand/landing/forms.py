@@ -3,21 +3,22 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
 
-from landing.models import User, Review, Place, Event
+from landing.models import User, Review, Place, Event, OwnerProfile
 
 
 class SignupForm(forms.ModelForm):
-  confirm_password = forms.CharField(
-    widget=forms.PasswordInput(attrs={
-      'class': 'form-control',
-      'placeholder': 'Подтверждение пароля',
-      'required': True
-    })
+  password = forms.CharField(
+    widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'}),
+    label="Пароль"
   )
-
+  confirm_password = forms.CharField(
+    widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Подтвердите пароль'}),
+    label="Подтвердите пароль"
+  )
   role = forms.ChoiceField(
     choices=User.ROLE_CHOICES,
-    widget=forms.Select(attrs={'class': 'form-control', 'required': True})
+    widget=forms.Select(attrs={'class': 'form-control'}),
+    label="Выберите роль"
   )
 
   class Meta:
@@ -27,14 +28,7 @@ class SignupForm(forms.ModelForm):
       'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
       'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
       'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-      'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'}),
     }
-
-  def clean_email(self):
-    email = self.cleaned_data.get("email")
-    if User.objects.filter(email=email).exists():
-      raise ValidationError("Этот email уже зарегистрирован.")
-    return email
 
   def clean(self):
     cleaned_data = super().clean()
@@ -52,6 +46,23 @@ class SignupForm(forms.ModelForm):
     if commit:
       user.save()
     return user
+
+  class OwnerProfileForm(forms.ModelForm):
+    places = forms.ModelMultipleChoiceField(
+      queryset=Place.objects.all(),
+      widget=forms.CheckboxSelectMultiple,  # ✅ Даем выбор нескольких заведений
+      required=False,
+      label="Выберите заведения"
+    )
+
+    class Meta:
+      model = OwnerProfile
+      fields = ["description", "places", "image"]
+      widgets = {
+        "description": forms.Textarea(attrs={"class": "form-control"}),
+        "image": forms.FileInput(attrs={"class": "form-control"}),
+      }
+
 
 class CustomUserChangeForm(UserChangeForm):
   class Meta:

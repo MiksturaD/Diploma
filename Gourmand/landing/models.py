@@ -6,6 +6,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.db.models import DO_NOTHING
 
 
 class UserManager(BaseUserManager):
@@ -107,7 +108,7 @@ class Review(models.Model):
   gourmand_rating = models.DecimalField(max_digits=10, decimal_places=0)
   positive_rating = models.DecimalField(max_digits=10, decimal_places=0)
   negative_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  gourmand =models.ForeignKey(User, on_delete=models.DO_NOTHING)
+  gourmand = models.ForeignKey(User, on_delete=models.DO_NOTHING)
   place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
   image = models.ImageField(
     validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
@@ -138,6 +139,20 @@ class Event(models.Model):
 
   def __str__(self):
     return f'{self.name}, {self.description}, {self.place}'
+
+
+class Gourmand(models.Model):
+  user = models.ForeignKey(User, on_delete=DO_NOTHING)
+  description = models.TextField()
+  event_date = models.DateField()
+  place = models.ManyToManyField(Place)
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Изображение события",
+    upload_to="events/",
+    blank=True,
+    null=True
+  )
 
 
 

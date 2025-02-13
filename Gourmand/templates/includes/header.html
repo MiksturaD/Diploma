@@ -48,7 +48,7 @@
   <div class="modal-dialog">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">
-        <h5 class="modal-title" id="loginModalLabel">Вход</h5>
+        <h2 class="modal-title custom-text-color" id="loginModalLabel">Вход</h2>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
         <div class="modal-body">
@@ -62,7 +62,10 @@
                 <label for="login-password" class="form-label">Пароль</label>
                 <input type="password" class="form-control" id="login-password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Войти</button>
+              <div class="button_user">
+                 <button type="submit" class="custom-button custom-text-color bg_dark">Войти</button> 
+              </div>
+              
           </form>
         </div>
     </div>
@@ -78,18 +81,16 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <form method="POST" action="{% url 'signup' %}">
+        <form method="POST" action="{% url 'signup' %}">
           {% csrf_token %}
               
           <div class="mb-3">
-          <label for="reg-role" class="form-label">Выберите роль</label>
-          <select class="form-control" id="reg-role" name="role" required>
-            <option value="gourmand">Гурман</option>
-            <option value="owner">Владелец заведения</option>
-          </select>
-          </div>    
-      </div>  
-      <div class="modal-body">
+            <label for="reg-role" class="form-label">Выберите роль</label>
+            <select class="form-control" id="reg-role" name="role" required>
+              <option value="gourmand">Гурман</option>
+              <option value="owner">Владелец заведения</option>
+            </select>
+          </div>
           <div class="mb-3">
             <label for="reg-first_name" class="form-label">Имя</label>
              <input type="text" class="form-control" id="reg-first_name" name="first_name" required>
@@ -110,9 +111,14 @@
               <label for="reg-password-confirm" class="form-label">Подтвердите пароль</label>
               <input type="password" class="form-control" id="reg-password-confirm" name="confirm_password" required>
             </div>
-          <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
-        </form>
+          <div class="button_user">
+             <button type="submit"  class="custom-text-color custom-button bg_dark">Зарегистрироваться</button>
+          </div>
+      </form>
       </div>
     </div>
   </div>
 </div>
+</div>
+
+

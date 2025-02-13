@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 
 from landing.forms import SignupForm
-from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
+from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, Gourmand
 
 
 def index(request):
@@ -21,7 +21,6 @@ def signup(request):
         if form.is_valid():
             user = form.save()
 
-            # Создаем профиль в зависимости от роли
             if user.role == "gourmand":
                 GourmandProfile.objects.create(user=user)
             elif user.role == "owner":

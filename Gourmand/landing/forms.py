@@ -30,6 +30,12 @@ class SignupForm(forms.ModelForm):
       'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
     }
 
+  def clean_email(self):
+    email = self.cleaned_data.get('email')
+    if User.objects.filter(email=email).exists():
+      raise ValidationError("Пользователь с таким email уже зарегистрирован.")
+    return email
+
   def clean(self):
     cleaned_data = super().clean()
     password = cleaned_data.get("password")
@@ -50,7 +56,7 @@ class SignupForm(forms.ModelForm):
   class OwnerProfileForm(forms.ModelForm):
     places = forms.ModelMultipleChoiceField(
       queryset=Place.objects.all(),
-      widget=forms.CheckboxSelectMultiple,  # ✅ Даем выбор нескольких заведений
+      widget=forms.CheckboxSelectMultiple,
       required=False,
       label="Выберите заведения"
     )

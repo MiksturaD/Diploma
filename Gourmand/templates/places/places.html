@@ -16,21 +16,22 @@
                          style="height: 200px; object-fit: cover;">
 
                     <div class="card-body bg-dark custom-text-color">
-                        <h5 class="custom-text-color">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h5>
+                        <h2 class="custom-text-color">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h2>
                         <p>{{ place.description|truncatechars:100 }}</p>
                     </div>
 
                     <ul class="list-group bg-dark list-group-flush">
                         <li class="list-group-item bg-dark">
-                            <i class="bi bi-geo-alt me-2"></i>
                             <span class="badge bg-dark me-1">
+                                Местоположение:
                                 {{ place.location }}
                             </span>
                         </li>
 
                         <li class="list-group-item bg-dark custom-text-color">
-                            <i class="bi bi-envelope me-2 bu"></i>
-                            {{ place.place_email }}
+                            <i class="bi bi-envelope me-2 bu">Контакты</i><br>
+                            Телефон {{ place.phone }} <br>
+                            Е-майл {{ place.place_email }}
                         </li>
                     </ul>
 
@@ -44,6 +45,11 @@
                 </div>
 </div>
             {% endfor %}
+        </div>
+        <div class="button_user pt-4">
+             <a href="{% url 'create_places' %}" class="custom-button">
+                Создать новое заведение
+             </a>
         </div>
     {% else %}
         <div class="alert alert-info" role="alert">

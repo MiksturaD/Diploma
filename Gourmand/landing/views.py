@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 
-from landing.forms import SignupForm
-from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, Gourmand
+from landing.forms import SignupForm, PlaceCreateForm
+from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
 
 def index(request):
@@ -151,8 +151,27 @@ def place_reviews(request, place_id):
   }
   return render(request, 'places/place_reviews.html', context={'place': place_obj, 'reviews': reviews})
 
+@login_required
 def create_places(request):
-  return None
+    if not request.user.is_owner():
+        print('не прошла проверка атата')
+        return redirect("index")
+    print('Прошла проверка на владельца')
+
+    if request.method == "POST":
+        print('запуск формы')
+        form = PlaceCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            place = form.save()
+            return redirect("place", place.id)
+            print('не прошла проверка тут')
+        else:
+            print('не прошла проверка и тут')
+            return render(request, "places/place_create.html", {"form": form})
+    else:
+        print('не прошла проверка совсем')
+        form = PlaceCreateForm()
+        return render(request, "places/place_create.html", {"form": form})
 
 
 def reviews(request):
@@ -177,17 +196,17 @@ def contacts(request):
 
 
 def gourmands(request):
-  gourmands_list = Gourmand.objects.all()
+  gourmands_list = User.objects.all()
   return render(request, 'gourmands/gourmands.html', context={'gourmands': gourmands_list})
 
 
-def gourmand(request, gourmand_id):
-    gourmand_obj = get_object_or_404(Gourmand, pk=gourmand_id)
+def gourmand(request, user_id):
+    gourmand_obj = get_object_or_404(User, pk=user_id)
     context = {'gourmand': gourmand_obj}
     return render(request, 'gourmands/gourmand.html', context)
 
-def gourmand_reviews(request, gourmand_id):
-    gourmand_obj = get_object_or_404(Gourmand, pk=gourmand_id)
+def gourmand_reviews(request, user_id):
+    gourmand_obj = get_object_or_404(User, pk=user_id)
     reviews = Review.objects.filter(gourmand=gourmand_obj)
     context = {'gourmand': gourmand_obj, 'reviews': reviews}
     return render(request, 'gourmands/gourmand_reviews.html', context)

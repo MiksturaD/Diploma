@@ -1,0 +1,18 @@
+{% extends "landing/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container my-3 pt-4">
+    <div class="row gx-1">
+        <h1 class="mb-4 pt-4 custom-text-color">Создание заведения</h1>
+        <form action="{% url 'create_places' %}" method="post">
+            {% csrf_token %}
+            <div class="col-md-4">
+                {{ form.as_p }}
+            </div>    
+                <div class="col-md-3 pt-1 button_user">
+                    <button type="submit" class="custom-button bg_dark">Создать заведение</button>
+                </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

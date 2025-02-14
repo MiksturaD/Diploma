@@ -3,15 +3,15 @@
 {% block content %}
 <div class="container text-white mt-2 pt-4">
   <h2 class="mb-4 pt-4 custom-text-color">Профиль гурмана</h2>
-  {% if profile.image %}
-    <img src="{{ profile.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
+  {% if user.image %}
+    <img src="{{ user.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
   {% else %}
     <img src="{% static 'img/default.png' %}" alt="Фото гурмана" class="img-thumbnail" width="150">
   {% endif %}
-  <p>Имя: {{ profile.first_name }}</p>
-  <p>Фамилия: {{ profile.last_name }}</p>
-  <p>Описание: {{ profile.description }}</p>
-  <p>Рейтинг: {{ profile.rating }}</p>
+  <p>Имя: {{ user.first_name }}</p>
+  <p>Фамилия: {{ user.last_name }}</p>
+  <p>Описание: {{ user.description }}</p>
+  <p>Рейтинг: {{ user.rating }}</p>
   <div class="mt-4 button_user">
     <a href="{% url 'edit_profile' %}" class="custom-button">Редактировать профиль</a>
   </div>

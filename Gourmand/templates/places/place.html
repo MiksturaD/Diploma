@@ -5,7 +5,6 @@
 <div class="container my-5">
   <h1 class="mb-4 pt-4 custom-text-color">{{ place.name }}</h1>
   <div class="row">
-    <!-- Левая колонка: изображение заведения -->
     <div class="col-md-4">
       {% if place.image %}
         <img src="{{ place.image.url }}" alt="{{ place.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
@@ -13,7 +12,6 @@
         <img src="{% static 'img/default.png' %}" alt="{{ place.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
       {% endif %}
     </div>
-    <!-- Правая колонка: детали заведения -->
     <div class="col-md-6">
       <div class="card bg-dark text-white">
         <div class="card-body">
@@ -22,7 +20,7 @@
           <p class="card-text">
             <strong>Email:</strong> {{ place.place_email }}<br>
             <strong>Местоположение:</strong> {{ place.location }}<br>
-            <strong>Рейтинг:</strong> {{ place.rating }} ★
+            <strong>Рейтинг:</strong> {{ place.rating }}<span class="text-warning"><span class="text-warning">★</span>
           </p>
         </div>
       </div>

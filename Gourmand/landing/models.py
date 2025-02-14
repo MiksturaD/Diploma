@@ -74,6 +74,7 @@ class Place(models.Model):
   place_email = models.EmailField()
   location = models.TextField()
   rating = models.DecimalField(max_digits=10, decimal_places=0)
+  phone = models.TextField(max_length=50)
   image = models.ImageField(
     validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
     verbose_name="Фото заведения",
@@ -139,21 +140,6 @@ class Event(models.Model):
 
   def __str__(self):
     return f'{self.name}, {self.description}, {self.place}'
-
-
-class Gourmand(models.Model):
-  user = models.ForeignKey(User, on_delete=DO_NOTHING)
-  description = models.TextField()
-  event_date = models.DateField()
-  place = models.ManyToManyField(Place)
-  image = models.ImageField(
-    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-    verbose_name="Изображение события",
-    upload_to="events/",
-    blank=True,
-    null=True
-  )
-
 
 
 

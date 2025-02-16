@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 
-from landing.forms import SignupForm, PlaceCreateForm
+from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
 
@@ -17,21 +17,28 @@ def main(request):
 
 def signup(request):
     if request.method == "POST":
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-
+        user_form = SignupForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
             if user.role == "gourmand":
-                GourmandProfile.objects.create(user=user)
+                gourmand_profile_form = GourmandProfileForm(request.POST, request.FILES)
+                if gourmand_profile_form.is_valid():
+                    gourmand_profile = gourmand_profile_form.save(commit=False)
+                    gourmand_profile.user = user
+                    gourmand_profile.save()
             elif user.role == "owner":
-                OwnerProfile.objects.create(user=user)
-
+                owner_profile_form = OwnerProfileForm(request.POST, request.FILES)
+                if owner_profile_form.is_valid():
+                    owner_profile = owner_profile_form.save(commit=False)
+                    owner_profile.user = user
+                    owner_profile.save()
             login(request, user)
             return redirect("index")
         else:
-            return render(request, "landing/index.html", {"signup_error": "Ошибка при регистрации", "form": form})
-
-    return redirect("index")
+            return render(request, "landing/index.html", {"user_form": user_form})
+    else:
+        user_form = SignupForm()
+    return render(request, 'landing/index.html', {'user_form': user_form})
 
 
 def signin(request):
@@ -70,42 +77,34 @@ def profile(request):
 @login_required
 def edit_profile(request):
     user = request.user
-    if request.method == "POST":
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        description = request.POST.get("description", "")
+    if user.is_gourmand():
+        profile = GourmandProfile.objects.get_or_create(user=user)[0]
+        return render(request, "gourmands/edit_profile_gourmand.html", {"profile": profile})
+    elif user.is_owner():
+        profile = OwnerProfile.objects.get_or_create(user=user)[0]
+        all_places = Place.objects.all()
+        if request.method == "POST":
+            first_name = request.POST.get("first_name")
+            last_name = request.POST.get("last_name")
+            description = request.POST.get("description")
+            places_ids = request.POST.getlist("places")
+            places = Place.objects.filter(id__in=places_ids)
+            image = request.FILES.get("image")
 
-        if user.is_gourmand():
-            profile, created = GourmandProfile.objects.get_or_create(user=user)
             profile.first_name = first_name
             profile.last_name = last_name
             profile.description = description
-            if "image" in request.FILES:
-                profile.image = request.FILES.get("image")
+            profile.places.set(places)
+            if image:
+                profile.image = image
             profile.save()
 
-        elif user.is_owner():
-            profile, created = OwnerProfile.objects.get_or_create(user=user)
-            profile.first_name = first_name
-            profile.last_name = last_name
-            profile.places - places
-            if "image" in request.FILES:
-                profile.image = request.FILES.get("image")
-            profile.save()
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
 
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
-
-        return redirect("profile")
-
-    if user.is_gourmand():
-        profile = GourmandProfile.objects.filter(user=user).first()
-        return render(request, "gourmands/edit_profile_gourmand.html", {"profile": profile})
-    elif user.is_owner():
-        profile = OwnerProfile.objects.filter(user=user).first()
-        return render(request, "places/edit_profile_owner.html", {"profile": profile})
-
+            return redirect("profile")
+        return render(request, "places/edit_profile_owner.html", {"profile": profile, "all_places": all_places})
     return redirect("index")
 
 

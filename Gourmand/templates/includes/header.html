@@ -35,90 +35,11 @@
         </li>
       {% else %}
         <li class="button_user">
-          <a class="button nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Вход</a>
-          <a class="button nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</a>
+          <a class="button nav-link" href="{% url 'signin' %}" >Вход</a>
+          <a class="button nav-link" href="{% url 'signup' %}" >Регистрация</a>
         </li>
       {% endif %}
     </ul>
   </div>
 </div>
-
-<!-- Модальное окно Входа -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h2 class="modal-title custom-text-color" id="loginModalLabel">Вход</h2>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-        <div class="modal-body">
-          <form method="POST" action="{% url 'signin' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="login-email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="login-email" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="login-password" class="form-label">Пароль</label>
-                <input type="password" class="form-control" id="login-password" name="password" required>
-            </div>
-              <div class="button_user">
-                 <button type="submit" class="custom-button custom-text-color bg_dark">Войти</button> 
-              </div>
-              
-          </form>
-        </div>
-    </div>
-  </div>
-</div>
-
-<!-- Модальное окно Регистрации -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h2 class="modal-title custom-text-color" id="registerModalLabel">Регистрация</h2>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="{% url 'signup' %}">
-          {% csrf_token %}
-              
-          <div class="mb-3">
-            <label for="reg-role" class="form-label">Выберите роль</label>
-            <select class="form-control" id="reg-role" name="role" required>
-              <option value="gourmand">Гурман</option>
-              <option value="owner">Владелец заведения</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="reg-first_name" class="form-label">Имя</label>
-             <input type="text" class="form-control" id="reg-first_name" name="first_name" required>
-          </div>
-          <div class="mb-3">
-            <label for="reg-last_name" class="form-label">Фамилия</label>
-             <input type="text" class="form-control" id="reg-last_name" name="last_name" required>
-          </div>
-          <div class="mb-3">
-            <label for="reg-email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="reg-email" name="email" required>
-          </div>
-            <div class="mb-3">
-              <label for="reg-password" class="form-label">Пароль</label>
-              <input type="password" class="form-control" id="reg-password" name="password" required>
-            </div>
-            <div class="mb-3">
-              <label for="reg-password-confirm" class="form-label">Подтвердите пароль</label>
-              <input type="password" class="form-control" id="reg-password-confirm" name="confirm_password" required>
-            </div>
-          <div class="button_user">
-             <button type="submit"  class="custom-text-color custom-button bg_dark">Зарегистрироваться</button>
-          </div>
-      </form>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
 

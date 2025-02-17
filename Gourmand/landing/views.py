@@ -16,47 +16,54 @@ def main(request):
 
 
 def signup(request):
+    """Регистрация нового пользователя"""
     if request.method == "POST":
-        user_form = SignupForm(request.POST)
-        if user_form.is_valid():
-            user = user_form.save()
-            if user.role == "gourmand":
-                gourmand_profile_form = GourmandProfileForm(request.POST, request.FILES)
-                if gourmand_profile_form.is_valid():
-                    gourmand_profile = gourmand_profile_form.save(commit=False)
-                    gourmand_profile.user = user
-                    gourmand_profile.save()
-            elif user.role == "owner":
-                owner_profile_form = OwnerProfileForm(request.POST, request.FILES)
-                if owner_profile_form.is_valid():
-                    owner_profile = owner_profile_form.save(commit=False)
-                    owner_profile.user = user
-                    owner_profile.save()
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data["password1"])  # Хешируем пароль
+            user.save()
+
+            # Создание профиля в зависимости от роли
+            if user.role == 'gourmand':
+                GourmandProfile.objects.create(user=user)
+            elif user.role == 'owner':
+                OwnerProfile.objects.create(user=user)
+
             login(request, user)
             return redirect("index")
-        else:
-            return render(request, "landing/index.html", {"user_form": user_form})
+
+        return render(request, "auth/signup.html", {"form": form})  # Передаем форму с ошибками
+
     else:
-        user_form = SignupForm()
-    return render(request, 'landing/index.html', {'user_form': user_form})
+        form = SignupForm()
+
+    print(form.errors)
+    return render(request, "auth/signup.html", {"form": form})
 
 
 def signin(request):
+    """Авторизация пользователя"""
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
 
         if not email or not password:
-            return render(request, "landing/index.html", {"login_error": "Введите email и пароль"})
+            return render(request, "auth/signin.html", {"login_error": "Введите email и пароль"})
 
-        user = authenticate(request, email=email, password=password)
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return render(request, "auth/signin.html", {"login_error": "Пользователь не найден."})
+
+        user = authenticate(request, username=user.email, password=password)  # Используем email
         if user is not None:
             login(request, user)
             return redirect("index")
         else:
-            return render(request, "landing/index.html", {"login_error": "Неверные учетные данные"})
+            return render(request, "auth/signin.html", {"login_error": "Неверные учетные данные"})
 
-    return redirect("index")
+    return render(request, "auth/signin.html")
 
 
 @login_required
@@ -77,34 +84,44 @@ def profile(request):
 @login_required
 def edit_profile(request):
     user = request.user
-    if user.is_gourmand():
-        profile = GourmandProfile.objects.get_or_create(user=user)[0]
-        return render(request, "gourmands/edit_profile_gourmand.html", {"profile": profile})
-    elif user.is_owner():
-        profile = OwnerProfile.objects.get_or_create(user=user)[0]
-        all_places = Place.objects.all()
-        if request.method == "POST":
-            first_name = request.POST.get("first_name")
-            last_name = request.POST.get("last_name")
-            description = request.POST.get("description")
-            places_ids = request.POST.getlist("places")
-            places = Place.objects.filter(id__in=places_ids)
-            image = request.FILES.get("image")
 
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        description = request.POST.get("description", "")
+
+        if user.is_gourmand():
+            profile, _ = GourmandProfile.objects.get_or_create(user=user)
             profile.first_name = first_name
             profile.last_name = last_name
             profile.description = description
-            profile.places.set(places)
-            if image:
-                profile.image = image
+            if "image" in request.FILES:
+                profile.image = request.FILES["image"]
             profile.save()
 
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
+        elif user.is_owner():
+            profile, _ = OwnerProfile.objects.get_or_create(user=user)
+            places_ids = request.POST.getlist("places")
+            places = Place.objects.filter(id__in=places_ids)
+            profile.places.set(places)
+            if "image" in request.FILES:
+                profile.image = request.FILES["image"]
+            profile.save()
 
-            return redirect("profile")
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        return redirect("profile")
+
+    if user.is_gourmand():
+        profile = GourmandProfile.objects.filter(user=user).first()
+        return render(request, "gourmands/edit_profile_gourmand.html", {"profile": profile})
+    elif user.is_owner():
+        profile = OwnerProfile.objects.filter(user=user).first()
+        all_places = Place.objects.all()
         return render(request, "places/edit_profile_owner.html", {"profile": profile, "all_places": all_places})
+
     return redirect("index")
 
 

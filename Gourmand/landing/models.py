@@ -10,19 +10,20 @@ from django.db.models import DO_NOTHING
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, username, password=None, **extra_fields):
         if not email:
             raise ValueError("Email обязателен")
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        return self.create_user(email, password, **extra_fields)
+
+        return self.create_user(email, username, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -40,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     def __str__(self):
         return self.email
@@ -53,19 +54,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class GourmandProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="gourmand_profile")
-    description = models.TextField()
-    rating = models.DecimalField(max_digits=10, decimal_places=0, default=0)
-    image = models.ImageField(
-        validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-        verbose_name="Фото гурмана",
-        upload_to="gourmands/",
-        blank=True,
-        null=True
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gourmand_profile')
+    description = models.TextField(blank=True)
+    rating = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    image = models.ImageField(upload_to="gourmands/", blank=True, null=True)
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name}, рейтинг {self.rating}'
+        return f"{self.user.first_name} {self.user.last_name} - рейтинг {self.rating}"
 
 
 class Place(models.Model):
@@ -86,20 +81,15 @@ class Place(models.Model):
   def __str__(self):
     return f'{self.name}, {self.description}, {self.place_email}, {self.location}, {self.rating}'
 
+
 class OwnerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="owner_profile")
-    description = models.TextField()
-    places = models.ManyToManyField("Place", blank=True)
-    image = models.ImageField(
-        validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-        verbose_name="Фото владельца",
-        upload_to="owners/",
-        blank=True,
-        null=True
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='owner_profile')
+    description = models.TextField(blank=True)  # 🔥 Вернул поле description
+    places = models.ManyToManyField(Place, blank=True)
+    image = models.ImageField(upload_to="owners/", blank=True, null=True)
 
     def __str__(self):
-        return f'Профиль владельца {self.user.email}'
+        return f"Владелец {self.user.username}"
 
 
 class Review(models.Model):

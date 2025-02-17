@@ -1,0 +1,69 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white shadow-lg p-4">
+                <h2 class="text-center mb-4 custom-text-color">Регистрация</h2>
+                <form method="POST" action="{% url 'signup' %}">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_first_name" class="form-label">Имя</label>
+                        <input type="text" name="first_name" id="id_first_name" class="form-control" placeholder="Введите имя" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_last_name" class="form-label">Фамилия</label>
+                        <input type="text" name="last_name" id="id_last_name" class="form-control" placeholder="Введите фамилию" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email</label>
+                        <input type="email" name="email" id="id_email" class="form-control" placeholder="Введите email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">Пароль</label>
+                        <input type="password" name="password1" id="id_password1" class="form-control" placeholder="Введите пароль" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password2" class="form-label">Подтверждение пароля</label>
+                        <input type="password" name="password2" id="id_password2" class="form-control" placeholder="Повторите пароль" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_role" class="form-label">Выберите роль</label>
+                        <select name="role" id="id_role" class="form-control" required>
+                            <option value="gourmand">Гурман</option>
+                            <option value="owner">Владелец заведения</option>
+                        </select>
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <div class="button_user pt-4">
+                        <button type="submit" class="custom-button custom-text-color bg_dark">Зарегистрироваться</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p>Уже есть аккаунт? <a href="{% url 'signin' %}" class="text-warning">Войти</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

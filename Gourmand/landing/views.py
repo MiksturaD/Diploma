@@ -15,7 +15,7 @@ def main(request):
   return None
 
 logger = logging.getLogger(__name__)
-def signup(request):
+def signup(request): #TODO: СДЕЛАТЬ РЕДИРРЕКТ НА СТРАНИЦУ ПРОФИЛЯ ПОСЛЕ РЕГИСТРАЦИИ
     if request.method == "POST":
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -29,7 +29,7 @@ def signup(request):
                 logger.error(f"Error creating profile: {e}")
                 return render(request, "auth/signup.html", {"form": form, "error": "Ошибка при создании профиля."})
             login(request, user)
-            return redirect("index")
+            return redirect("profile")
         else:
             print(f"Form errors: {form.errors}")
             return render(request, "auth/signup.html", {"form": form})
@@ -83,7 +83,7 @@ def edit_profile(request):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
-        description = request.POST.get("description", "")
+        description = request.POST.get("description")
 
         if user.is_gourmand():
             profile, _ = GourmandProfile.objects.get_or_create(user=user)
@@ -207,19 +207,19 @@ def contacts(request):
 
 
 def gourmands(request):
-  gourmands_list = User.objects.all()
-  return render(request, 'gourmands/gourmands.html', context={'gourmands': gourmands_list})
+  # gourmands_list = User.objects.all()
+  gourmands_list = GourmandProfile.objects.all()
+  return render(request, 'gourmands/gourmands.html', context={'gourmands': gourmands_list, 'profile': profile})
 
 
 def gourmand(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)
-    context = {'gourmand': gourmand_obj}
-    return render(request, 'gourmands/gourmand.html', context)
+    profile = GourmandProfile.objects.all()
+    return render(request, 'gourmands/gourmand.html', context={'gourmands': gourmand_obj, 'profile': profile})
 
 def gourmand_reviews(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)
     reviews = Review.objects.filter(gourmand=gourmand_obj)
-    context = {'gourmand': gourmand_obj, 'reviews': reviews}
-    return render(request, 'gourmands/gourmand_reviews.html', context)
+    return render(request, 'gourmands/gourmand_reviews.html', context={'gourmand': gourmand_obj, 'reviews': reviews})
 
 

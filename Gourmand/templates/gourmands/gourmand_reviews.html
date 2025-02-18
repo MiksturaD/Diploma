@@ -26,13 +26,13 @@
     </div>
   {% else %}
     <div class="alert alert-info" role="alert">
-      Пока нет отзывов о {{ gourmand.first_name }}. Будьте первым, кто оставит отзыв!
+      Пока нет отзывов от {{ gourmand.first_name }}. Ждите, пока напишет первый отзыв
     </div>
   {% endif %}
 
   <!-- Кнопка возврата -->
   <div class="mt-4 button_user">
-    <a href="{% url 'gourmand' gourmand.id %}" class="custom-button">Назад</a>
+    <a href="{% url 'gourmand' user.id %}" class="custom-button">Назад</a>
   </div>
 </div>
 {% endblock %}

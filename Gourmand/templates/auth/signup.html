@@ -49,18 +49,6 @@
                         </select>
                         {{ form.role.errors }}
                     </div>
-
-                    {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
                     <div class="button_user pt-4">
                         <button type="submit" class="custom-button custom-text-color bg_dark">Зарегистрироваться</button>
                     </div>

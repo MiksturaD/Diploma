@@ -6,7 +6,6 @@
   <h1 class="mb-4 pt-4 custom-text-color">{{ gourmand.first_name }} {{ gourmand.last_name }}</h1>
 
   <div class="row">
-    <!-- Левая колонка: изображение гурмана -->
     <div class="col-md-6">
       {% if gourmand.image %}
         <img src="{{ gourmand.image.url }}" alt="{{ gourmand.first_name }}" class="img-fluid rounded" style="max-height: 400px; object-fit: cover;">
@@ -14,8 +13,7 @@
         <img src="{% static 'img/default.png' %}" alt="{{ gourmand.first_name }}" class="img-fluid rounded" style="max-height: 400px; object-fit: cover;">
       {% endif %}
     </div>
-
-    <!-- Правая колонка: информация о гурмане -->
+  
     <div class="col-md-6">
       <div class="card bg-dark text-white">
         <div class="card-body">
@@ -29,12 +27,11 @@
     </div>
   </div>
 
-  <!-- Кнопка для просмотра отзывов гурмана -->
   <div class="mt-4 button_user">
-    <a href="{% url 'gourmand_reviews' gourmand.id %}" class="custom-button">Посмотреть отзывы</a>
+    <a href="{% url 'gourmand_reviews' user.id %}" class="custom-button">Посмотреть отзывы</a>
   </div>
 
-  <!-- Кнопка возврата к списку гурманов -->
+
   <div class="button_user">
     <a href="{% url 'gourmands' %}" class="custom-button">Назад к гурманам</a>
   </div>

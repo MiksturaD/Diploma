@@ -1,9 +1,9 @@
 {% extends "landing/base.html" %}
 {% load static %}
 {% block content %}
-<div class="container my-5 pt-4">
+<div class="container my-5">
  <div class="row gx-1">
-  <h2>Редактирование профиля владельца заведений</h2>
+  <h2 class="mb-4 pt-4 custom-text-color">Редактирование профиля владельца заведений</h2>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
         {% if profile.image %}

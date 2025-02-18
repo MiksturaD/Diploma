@@ -5,18 +5,18 @@
 <div class="container my-5">
     <h1 class="mb-4 pt-4 custom-text-color">Наши гурманы</h1>
     
-    {% if gourmand_profile %}
+    {% if gourmands %}
         <div class="row row-cols-1 row-cols-md-3 g-4"> 
-            {% for gourmand in gourmand_profiles %}
+            {% for gourmand in gourmands %}
             <div class="col">
                 <div class="card h-100 shadow">
-                    <img src="{% if gourmand.image %}{{ gourmand.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" 
+                    <img src="{% if gourmand.image %}{{ gourmand.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
                          class="card-img-top img-fluid" 
-                         alt="{{ gourmand.first_name }}"
+                         alt="image"
                          style="height: 200px; object-fit: cover;">
                     
                     <div class="card-body bg-dark">
-                        <h3 class="card-title bg-dark custom-text-color">{{ gourmand.first_name }} {{ gourmand.last_name }}</h3>
+                        <h3 class="card-title bg-dark custom-text-color">{{ gourmand.user.first_name }} {{ gourmand.last_name }}</h3>
                         <p class="card-text custom-text-color">{{ gourmand.description|truncatechars:100 }}</p>
                     </div>
                     
@@ -24,7 +24,7 @@
                         <li class="list-group-item bg-dark">
                             <i class="bi bi-geo-alt me-2"></i>
                                 <span class="badge bg-secondary me-1 bg-dark">
-                                    Рейтинг Гурмана - {{ gourmand.rating }} <span class="text-warning">★{{ place.rating }}</span>
+                                    Рейтинг Гурмана - {{ gourmand.rating }} <span class="text-warning">★{{ gourmand.rating }}</span>
                                 </span>
                         </li>
                     </ul>

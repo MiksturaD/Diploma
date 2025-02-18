@@ -24,7 +24,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('contacts/', views.contacts, name='contacts'),
     path('gourmands/', views.gourmands, name='gourmands'),
-    path('gourmands/<int:gourmand_id>/', views.gourmand, name='gourmand'),
-    path('gourmands/<int:gourmand_id>/reviews/', views.gourmand_reviews, name='gourmand_reviews'),
+    path('gourmands/<int:user_id>/', views.gourmand, name='gourmand'),
+    path('gourmands/<int:user_id>/reviews/', views.gourmand_reviews, name='gourmand_reviews'),
 
 ]

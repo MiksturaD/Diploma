@@ -1,9 +1,9 @@
 {% extends "landing/base.html" %}
 {% load static %}
 {% block content %}
-<div class="container my-5 pt-4">
+<div class="container my-5">
  <div class="row gx-1">
-  <h2>Редактирование профиля гурмана</h2>
+  <h2 class="mb-4 pt-4 custom-text-color">Редактирование профиля гурмана</h2>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
         {% if profile.image %}
@@ -13,11 +13,11 @@
         {% endif %}
     <div class="col-md-3">
       <label for="first_name" class="form-label">Имя</label>
-      <input type="text" class="form-control" id="first_name" name="first_name" value="{{ profile.first_name }}" required>
+      <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
     </div>
     <div class="col-md-3">
       <label for="last_name" class="form-label">Фамилия</label>
-      <input type="text" class="form-control" id="last_name" name="last_name" value="{{ profile.last_name }}" required>
+      <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
     </div>
     <div class="col-md-3">
       <label for="description" class="form-label">Описание</label>

@@ -89,7 +89,7 @@ class OwnerProfile(models.Model):
     image = models.ImageField(upload_to="owners/", blank=True, null=True)
 
     def __str__(self):
-        return f"Владелец {self.user.username}"
+        return f"Владелец {self.user}"
 
 
 class Review(models.Model):

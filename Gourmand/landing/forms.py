@@ -8,57 +8,63 @@ from landing.models import User, Review, Place, Event, OwnerProfile, GourmandPro
 
 
 class SignupForm(UserCreationForm):
-  role = forms.ChoiceField(
-    choices=User.ROLE_CHOICES,
-    widget=forms.Select(attrs={'class': 'form-control'}),
-    label="Выберите роль"
-  )
+    role = forms.ChoiceField(
+        choices=User.ROLE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Выберите роль"
+    )
 
-  class Meta:
-    model = User
-    fields = ['first_name', 'last_name', 'email', 'password']
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'floatingTitle',
+                'placeholder': 'Имя',
+                'required': True
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'floatingLastname',
+                'aria-label': 'Фамилия',
+                'placeholder': 'Фамилия',
+                'required': True
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'id': 'floatingEmail',
+                'placeholder': 'Почта',
+                'required': True
+            }),
+            'password1': forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'id': 'password1',
+                'aria-label': 'Пароль',
+                'placeholder': 'Пароль',
+                'required': True
+            }),
+            'password2': forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'id': 'password2',
+                'aria-label': 'Подтверждение пароля',
+                'placeholder': 'Подтвердите пароль',
+                'required': True
+            }),
+        }
 
-    widgets = {
-      'first_name': forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingTitle',
-        'placeholder': 'Имя',
-        'required': True
-      }),
-      'last_name': forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingLastname',
-        'aria-label': 'Фамилия',
-        'placeholder': 'Фамилия',
-        'required': True
-      }),
-      'email': forms.EmailInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingEmail',
-        'placeholder': 'Почта',
-        'required': True
-      }),
-      'password': forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'id': 'floatingPassword',
-        'aria-label': 'Пароль',
-        # 'placeholder': 'Пароль',
-        'required': True
-      }),
-    }
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Пользователь с таким email уже зарегистрирован.")
+        return email
 
-  def clean_email(self):
-    email = self.cleaned_data.get('email')
-    if User.objects.filter(email=email).exists():
-      raise ValidationError("Пользователь с таким email уже зарегистрирован.")
-    return email
-
-  def save(self, commit=True):
-    user = super().save(commit=False)
-    user.role = self.cleaned_data['role']
-    if commit:
-      user.save()
-    return user
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.role = self.cleaned_data['role']
+        if commit:
+            user.save()
+        return user
 
 class GourmandProfileForm(forms.ModelForm):
     class Meta:

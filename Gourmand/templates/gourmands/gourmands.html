@@ -5,9 +5,9 @@
 <div class="container my-5">
     <h1 class="mb-4 pt-4 custom-text-color">Наши гурманы</h1>
     
-    {% if gourmands %}
+    {% if gourmand_profile %}
         <div class="row row-cols-1 row-cols-md-3 g-4"> 
-            {% for gourmand in gourmands %}
+            {% for gourmand in gourmand_profiles %}
             <div class="col">
                 <div class="card h-100 shadow">
                     <img src="{% if gourmand.image %}{{ gourmand.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" 

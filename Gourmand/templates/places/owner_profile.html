@@ -3,10 +3,10 @@
 {% block content %}
 <div class="container text-white mt-2 pt-4">
   <h2 class="mb-4 pt-4 custom-text-color">Профиль владельца заведения(й)</h2>
-  {% if user.image %}
-    <img src="{{ user.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
+  {% if profile.image %}
+    <img src="{{ profile.image.url }}" alt="Фото владельца" class="img-thumbnail" width="150">
   {% else %}
-    <img src="{% static 'img/default.png' %}" alt="Фото гурмана" class="img-thumbnail" width="150">
+    <img src="{% static 'img/default.png' %}" alt="Фото владельца" class="img-thumbnail" width="150">
   {% endif %}
   <p>Имя: {{ user.first_name }}</p>
   <p>Фамилия: {{ user.last_name }}</p>

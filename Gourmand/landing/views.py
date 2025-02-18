@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
-
+import logging
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
@@ -14,36 +14,31 @@ def index(request):
 def main(request):
   return None
 
-
+logger = logging.getLogger(__name__)
 def signup(request):
-    """Регистрация нового пользователя"""
     if request.method == "POST":
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data["password1"])  # Хешируем пароль
-            user.save()
-
-            # Создание профиля в зависимости от роли
-            if user.role == 'gourmand':
-                GourmandProfile.objects.create(user=user)
-            elif user.role == 'owner':
-                OwnerProfile.objects.create(user=user)
-
+            user = form.save()
+            try:
+                if user.role == "gourmand":
+                    GourmandProfile.objects.create(user=user)
+                elif user.role == "owner":
+                    OwnerProfile.objects.create(user=user)
+            except Exception as e:
+                logger.error(f"Error creating profile: {e}")
+                return render(request, "auth/signup.html", {"form": form, "error": "Ошибка при создании профиля."})
             login(request, user)
             return redirect("index")
-
-        return render(request, "auth/signup.html", {"form": form})  # Передаем форму с ошибками
-
+        else:
+            print(f"Form errors: {form.errors}")
+            return render(request, "auth/signup.html", {"form": form})
     else:
         form = SignupForm()
-
-    print(form.errors)
-    return render(request, "auth/signup.html", {"form": form})
+    return render(request, 'auth/signup.html', {'form': form})
 
 
 def signin(request):
-    """Авторизация пользователя"""
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")

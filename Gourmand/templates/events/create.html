@@ -5,12 +5,12 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card bg-dark text-white shadow-lg p-4">
-                <h2 class="text-center mb-4 custom-text-color">Создание заведения</h2>
-                <form method="POST" action="{% url 'create_places' %}" enctype="multipart/form-data">
+                <h2 class="text-center mb-4 custom-text-color">Создание события</h2>
+                <form method="POST" action="{% url 'create_event' %}">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     <div class="mb-3">
-                        <label for="id_name" class="form-label">Название заведения</label>
+                        <label for="id_name" class="form-label">Название события</label>
                         {{ form.name }}
                         {{ form.name.errors }}
                     </div>
@@ -20,29 +20,19 @@
                         {{ form.description.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="id_place_email" class="form-label">Email заведения</label>
-                        {{ form.place_email }}
-                        {{ form.place_email.errors }}
+                        <label for="id_event_date" class="form-label">Дата события</label>
+                        {{ form.event_date }}
+                        {{ form.event_date.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="id_location" class="form-label">Местоположение</label>
-                        {{ form.location }}
-                        {{ form.location.errors }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_rating" class="form-label">Рейтинг</label>
-                        {{ form.rating }}
-                        {{ form.rating.errors }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_phone" class="form-label">Телефон</label>
-                        {{ form.phone }}
-                        {{ form.phone.errors }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_image" class="form-label">Фото заведения</label>
+                        <label for="id_image" class="form-label">Фото мероприятия</label>
                         {{ form.image }}
                         {{ form.image.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_places" class="form-label">Выберите заведения</label>
+                        {{ form.places }}
+                        {{ form.places.errors }}
                     </div>
                     {% if form.errors %}
                     <div class="alert alert-danger">
@@ -56,7 +46,7 @@
                     </div>
                     {% endif %}
                     <div class="button_user pt-4">
-                        <button type="submit" class="custom-button custom-text-color bg_dark">Создать заведение</button>
+                        <button type="submit" class="custom-button custom-text-color bg_dark">Создать событие</button>
                     </div>
                 </form>
             </div>

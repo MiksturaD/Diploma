@@ -53,6 +53,11 @@
         <div class="alert alert-info" role="alert">
             На данный момент отзывов нет. Следите за обновлениями!
         </div>
+        <div class="button_user">
+            <a href="{% url 'create_review' %}" class="custom-button">
+                Создать отзыв
+            </a>
+        </div>
     {% endif %}
 </div>
 {% endblock %}

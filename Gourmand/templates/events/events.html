@@ -51,6 +51,15 @@
         <div class="alert alert-info" role="alert">
             На данный момент мероприятий нет. Следите за обновлениями!
         </div>
+        {% csrf_token %}
+        {% if request.user.is_owner %}
+        <div class="button_user">
+            <a href="{% url 'create_event' %}" class="custom-button">
+                Создать мероприятие
+            </a>
+        </div>
+        {% endif %}
+
     {% endif %}
 </div>
 {% endblock %}

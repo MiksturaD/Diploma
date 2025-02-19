@@ -179,32 +179,20 @@ class PlaceCreateForm(forms.ModelForm):
             'phone': 'Телефоны',
 
         }
-#
-#
-# class EventCreateForm(forms.ModelForm):
-#     class Meta:
-#         model = Event
-#         fields = ['name', 'description', 'place']
-#         widgets = {
-#             'name': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'required': True
-#             }),
-#             'description': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'required': True
-#             }),
-#             'place': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'required': True
-#             }),
-#         }
-#         labels = {
-#             'name': 'Название ивента',
-#         }
-#
-#     def __init__(self, *args, **kwargs):
-#         super(EvenCreateForm, self).__init__(*args, **kwargs)
-#         self.fields['name'].widget.attrs.update({'aria-label': 'Название ивента'})
-#         self.fields['description'].widget.attrs.update({'aria-label': 'Описание ивента'})
-#         self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения в котором будет ивент'})
+
+
+class EventCreateForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name', 'description', 'event_date', 'image', 'places']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'places': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(EventCreateForm, self).__init__(*args, **kwargs)
+        self.fields['places'].queryset = Place.objects.all()

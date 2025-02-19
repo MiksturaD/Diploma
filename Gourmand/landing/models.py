@@ -119,7 +119,7 @@ class Event(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
   event_date = models.DateField()
-  place = models.ManyToManyField(Place)
+  places = models.ManyToManyField(Place)
   image = models.ImageField(
     validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
     verbose_name="Изображение события",
@@ -129,7 +129,7 @@ class Event(models.Model):
   )
 
   def __str__(self):
-    return f'{self.name}, {self.description}, {self.place}'
+      return f'{self.name}, {self.description}, {", ".join(str(place) for place in self.place.all())}'
 
 
 

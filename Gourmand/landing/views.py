@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 import logging
-from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm
+from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
+    EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
 
 
@@ -134,8 +135,22 @@ def event(request, event_id):
     return render(request, 'events/event.html', context={'event': event_obj})
 
 
+@login_required
 def create_event(request):
-  return None
+    if not request.user.is_owner():
+        return redirect('index')  # Перенаправляем на главную страницу, если пользователь не является владельцем
+
+    if request.method == "POST":
+        form = EventCreateForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.save()
+            form.save_m2m()  # Сохраняем связанные места
+            return redirect("events")
+    else:
+        form = EventCreateForm()
+
+    return render(request, 'events/create.html', {'form': form})
 
 
 def places(request):
@@ -194,9 +209,22 @@ def review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     return render(request, 'review/review.html', {'review': review})
 
+@login_required
 def create_review(request):
-  return None
+    if request.user.is_owner():
+        return redirect('index')  # Перенаправляем на главную страницу, если пользователь не является гурманом
 
+    if request.method == "POST":
+        form = ReviewCreateForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.gourmand = request.user
+            review.save()
+            return redirect("reviews")
+    else:
+        form = ReviewCreateForm()
+
+    return render(request, 'review/create.html', {'form': form})
 
 def about(request):
   return None
@@ -207,19 +235,16 @@ def contacts(request):
 
 
 def gourmands(request):
-  # gourmands_list = User.objects.all()
-  gourmands_list = GourmandProfile.objects.all()
-  return render(request, 'gourmands/gourmands.html', context={'gourmands': gourmands_list, 'profile': profile})
-
+    gourmands_list = GourmandProfile.objects.all()
+    return render(request, 'gourmands/gourmands.html', {'gourmands': gourmands_list})
 
 def gourmand(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)
-    profile = GourmandProfile.objects.all()
-    return render(request, 'gourmands/gourmand.html', context={'gourmands': gourmand_obj, 'profile': profile})
+    return render(request, 'gourmands/gourmand.html', {'gourmand': gourmand_obj})
 
 def gourmand_reviews(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)
     reviews = Review.objects.filter(gourmand=gourmand_obj)
-    return render(request, 'gourmands/gourmand_reviews.html', context={'gourmand': gourmand_obj, 'reviews': reviews})
+    return render(request, 'gourmands/gourmand_reviews.html', {'gourmand': gourmand_obj, 'reviews': reviews})
 
 

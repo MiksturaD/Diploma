@@ -24,14 +24,14 @@
                         <li class="list-group-item bg-dark">
                             <i class="bi bi-geo-alt me-2"></i>
                                 <span class="badge bg-secondary me-1 bg-dark">
-                                    Рейтинг Гурмана - {{ gourmand.rating }} <span class="text-warning">★{{ gourmand.rating }}</span>
+                                    Рейтинг Гурмана - <span class="text-warning">★{{ gourmand.rating }}</span>
                                 </span>
                         </li>
                     </ul>
                     
                     <div class="card-body text-center bg-dark">
                         <div class="button_user">
-                            <a href="{% url 'gourmand' gourmand.id %}" class="custom-button">
+                            <a href="{% url 'gourmand' gourmand.user.id %}" class="custom-button">
                                 Подробнее <i class="bi bi-arrow-right"></i>
                             </a>
                         </div>

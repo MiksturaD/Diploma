@@ -55,6 +55,14 @@
         <div class="alert alert-info" role="alert">
             На данный момент заведений нет. Следите за обновлениями!
         </div>
+        {% csrf_token %}
+        {% if request.user.is_owner %}
+        <div class="button_user">
+            <a href="{% url 'create_places' %}" class="custom-button">
+                Создать заведение
+            </a>
+        </div>
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}

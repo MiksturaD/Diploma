@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 import logging
+
+from django.views.decorators.http import require_POST
+
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
     EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
@@ -141,11 +144,12 @@ def create_event(request):
         return redirect('index')  # Перенаправляем на главную страницу, если пользователь не является владельцем
 
     if request.method == "POST":
-        form = EventCreateForm(request.POST)
+        print("POST DATA", request.POST)
+        form = EventCreateForm(request.POST, request.FILES)
         if form.is_valid():
-            event = form.save(commit=False)
-            event.save()
-            form.save_m2m()  # Сохраняем связанные места
+            event = form.save()
+            form.save_m2m()
+            print(event.place.all())
             return redirect("events")
     else:
         form = EventCreateForm()
@@ -154,8 +158,9 @@ def create_event(request):
 
 
 def places(request):
+  user = request.user
   places_list = Place.objects.all()
-  return render(request, 'places/places.html', context={'places': places_list})
+  return render(request, 'places/places.html', context={'places': places_list, 'user': user})
 
 
 def place(request, place_id):
@@ -190,7 +195,6 @@ def create_places(request):
         if form.is_valid():
             place = form.save()
             return redirect("place", place.id)
-            print('не прошла проверка тут')
         else:
             print('не прошла проверка и тут')
             return render(request, "places/place_create.html", {"form": form})

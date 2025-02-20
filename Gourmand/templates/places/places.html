@@ -46,18 +46,20 @@
 </div>
             {% endfor %}
         </div>
+        {% if user.role == "owner" %}
         <div class="button_user pt-4">
-             <a href="{% url 'create_places' %}" class="custom-button">
-                Создать новое заведение
-             </a>
+            <a href="{% url 'create_places' %}" class="custom-button">
+                Создать заведение
+            </a>
         </div>
+        {% endif %}
+
     {% else %}
         <div class="alert alert-info" role="alert">
             На данный момент заведений нет. Следите за обновлениями!
         </div>
-        {% csrf_token %}
-        {% if request.user.is_owner %}
-        <div class="button_user">
+        {% if user.role == "owner" %}
+        <div class="button_user pt-4">
             <a href="{% url 'create_places' %}" class="custom-button">
                 Создать заведение
             </a>

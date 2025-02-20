@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <div class="card bg-dark text-white shadow-lg p-4">
                 <h2 class="text-center mb-4 custom-text-color">Создание события</h2>
-                <form method="POST" action="{% url 'create_event' %}">
+                <form method="POST" action="{% url 'create_event' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     <div class="mb-3">

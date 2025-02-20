@@ -129,7 +129,7 @@ class Event(models.Model):
   )
 
   def __str__(self):
-      return f'{self.name}, {self.description}, {", ".join(str(place) for place in self.place.all())}'
+      return f'{self.name}, {self.description}, {", ".join(str(place) for place in self.places.all())}'
 
 
 

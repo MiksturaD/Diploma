@@ -20,7 +20,7 @@
           <p class="card-text">
             <strong>Дата события:</strong> {{ event.event_date|date:"d M Y" }}<br>
             <strong>Места:</strong> 
-            {% for place in event.place.all %}
+            {% for place in event.places.all %}
               {{ place.name }}{% if not forloop.last %}, {% endif %}
             {% empty %}
               Нет привязанных заведений

@@ -17,7 +17,7 @@
                     
                     <div class="card-body bg-dark">
                         <h5 class="card-title bg-dark custom-text-color">{{ event.name }}</h5>
-                        <p class="card-text custom-text-color">{{ event.description|truncatechars:100 }}</p>
+                        <p class="card-text custom-text-color">{{ event.description|truncatewords:20 }}</p>
                     </div>
                     
                     <ul class="list-group list-group-flush bg-dark">
@@ -69,5 +69,30 @@
 
     {% endif %}
 </div>
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    {% if events.has_previous %}
+      <li class="page-item button_user">
+        <a class="page-link bg_dark " href="?page=1">Первая</a>
+      </li>
+      <li class="page-item button_user">
+        <a class="page-link bg_dark" href="?page={{ events.previous_page_number }}">Назад</a>
+      </li>
+    {% endif %}
+
+    <li class="page-item custom-button">
+      <span class="page-link bg_dark pag_size">Страница {{ events.number }} из {{ events.paginator.num_pages }}</span>
+    </li>
+
+    {% if events.has_next %}
+      <li class="page-item button_user">
+        <a class="page-link bg_dark" href="?page={{ events.next_page_number }}">Вперед</a>
+      </li>
+      <li class="page-item button_user">
+        <a class="page-link bg_dark" href="?page={{ events.paginator.num_pages }}">Последняя</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}
 

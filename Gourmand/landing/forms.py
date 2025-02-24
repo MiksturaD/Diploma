@@ -131,7 +131,6 @@ class ReviewCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReviewCreateForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'aria-label': 'Название отзыва'})
-        self.fields['review_date'].widget.attrs.update({'aria-label': 'Дата отзыва'})
         self.fields['description'].widget.attrs.update({'aria-label': 'Детали отзыва'})
         self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения'})
 

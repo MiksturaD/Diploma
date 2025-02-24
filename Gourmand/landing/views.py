@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 import logging
-
+from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
@@ -128,9 +128,14 @@ def signout(request):
     logout(request)
     return redirect("index")
 
+
 def events(request):
-  event_list = Event.objects.all()
-  return render(request, 'events/events.html', context={'events': event_list})
+    event_list = Event.objects.all().order_by("id")
+    paginator = Paginator(event_list, 3)
+    page_number = request.GET.get('page')
+    events_page = paginator.get_page(page_number)
+
+    return render(request, 'events/events.html', {'events': events_page})
 
 
 def event(request, event_id):
@@ -141,16 +146,22 @@ def event(request, event_id):
 @login_required
 def create_event(request):
     if not request.user.is_owner():
-        return redirect('index')  # Перенаправляем на главную страницу, если пользователь не является владельцем
+        return redirect('index')  # Ограничиваем доступ
 
     if request.method == "POST":
-        print("POST DATA", request.POST)
+        print("POST DATA:", request.POST)  # 👀 Вывод данных в консоль
         form = EventCreateForm(request.POST, request.FILES)
+
         if form.is_valid():
-            event = form.save()
-            form.save_m2m()
-            print(event.place.all())
+            event = form.save(commit=False)
+            event.save()
+            form.save_m2m()  # Сохранение связей ManyToMany
+
+            print("Сохраненные места:", event.places.all())  # 👀 Проверяем сохраненные места
             return redirect("events")
+        else:
+            print("Ошибки формы:", form.errors)  # 👀 Проверяем ошибки формы
+
     else:
         form = EventCreateForm()
 
@@ -159,8 +170,11 @@ def create_event(request):
 
 def places(request):
   user = request.user
-  places_list = Place.objects.all()
-  return render(request, 'places/places.html', context={'places': places_list, 'user': user})
+  places_list = Place.objects.all().order_by("id")
+  paginator = Paginator(places_list, 3)
+  page_number = request.GET.get('page')
+  places_page = paginator.get_page(page_number)
+  return render(request, 'places/places.html', context={'places': places_page, 'user': user})
 
 
 def place(request, place_id):
@@ -205,8 +219,12 @@ def create_places(request):
 
 
 def reviews(request):
-  review_list = Review.objects.all()
-  return render(request, 'review/reviews.html', context={'reviews': review_list})
+    review_list = Review.objects.all().order_by("id")
+    paginator = Paginator(review_list, 3)
+    page_number = request.GET.get('page')
+    reviews_page = paginator.get_page(page_number)
+
+    return render(request, 'review/reviews.html', {'reviews': reviews_page})
 
 
 def review(request, review_id):
@@ -215,20 +233,23 @@ def review(request, review_id):
 
 @login_required
 def create_review(request):
-    if request.user.is_owner():
-        return redirect('index')  # Перенаправляем на главную страницу, если пользователь не является гурманом
-
     if request.method == "POST":
-        form = ReviewCreateForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.gourmand = request.user
-            review.save()
-            return redirect("reviews")
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        place_id = request.POST.get("place")
+        gourmand_rating = request.POST.get("gourmand_rating")
+
+        place = get_object_or_404(Place, id=place_id)
+        review = Review.objects.create(
+            name=name,
+            description=description,
+            place=place,
+            gourmand_rating=gourmand_rating
+        )
+        return redirect("reviews")
     else:
         form = ReviewCreateForm()
-
-    return render(request, 'review/create.html', {'form': form})
+    return render(request, "review/create.html", {"form": form})
 
 def about(request):
   return None
@@ -239,8 +260,12 @@ def contacts(request):
 
 
 def gourmands(request):
-    gourmands_list = GourmandProfile.objects.all()
-    return render(request, 'gourmands/gourmands.html', {'gourmands': gourmands_list})
+    gourmands_list = GourmandProfile.objects.all().order_by("id")
+    paginator = Paginator(gourmands_list, 3)
+    page_number = request.GET.get('page')
+    gourmands_page = paginator.get_page(page_number)
+
+    return render(request, 'gourmands/gourmands.html', {'gourmands': gourmands_page})
 
 def gourmand(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)

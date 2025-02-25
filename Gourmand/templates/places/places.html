@@ -3,95 +3,72 @@
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-4 pt-4 custom-text-color">Заведения в городе Красноярске</h1>
-    
+    <h1 class="mb-2 pt-2 custom-text-color">Заведения в городе Красноярске</h1>
+
     {% if places %}
-        <div class="row row-cols-1 row-cols-md-3 g-4"> 
+        <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for place in places %}
             <div class="col">
                 <div class="card h-100 shadow">
-                    <img src="{% if place.image %}{{ place.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
+                    <img src="{% if place.images.exists %}{{ place.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
                          class="card-img-top img-fluid"
                          alt="{{ place.name }}"
                          style="height: 200px; object-fit: cover;">
-
                     <div class="card-body bg-dark custom-text-color">
                         <h2 class="custom-text-color">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h2>
                         <p>{{ place.description|truncatewords:20 }}</p>
                     </div>
-
                     <ul class="list-group bg-dark list-group-flush">
                         <li class="list-group-item bg-dark">
-                            <span class="badge bg-dark me-1">
-                                Местоположение:
-                                {{ place.location }}
-                            </span>
+                            <span class="badge bg-dark me-1">Местоположение: {{ place.location }}</span>
                         </li>
-
                         <li class="list-group-item bg-dark custom-text-color">
                             <i class="bi bi-envelope me-2 bu">Контакты</i><br>
                             Телефон {{ place.phone }} <br>
                             Е-майл {{ place.place_email }}
                         </li>
                     </ul>
-
-                        <div class="card-body text-center bg-dark">
-                            <div class="button_user">
-                                <a href="{% url 'place' place.id %}" class="custom-button">
-                                    Подробнее
-                                </a>
-                            </div>
+                    <div class="card-body text-center bg-dark">
+                        <div class="button_user">
+                            <a href="{% url 'place' place.id %}" class="custom-button">Подробнее</a>
+                            {% if user.is_authenticated and user.is_owner and place.owner == user %}
+                                <a href="{% url 'edit_place' place.id %}" class="custom-button ms-2">Редактировать</a>
+                            {% endif %}
                         </div>
+                    </div>
                 </div>
-</div>
+            </div>
             {% endfor %}
         </div>
         {% if user.role == "owner" %}
         <div class="button_user pt-4">
-            <a href="{% url 'create_places' %}" class="custom-button">
-                Создать заведение
-            </a>
+            <a href="{% url 'create_places' %}" class="custom-button">Создать заведение</a>
         </div>
         {% endif %}
-
     {% else %}
         <div class="alert alert-info" role="alert">
             На данный момент заведений нет. Следите за обновлениями!
         </div>
         {% if user.role == "owner" %}
         <div class="button_user pt-4">
-            <a href="{% url 'create_places' %}" class="custom-button">
-                Создать заведение
-            </a>
+            <a href="{% url 'create_places' %}" class="custom-button">Создать заведение</a>
         </div>
         {% endif %}
     {% endif %}
 </div>
 <nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center">
-    {% if places.has_previous %}
-      <li class="page-item button_user">
-        <a class="page-link bg_dark " href="?page=1">Первая</a>
-      </li>
-      <li class="page-item button_user">
-        <a class="page-link bg_dark" href="?page={{ places.previous_page_number }}">Назад</a>
-      </li>
-    {% endif %}
-
-    <li class="page-item custom-button">
-      <span class="page-link bg_dark pag_size">Страница {{ places.number }} из {{ places.paginator.num_pages }}</span>
-    </li>
-
-    {% if places.has_next %}
-      <li class="page-item button_user">
-        <a class="page-link bg_dark" href="?page={{ places.next_page_number }}">Вперед</a>
-      </li>
-      <li class="page-item button_user">
-        <a class="page-link bg_dark" href="?page={{ places.paginator.num_pages }}">Последняя</a>
-      </li>
-    {% endif %}
-  </ul>
-</nav>        
+    <ul class="pagination justify-content-center">
+        {% if places.has_previous %}
+            <li class="page-item button_user"><a class="page-link bg_dark" href="?page=1">Первая</a></li>
+            <li class="page-item button_user"><a class="page-link bg_dark" href="?page={{ places.previous_page_number }}">Назад</a></li>
+        {% endif %}
+        <li class="page-item custom-button"><span class="page-link bg_dark pag_size">Страница {{ places.number }} из {{ places.paginator.num_pages }}</span></li>
+        {% if places.has_next %}
+            <li class="page-item button_user"><a class="page-link bg_dark" href="?page={{ places.next_page_number }}">Вперёд</a></li>
+            <li class="page-item button_user"><a class="page-link bg_dark" href="?page={{ places.paginator.num_pages }}">Последняя</a></li>
+        {% endif %}
+    </ul>
+</nav>
 {% endblock %}
 
 {% include 'includes/footer.html' %}

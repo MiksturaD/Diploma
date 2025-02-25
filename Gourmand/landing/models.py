@@ -70,6 +70,14 @@ class Place(models.Model):
   location = models.TextField()
   rating = models.DecimalField(max_digits=10, decimal_places=0)
   phone = models.TextField(max_length=50)
+  owner = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='owned_places')
+
+  def __str__(self):
+    return self.name
+
+
+class PlaceImage(models.Model):
+  place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='images')
   image = models.ImageField(
     validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
     verbose_name="Фото заведения",
@@ -79,7 +87,7 @@ class Place(models.Model):
   )
 
   def __str__(self):
-    return f'{self.name}, {self.description}, {self.place_email}, {self.location}, {self.rating}'
+    return f"Фото для {self.place.name}"
 
 
 class OwnerProfile(models.Model):
@@ -93,32 +101,47 @@ class OwnerProfile(models.Model):
 
 
 class Review(models.Model):
-    name = models.CharField(max_length=50)
-    review_date = models.DateTimeField(auto_now_add=True)
-    description = models.TextField()
-    gourmand_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
-    positive_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
-    negative_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
-    gourmand = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
+  name = models.CharField(max_length=50)
+  review_date = models.DateTimeField(auto_now_add=True)
+  description = models.TextField()
+  gourmand_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
+  positive_rating = models.IntegerField(default=0)  # Количество позитивных голосов
+  negative_rating = models.IntegerField(default=0)  # Количество негативных голосов
+  gourmand = models.ForeignKey('User', on_delete=models.DO_NOTHING, related_name='reviews')
+  place = models.ForeignKey('Place', on_delete=models.DO_NOTHING)
 
-    def __str__(self):
-        return f"{self.name} от {self.gourmand} о {self.place}"
+  def __str__(self):
+    return f"{self.name} от {self.gourmand} о {self.place}"
 
 
 class ReviewImage(models.Model):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(
-        validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-        verbose_name="Фото отзыва",
-        upload_to="reviews/",
-        blank=True,
-        null=True
-    )
+  review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='images')
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Фото отзыва",
+    upload_to="reviews/",
+    blank=True,
+    null=True
+  )
 
-    def __str__(self):
-        return f"Фото для {self.review.name}"
+  def __str__(self):
+    return f"Фото для {self.review.name}"
 
+
+class ReviewVote(models.Model):
+  VOTE_CHOICES = (
+    ('positive', 'Позитивный'),
+    ('negative', 'Негативный'),
+  )
+  review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='votes')
+  user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='review_votes')
+  vote_type = models.CharField(max_length=10, choices=VOTE_CHOICES)
+
+  class Meta:
+    unique_together = ('review', 'user')  # Один пользователь — один голос за отзыв
+
+  def __str__(self):
+    return f"{self.user} проголосовал {self.vote_type} за {self.review}"
 
 class Event(models.Model):
   name = models.CharField(max_length=100)

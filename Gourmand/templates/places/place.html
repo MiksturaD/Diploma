@@ -3,40 +3,89 @@
 
 {% block content %}
 <div class="container my-5">
-  <h1 class="mb-4 pt-4 custom-text-color">{{ place.name }}</h1>
-  <div class="row">
-    <div class="col-md-4">
-      {% if place.image %}
-        <img src="{{ place.image.url }}" alt="{{ place.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
-      {% else %}
-        <img src="{% static 'img/default.png' %}" alt="{{ place.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
-      {% endif %}
-    </div>
-    <div class="col-md-6">
-      <div class="card bg-dark text-white">
+    <h1 class="mb-2 pt-2 custom-text-color">{{ place.name }}</h1>
+
+    <div class="card bg-dark text-white shadow">
+        {% if place.images.exists %}
+            <div class="row g-2 p-3">
+                {% for image in place.images.all %}
+                    <div class="col-md-4">
+                        <img src="{{ image.image.url }}"
+                             class="card-img-top img-fluid rounded"
+                             alt="{{ place.name }}"
+                             style="height: 200px; object-fit: contain; cursor: pointer;"
+                             data-bs-toggle="modal"
+                             data-bs-target="#imageModal"
+                             data-bs-image="{{ image.image.url }}">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <img src="{% static 'img/default.png' %}"
+                 class="card-img-top img-fluid"
+                 alt="{{ place.name }}"
+                 style="height: 200px; object-fit: contain;">
+        {% endif %}
         <div class="card-body">
-          <h4 class="card-title">Описание</h4>
-          <p class="card-text">{{ place.description }}</p>
-          <p class="card-text">
-            <strong>Email:</strong> {{ place.place_email }}<br>
-            <strong>Местоположение:</strong> {{ place.location }}<br>
-            <strong>Рейтинг:</strong> {{ place.rating }}<span class="text-warning"><span class="text-warning">★</span>
-          </p>
+            <p><strong>Описание:</strong> {{ place.description }}</p>
+            <p><strong>Email:</strong> {{ place.place_email }}</p>
+            <p><strong>Местоположение:</strong> {{ place.location }}</p>
+            <p><strong>Рейтинг:</strong> {{ place.rating }} ★</p>
+            <p><strong>Телефон:</strong> {{ place.phone }}</p>
         </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Блок для кнопки просмотра отзывов -->
-  <div class="mt-4 button_user">
-    <a href="{% url 'place_reviews' place.id %}" class="custom-button">Посмотреть отзывы</a>
-  </div>
+    {% if reviews %}
+        <h3 class="mt-4 custom-text-color">Отзывы</h3>
+        {% for review in reviews %}
+            <div class="card bg-dark text-white shadow mt-3">
+                <div class="card-body">
+                    <h5>{{ review.name }}</h5>
+                    <p>{{ review.description|truncatewords:20 }}</p>
+                    <a href="{% url 'review' review.id %}" class="custom-button">Подробнее</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 
-  <!-- Кнопка возврата к списку заведений -->
-  <div class="mt-4 button_user">
-    <a href="{% url 'places' %}" class="custom-button">Назад к заведениям</a>
-  </div>
+    <div class="mt-4 button_user">
+        <a href="{% url 'places' %}" class="custom-button">Назад к заведениям</a>
+        {% if user.is_authenticated and user.is_owner and place.owner == user %}
+            <a href="{% url 'edit_place' place.id %}" class="custom-button ms-2">Редактировать</a>
+        {% endif %}
+    </div>
 </div>
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Фото заведения</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" id="modalImage" class="img-fluid" alt="Увеличенное фото">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalImage = document.getElementById('modalImage');
+        const images = document.querySelectorAll('[data-bs-toggle="modal"]');
+
+        images.forEach(image => {
+            image.addEventListener('click', function () {
+                const imageUrl = this.getAttribute('data-bs-image');
+                modalImage.src = imageUrl;
+            });
+        });
+    });
+</script>
 {% endblock %}
 
 {% include 'includes/footer.html' %}

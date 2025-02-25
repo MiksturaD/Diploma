@@ -125,47 +125,23 @@ class ReviewCreateForm(forms.ModelForm):
 class PlaceCreateForm(forms.ModelForm):
     class Meta:
         model = Place
-        fields = ['name', 'description', 'place_email', 'location', 'rating', 'phone', 'image']
+        fields = ['name', 'description', 'place_email', 'location', 'rating', 'phone']
         widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'description': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'place_email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'location': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'rating': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'phone': forms.TextInput(attrs={
-            'class': 'form-control',
-            'required': True
-            }),
-            'image': forms.FileInput(attrs={
-            'class': 'form-control',
-            'required': True
-            }),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'place_email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'rating': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 10}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': 'Название заведения',
             'description': 'Описание',
-            'place_email': 'Е-майл',
-            'location': 'Местоположение заведения',
-            'rating': 'Рейтинг заведения',
-            'phone': 'Телефоны',
-
+            'place_email': 'Email',
+            'location': 'Местоположение',
+            'rating': 'Рейтинг',
+            'phone': 'Телефон',
         }
-
 
 class EventCreateForm(forms.ModelForm):
     class Meta:

@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
 import logging
@@ -8,7 +9,8 @@ from django.views.decorators.http import require_POST
 
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
     EventCreateForm
-from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage
+from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage, PlaceImage, \
+    ReviewVote
 
 
 def index(request):
@@ -189,27 +191,51 @@ def place_reviews(request, place_id):
   }
   return render(request, 'places/place_reviews.html', context={'place': place_obj, 'reviews': reviews})
 
+
 @login_required
 def create_places(request):
     if not request.user.is_owner():
-        print('не прошла проверка атата')
         return redirect("index")
-    print('Прошла проверка на владельца')
 
     if request.method == "POST":
-        print('запуск формы')
-        form = PlaceCreateForm(request.POST, request.FILES)
+        form = PlaceCreateForm(request.POST)
         if form.is_valid():
-            place = form.save()
+            place = form.save(commit=False)
+            place.owner = request.user  # Привязываем владельца
+            place.save()
+            if 'images' in request.FILES:
+                for image in request.FILES.getlist('images'):
+                    PlaceImage.objects.create(place=place, image=image)
             return redirect("place", place.id)
-        else:
-            print('не прошла проверка и тут')
-            return render(request, "places/place_create.html", {"form": form})
-    else:
-        print('не прошла проверка совсем')
-        form = PlaceCreateForm()
         return render(request, "places/place_create.html", {"form": form})
 
+    form = PlaceCreateForm()
+    return render(request, "places/place_create.html", {"form": form})
+
+
+@login_required
+def edit_place(request, place_id):
+    place = get_object_or_404(Place, pk=place_id)
+
+    # Проверяем, что текущий пользователь — владелец заведения
+    if not request.user.is_owner() or place.owner != request.user:
+        return redirect("index")
+
+    if request.method == "POST":
+        form = PlaceCreateForm(request.POST, instance=place)
+        if form.is_valid():
+            form.save()
+            # Обновляем изображения, если загружены новые
+            if 'images' in request.FILES:
+                # Удаляем старые изображения (опционально, если хочешь заменять)
+                place.images.all().delete()
+                for image in request.FILES.getlist('images'):
+                    PlaceImage.objects.create(place=place, image=image)
+            return redirect("place", place.id)
+        return render(request, "places/place_edit.html", {"form": form, "place": place})
+
+    form = PlaceCreateForm(instance=place)
+    return render(request, "places/place_edit.html", {"form": form, "place": place})
 
 def reviews(request):
     review_list = Review.objects.all().order_by("id")
@@ -222,7 +248,7 @@ def reviews(request):
 
 def review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
-    return render(request, 'review/review.html', {'review': review})
+    return render(request, 'review/review.html', {'review': review, 'user': request.user})
 
 
 @login_required
@@ -273,5 +299,39 @@ def gourmand_reviews(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)
     reviews = Review.objects.filter(gourmand=gourmand_obj)
     return render(request, 'gourmands/gourmand_reviews.html', {'gourmand': gourmand_obj, 'reviews': reviews})
+
+
+@login_required
+def vote_review(request, review_id, vote_type):
+    if not request.user.is_gourmand():
+        return redirect('index')  # Только гурманы могут голосовать
+
+    review = get_object_or_404(Review, pk=review_id)
+    if vote_type not in ['positive', 'negative']:
+        return HttpResponseBadRequest("Недопустимый тип голоса")
+
+    # Проверяем, голосовал ли пользователь ранее
+    existing_vote = ReviewVote.objects.filter(review=review, user=request.user).first()
+
+    if existing_vote:
+        # Если голос уже есть и тип тот же, ничего не делаем
+        if existing_vote.vote_type == vote_type:
+            return redirect('review', review_id=review.id)
+        # Если тип другой, удаляем старый голос
+        existing_vote.delete()
+        if existing_vote.vote_type == 'positive':
+            review.positive_rating -= 1
+        else:
+            review.negative_rating -= 1
+
+    # Добавляем новый голос
+    ReviewVote.objects.create(review=review, user=request.user, vote_type=vote_type)
+    if vote_type == 'positive':
+        review.positive_rating += 1
+    else:
+        review.negative_rating += 1
+    review.save()
+
+    return redirect('review', review_id=review.id)
 
 

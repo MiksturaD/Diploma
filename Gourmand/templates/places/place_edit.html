@@ -5,8 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card bg-dark text-white shadow-lg p-4">
-                <h2 class="text-center mb-4 custom-text-color">Создание заведения</h2>
-                <form method="POST" action="{% url 'create_places' %}" enctype="multipart/form-data">
+                <h2 class="text-center mb-4 custom-text-color">Редактирование заведения: {{ place.name }}</h2>
+                <form method="POST" action="{% url 'edit_place' place.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     <div class="mb-3">
@@ -42,6 +42,7 @@
                     <div class="mb-3">
                         <label for="images" class="form-label">Фотографии заведения (можно выбрать несколько, необязательно)</label>
                         <input type="file" name="images" id="images" class="form-control" multiple>
+                        <small class="form-text text-muted">Текущие фото будут заменены, если загрузить новые.</small>
                     </div>
                     {% if form.errors %}
                     <div class="alert alert-danger">
@@ -55,7 +56,7 @@
                     </div>
                     {% endif %}
                     <div class="button_user pt-4">
-                        <button type="submit" class="custom-button custom-text-color bg_dark">Создать заведение</button>
+                        <button type="submit" class="custom-button custom-text-color bg_dark">Сохранить изменения</button>
                     </div>
                 </form>
             </div>

@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-4 pt-4 custom-text-color">Отзывы о ресторанах</h1>
+    <h1 class="mb-2 pt-2 custom-text-color">Отзывы о ресторанах</h1>
 
     {% if reviews %}
         <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -22,7 +22,7 @@
                             Оценка от гурмана: {% if review.gourmand_rating %}{{ review.gourmand_rating }} <span class="text-warning">★</span>{% else %}Не указана{% endif %}
                         </h5>
                         <h2 class="card-title bg-dark custom-text-color">{{ review.place.name }} {{ review.place.rating }}<span class="text-warning">★</span></h2>
-                        <p class="card-text custom-text-color">{{ review.description|truncatewords:20 }}</p>
+                        <p class="card-text custom-text-color">{{ review.description|truncatewords:10 }}</p>
                     </div>
 
                     <ul class="list-group list-group-flush bg-dark">
@@ -51,7 +51,7 @@
             </div>
             {% endfor %}
         </div>
-        <div class="button_user pt-4">
+        <div class="button_user pt-2">
             <a href="{% url 'create_review' %}" class="custom-button">
                 Создать отзыв
             </a>

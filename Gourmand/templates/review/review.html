@@ -3,25 +3,48 @@
 
 {% block content %}
 <div class="container my-5">
-  <h1 class="mb-4 pt-4 custom-text-color">Отзыв: {{ review.name }}</h1>
+    <h1 class="mb-4 pt-4 custom-text-color">Отзыв: {{ review.name }}</h1>
 
-  <div class="card bg-dark text-white shadow">
-    <div class="card-body">
-      <h5 class="card-title">Автор: {{ review.gourmand.first_name }} {{ review.gourmand.last_name }}</h5>
-      <p class="card-text">{{ review.description }}</p>
-      <p><strong>Дата:</strong> {{ review.review_date|date:"d.m.Y" }}</p>
-      <p>
-        <strong>Положительная оценка:</strong> <span class="text-success">{{ review.positive_rating }} ★</span><br>
-        <strong>Отрицательная оценка:</strong> <span class="text-danger">{{ review.negative_rating }} ★</span>
-      </p>
-      <p><strong>Заведение:</strong> {{ review.place.name }}</p>
+    <div class="card bg-dark text-white shadow">
+        {% if review.images.exists %}
+            <div class="row g-2 p-3">
+                {% for image in review.images.all %}
+                    <div class="col-md-4">
+                        <img src="{{ image.image.url }}"
+                             class="card-img-top img-fluid rounded"
+                             alt="{{ review.name }}"
+                             style="height: 200px; object-fit: contain;">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <img src="{% static 'img/default.png' %}"
+                 class="card-img-top img-fluid"
+                 alt="{{ review.name }}"
+                 style="height: 200px; object-fit: contain;">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">Автор: {{ review.gourmand.first_name }} {{ review.gourmand.last_name }}</h5>
+            <p class="card-text">{{ review.description }}</p>
+            <p><strong>Дата:</strong> {{ review.review_date|date:"d.m.Y" }}</p>
+            <p>
+                <strong>Положительная оценка:</strong> 
+                <span class="text-success">
+                    {% if review.positive_rating %}{{ review.positive_rating }} ★{% else %}0 ★{% endif %}
+                </span><br>
+                <strong>Отрицательная оценка:</strong> 
+                <span class="text-danger">
+                    {% if review.negative_rating %}{{ review.negative_rating }} ★{% else %}0 ★{% endif %}
+                </span>
+            </p>
+            <p><strong>Заведение:</strong> {{ review.place.name }}</p>
+        </div>
     </div>
-  </div>
 
-  <!-- Кнопка возврата -->
-  <div class="mt-4 button_user">
-    <a href="{% url 'gourmand_reviews' review.gourmand.id %}" class="custom-button">Назад к отзывам</a>
-  </div>
+    <!-- Кнопка возврата -->
+    <div class="mt-4 button_user">
+        <a href="{% url 'gourmand_reviews' review.gourmand.id %}" class="custom-button">Назад к отзывам</a>
+    </div>
 </div>
 {% endblock %}
 

@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def __str__(self):
         return self.email
@@ -93,26 +93,31 @@ class OwnerProfile(models.Model):
 
 
 class Review(models.Model):
-  name = models.CharField(max_length=50)
-  review_date = models.DateTimeField(auto_now_add=True)
-  description = models.TextField()
-  gourmand_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  positive_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  negative_rating = models.DecimalField(max_digits=10, decimal_places=0)
-  gourmand = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-  place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
-  image = models.ImageField(
-    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-    verbose_name="Фото отзыва",
-    upload_to="reviews/",
-    blank=True,
-    null=True
-  )
+    name = models.CharField(max_length=50)
+    review_date = models.DateTimeField(auto_now_add=True)
+    description = models.TextField()
+    gourmand_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
+    positive_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
+    negative_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
+    gourmand = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    place = models.ForeignKey(Place, on_delete=models.DO_NOTHING)
 
-  def __str__(self):
-    return (f'{self.name}, {self.gourmand} {self.description}, {self.review_date}, {self.positive_rating}, '
-            f'{self.negative_rating}, '
-            f'{self.place}')
+    def __str__(self):
+        return f"{self.name} от {self.gourmand} о {self.place}"
+
+
+class ReviewImage(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(
+        validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+        verbose_name="Фото отзыва",
+        upload_to="reviews/",
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return f"Фото для {self.review.name}"
 
 
 class Event(models.Model):

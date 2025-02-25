@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
     EventCreateForm
-from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile
+from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage
 
 
 def index(request):
@@ -19,7 +19,7 @@ def main(request):
   return None
 
 logger = logging.getLogger(__name__)
-def signup(request): #TODO: СДЕЛАТЬ РЕДИРРЕКТ НА СТРАНИЦУ ПРОФИЛЯ ПОСЛЕ РЕГИСТРАЦИИ
+def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -35,11 +35,10 @@ def signup(request): #TODO: СДЕЛАТЬ РЕДИРРЕКТ НА СТРАНИ�
             login(request, user)
             return redirect("profile")
         else:
-            print(f"Form errors: {form.errors}")
-            return render(request, "auth/signup.html", {"form": form})
+            return render(request, "auth/signup.html", {"form": form, "errors": form.errors})
     else:
         form = SignupForm()
-    return render(request, 'auth/signup.html', {'form': form})
+    return render(request, "auth/signup.html", {"form": form})
 
 
 def signin(request):
@@ -50,17 +49,11 @@ def signin(request):
         if not email or not password:
             return render(request, "auth/signin.html", {"login_error": "Введите email и пароль"})
 
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return render(request, "auth/signin.html", {"login_error": "Пользователь не найден."})
-
-        user = authenticate(request, username=user.email, password=password)  # Используем email
-        if user is not None:
+        user = authenticate(request, username=email, password=password)
+        if user:
             login(request, user)
             return redirect("index")
-        else:
-            return render(request, "auth/signin.html", {"login_error": "Неверные учетные данные"})
+        return render(request, "auth/signin.html", {"login_error": "Неверные email или пароль"})
 
     return render(request, "auth/signin.html")
 
@@ -231,24 +224,29 @@ def review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     return render(request, 'review/review.html', {'review': review})
 
+
 @login_required
 def create_review(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        description = request.POST.get("description")
-        place_id = request.POST.get("place")
-        gourmand_rating = request.POST.get("gourmand_rating")
+    if not request.user.is_gourmand():
+        return redirect('index')
 
-        place = get_object_or_404(Place, id=place_id)
-        review = Review.objects.create(
-            name=name,
-            description=description,
-            place=place,
-            gourmand_rating=gourmand_rating
-        )
-        return redirect("reviews")
-    else:
-        form = ReviewCreateForm()
+    if request.method == "POST":
+        form = ReviewCreateForm(request.POST)
+        if form.is_valid():
+            # Сохраняем отзыв
+            review = form.save(commit=False)
+            review.gourmand = request.user
+            review.save()
+
+            # Обрабатываем загруженные изображения
+            if 'images' in request.FILES:
+                for image in request.FILES.getlist('images'):
+                    ReviewImage.objects.create(review=review, image=image)
+
+            return redirect("reviews")
+        return render(request, "review/create.html", {"form": form})
+
+    form = ReviewCreateForm()
     return render(request, "review/create.html", {"form": form})
 
 def about(request):

@@ -111,28 +111,15 @@ class ReviewCreateForm(forms.ModelForm):
         model = Review
         fields = ['name', 'description', 'place']
         widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
-            'description': forms.TextInput(attrs={
-                'class': 'form-select',
-                'required': True
-            }),
-            'place': forms.TextInput(attrs={
-                'class': 'form-control',
-                'required': True
-            }),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'place': forms.Select(attrs={'class': 'form-select'}),
         }
         labels = {
             'name': 'Название отзыва',
+            'description': 'Описание',
+            'place': 'Заведение',
         }
-
-    def __init__(self, *args, **kwargs):
-        super(ReviewCreateForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'aria-label': 'Название отзыва'})
-        self.fields['description'].widget.attrs.update({'aria-label': 'Детали отзыва'})
-        self.fields['place'].widget.attrs.update({'aria-label': 'Наименование заведения'})
 
 
 class PlaceCreateForm(forms.ModelForm):

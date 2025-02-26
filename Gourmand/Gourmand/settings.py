@@ -65,6 +65,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+        'libraries': {
+                'review_tags': 'landing.templatetags.review_tags',  # Регистрируем теги
+            },
         },
     },
 ]

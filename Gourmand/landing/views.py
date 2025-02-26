@@ -237,18 +237,36 @@ def edit_place(request, place_id):
     form = PlaceCreateForm(instance=place)
     return render(request, "places/place_edit.html", {"form": form, "place": place})
 
+
 def reviews(request):
     review_list = Review.objects.all().order_by("id")
     paginator = Paginator(review_list, 3)
     page_number = request.GET.get('page')
     reviews_page = paginator.get_page(page_number)
 
-    return render(request, 'review/reviews.html', {'reviews': reviews_page})
+    # Добавляем информацию о голосах пользователя для каждого отзыва
+    user_votes = {}
+    if request.user.is_authenticated:
+        votes = ReviewVote.objects.filter(user=request.user, review__in=reviews_page)
+        user_votes = {vote.review_id: vote.vote_type for vote in votes}
+
+    return render(request, 'review/reviews.html', {
+        'reviews': reviews_page,
+        'user': request.user,
+        'user_votes': user_votes,
+    })
 
 
 def review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
-    return render(request, 'review/review.html', {'review': review, 'user': request.user})
+    user_vote = None
+    if request.user.is_authenticated:
+        user_vote = ReviewVote.objects.filter(review=review, user=request.user).first()
+    return render(request, 'review/review.html', {
+        'review': review,
+        'user': request.user,
+        'user_vote': user_vote,
+    })
 
 
 @login_required

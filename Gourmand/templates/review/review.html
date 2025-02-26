@@ -40,11 +40,11 @@
             {% if user.is_authenticated and user.is_gourmand %}
                 <div class="mt-3">
                     <a href="{% url 'vote_review' review.id 'positive' %}" 
-                       class="btn btn-sm me-2 {% if user.review_votes.filter(review=review, vote_type='positive').exists %}btn-success{% else %}btn-outline-success{% endif %}">
+                       class="btn btn-sm me-2 {% if user_vote and user_vote.vote_type == 'positive' %}btn-success{% else %}btn-outline-success{% endif %}">
                         Лайк ({{ review.positive_rating }})
                     </a>
                     <a href="{% url 'vote_review' review.id 'negative' %}" 
-                       class="btn btn-sm {% if user.review_votes.filter(review=review, vote_type='negative').exists %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                       class="btn btn-sm {% if user_vote and user_vote.vote_type == 'negative' %}btn-danger{% else %}btn-outline-danger{% endif %}">
                         Дизлайк ({{ review.negative_rating }})
                     </a>
                 </div>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="mt-4 button_user">
-        <a href="{% url 'gourmand_reviews' review.gourmand.id %}" class="custom-button">Назад к отзывам</a>
+        <a href="{% url 'reviews'  %}" class="custom-button">Назад к отзывам</a>
     </div>
 </div>
 

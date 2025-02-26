@@ -76,12 +76,12 @@
         <a class="page-link bg_dark " href="?page=1">Первая</a>
       </li>
       <li class="page-item button_user">
-        <a class="page-link bg_dark" href="?page={{ events.previous_page_number }}">Назад</a>
+        <a class="page-link bg_dark " href="?page={{ events.previous_page_number }}">Назад</a>
       </li>
     {% endif %}
 
-    <li class="page-item custom-button">
-      <span class="page-link bg_dark pag_size">Страница {{ events.number }} из {{ events.paginator.num_pages }}</span>
+    <li class="page-item">
+      <span class="bg_dark pag_size ">Страница {{ events.number }} из {{ events.paginator.num_pages }}</span>
     </li>
 
     {% if events.has_next %}

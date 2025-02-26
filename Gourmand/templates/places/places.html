@@ -16,24 +16,39 @@
                          style="height: 200px; object-fit: cover;">
                     <div class="card-body bg-dark custom-text-color">
                         <h2 class="custom-text-color">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h2>
-                        <p>{{ place.description|truncatewords:20 }}</p>
+                        <p>{{ place.description|truncatewords:10 }}</p> <!-- Уменьшили до 10 слов для компактности -->
                     </div>
-                    <ul class="list-group bg-dark list-group-flush">
-                        <li class="list-group-item bg-dark">
-                            <span class="badge bg-dark me-1">Местоположение: {{ place.location }}</span>
-                        </li>
-                        <li class="list-group-item bg-dark custom-text-color">
-                            <i class="bi bi-envelope me-2 bu">Контакты</i><br>
-                            Телефон {{ place.phone }} <br>
-                            Е-майл {{ place.place_email }}
-                        </li>
-                    </ul>
                     <div class="card-body text-center bg-dark">
                         <div class="button_user">
-                            <a href="{% url 'place' place.id %}" class="custom-button">Подробнее</a>
+                            <a href="{% url 'place' place.id %}" class="custom-button bg_dark">Подробнее</a>
+                            <button type="button" class="custom-button bg_dark"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#contactModal{{ place.id }}">
+                                Контакты
+                            </button>
                             {% if user.is_authenticated and user.is_owner and place.owner == user %}
-                                <a href="{% url 'edit_place' place.id %}" class="custom-button ms-2">Редактировать</a>
+                                <a href="{% url 'edit_place' place.id %}" class="custom-button btn-sm ms-2">Редактировать</a>
                             {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальное окно для каждого заведения -->
+            <div class="modal fade" id="contactModal{{ place.id }}" tabindex="-1" aria-labelledby="contactModalLabel{{ place.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h2 class="modal-title custom-text-color" id="contactModalLabel{{ place.id }}">{{ place.name }} - Контакты</h2>
+                            <button type="button" class="btn-close btn-close-white " data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Местоположение:</strong> {{ place.location }}</p>
+                            <p><strong>Телефон:</strong> {{ place.phone }}</p>
+                            <p><strong>Email:</strong> {{ place.place_email }}</p>
+                        </div>
+                        <div class="modal-footer button_user">
+                            <button type="button" class="custom-button bg_dark" data-bs-dismiss="modal">Закрыть</button>
                         </div>
                     </div>
                 </div>
@@ -56,16 +71,27 @@
         {% endif %}
     {% endif %}
 </div>
+
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
         {% if places.has_previous %}
-            <li class="page-item button_user"><a class="page-link bg_dark" href="?page=1">Первая</a></li>
-            <li class="page-item button_user"><a class="page-link bg_dark" href="?page={{ places.previous_page_number }}">Назад</a></li>
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page=1">Первая</a>
+            </li>
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page={{ places.previous_page_number }}">Назад</a>
+            </li>
         {% endif %}
-        <li class="page-item custom-button"><span class="page-link bg_dark pag_size">Страница {{ places.number }} из {{ places.paginator.num_pages }}</span></li>
+        <li class="page-item">
+            <span class="bg_dark pag_size">Страница {{ places.number }} из {{ places.paginator.num_pages }}</span>
+        </li>
         {% if places.has_next %}
-            <li class="page-item button_user"><a class="page-link bg_dark" href="?page={{ places.next_page_number }}">Вперёд</a></li>
-            <li class="page-item button_user"><a class="page-link bg_dark" href="?page={{ places.paginator.num_pages }}">Последняя</a></li>
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page={{ places.next_page_number }}">Вперёд</a>
+            </li>
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page={{ places.paginator.num_pages }}">Последняя</a>
+            </li>
         {% endif %}
     </ul>
 </nav>

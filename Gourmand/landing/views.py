@@ -125,12 +125,31 @@ def signout(request):
 
 
 def events(request):
-    event_list = Event.objects.all().order_by("id")
-    paginator = Paginator(event_list, 3)
+    events_list = Event.objects.all()
+
+    # Фильтр по заведениям
+    place_id = request.GET.get('place')
+    if place_id:
+        events_list = events_list.filter(places__id=place_id)
+
+    # Сортировка
+    sort_by = request.GET.get('sort', 'id')  # По умолчанию по ID
+    if sort_by == 'date':
+        events_list = events_list.order_by('event_date')
+    elif sort_by == 'name':
+        events_list = events_list.order_by('name')
+
+    paginator = Paginator(events_list, 12)
     page_number = request.GET.get('page')
     events_page = paginator.get_page(page_number)
 
-    return render(request, 'events/events.html', {'events': events_page})
+    places = Place.objects.all()  # Для выпадающего списка
+    return render(request, 'events/events.html', {
+        'events': events_page,
+        'places': places,
+        'current_place': place_id,
+        'current_sort': sort_by,
+    })
 
 
 def event(request, event_id):
@@ -164,12 +183,24 @@ def create_event(request):
 
 
 def places(request):
-  user = request.user
-  places_list = Place.objects.all().order_by("id")
-  paginator = Paginator(places_list, 3)
-  page_number = request.GET.get('page')
-  places_page = paginator.get_page(page_number)
-  return render(request, 'places/places.html', context={'places': places_page, 'user': user})
+    places_list = Place.objects.all()
+
+    # Сортировка
+    sort_by = request.GET.get('sort', 'id')
+    if sort_by == 'name':
+        places_list = places_list.order_by('name')
+    elif sort_by == 'rating':
+        places_list = places_list.order_by('-rating')  # По убыванию
+
+    paginator = Paginator(places_list, 12)
+    page_number = request.GET.get('page')
+    places_page = paginator.get_page(page_number)
+
+    return render(request, 'places/places.html', {
+        'places': places_page,
+        'user': request.user,
+        'current_sort': sort_by,
+    })
 
 
 def place(request, place_id):
@@ -239,21 +270,30 @@ def edit_place(request, place_id):
 
 
 def reviews(request):
-    review_list = Review.objects.all().order_by("id")
-    paginator = Paginator(review_list, 3)
+    reviews_list = Review.objects.all()
+
+    # Фильтр по заведениям
+    place_id = request.GET.get('place')
+    if place_id:
+        reviews_list = reviews_list.filter(place__id=place_id)
+
+    # Сортировка
+    sort_by = request.GET.get('sort', 'id')
+    if sort_by == 'date':
+        reviews_list = reviews_list.order_by('-review_date')
+    elif sort_by == 'name':
+        reviews_list = reviews_list.order_by('name')
+
+    paginator = Paginator(reviews_list, 12)
     page_number = request.GET.get('page')
     reviews_page = paginator.get_page(page_number)
 
-    # Добавляем информацию о голосах пользователя для каждого отзыва
-    user_votes = {}
-    if request.user.is_authenticated:
-        votes = ReviewVote.objects.filter(user=request.user, review__in=reviews_page)
-        user_votes = {vote.review_id: vote.vote_type for vote in votes}
-
+    places = Place.objects.all()
     return render(request, 'review/reviews.html', {
         'reviews': reviews_page,
-        'user': request.user,
-        'user_votes': user_votes,
+        'places': places,
+        'current_place': place_id,
+        'current_sort': sort_by,
     })
 
 
@@ -302,12 +342,25 @@ def contacts(request):
 
 
 def gourmands(request):
-    gourmands_list = GourmandProfile.objects.all().order_by("id")
-    paginator = Paginator(gourmands_list, 3)
+    gourmands_list = GourmandProfile.objects.all()
+
+    # Сортировка
+    sort_by = request.GET.get('sort', 'id')
+    if sort_by == 'rating':
+        gourmands_list = gourmands_list.order_by('-rating')
+    elif sort_by == 'experience':
+        gourmands_list = gourmands_list.order_by('user__date_joined')
+    elif sort_by == 'reviews':
+        gourmands_list = gourmands_list.annotate(review_count=Count('user__reviews')).order_by('-review_count')
+
+    paginator = Paginator(gourmands_list, 12)
     page_number = request.GET.get('page')
     gourmands_page = paginator.get_page(page_number)
 
-    return render(request, 'gourmands/gourmands.html', {'gourmands': gourmands_page})
+    return render(request, 'gourmands/gourmands.html', {
+        'gourmands': gourmands_page,
+        'current_sort': sort_by,
+    })
 
 def gourmand(request, user_id):
     gourmand_obj = get_object_or_404(User, pk=user_id)

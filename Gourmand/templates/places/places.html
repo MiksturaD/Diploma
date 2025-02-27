@@ -2,53 +2,60 @@
 {% load static %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="mb-2 pt-2 custom-text-color">Заведения в городе Красноярске</h1>
+<div class="container my-4 my-md-5">
+    <h1 class="mb-3 custom-text-color">Заведения в городе Красноярске</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-4 mb-2">
+            <form method="GET" class="d-flex gap-2">
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="id" {% if current_sort == 'id' %}selected{% endif %}>По умолчанию</option>
+                    <option value="name" {% if current_sort == 'name' %}selected{% endif %}>По названию</option>
+                    <option value="rating" {% if current_sort == 'rating' %}selected{% endif %}>По рейтингу</option>
+                </select>
+            </form>
+        </div>
+    </div>
 
     {% if places %}
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 g-md-4 mb-3">
             {% for place in places %}
             <div class="col">
                 <div class="card h-100 shadow">
                     <img src="{% if place.images.exists %}{{ place.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
                          class="card-img-top img-fluid"
                          alt="{{ place.name }}"
-                         style="height: 200px; object-fit: cover;">
-                    <div class="card-body bg-dark custom-text-color">
-                        <h2 class="custom-text-color">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h2>
-                        <p>{{ place.description|truncatewords:10 }}</p> <!-- Уменьшили до 10 слов для компактности -->
+                         style="height: 150px; object-fit: cover;">
+                    <div class="card-body bg-dark custom-text-color p-2 p-md-3">
+                        <h5 class="custom-text-color mb-1">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h5>
+                        <p class="small mb-0">{{ place.description|truncatewords:8 }}</p>
                     </div>
-                    <div class="card-body text-center bg-dark">
-                        <div class="button_user">
-                            <a href="{% url 'place' place.id %}" class="custom-button bg_dark">Подробнее</a>
-                            <button type="button" class="custom-button bg_dark"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#contactModal{{ place.id }}">
-                                Контакты
-                            </button>
+                    <div class="card-footer bg-dark p-2 text-center">
+                        <div class="d-flex flex-column flex-md-row justify-content-center gap-2 button_user">
+                            <a href="{% url 'place' place.id %}" class="btn custom-button btn-sm custom-text-color custom-button">Подробнее</a>
+                            <button type="button" class="btn custom-button btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal{{ place.id }}">Контакты</button>
                             {% if user.is_authenticated and user.is_owner and place.owner == user %}
-                                <a href="{% url 'edit_place' place.id %}" class="custom-button btn-sm ms-2">Редактировать</a>
+                                <a href="{% url 'edit_place' place.id %}" class="btn custom-button btn-sm custom-text-color">Редактировать</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Модальное окно для каждого заведения -->
+            <!-- Модальное окно -->
             <div class="modal fade" id="contactModal{{ place.id }}" tabindex="-1" aria-labelledby="contactModalLabel{{ place.id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content bg-dark text-white">
                         <div class="modal-header">
-                            <h2 class="modal-title custom-text-color" id="contactModalLabel{{ place.id }}">{{ place.name }} - Контакты</h2>
-                            <button type="button" class="btn-close btn-close-white " data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 class="modal-title custom-text-color" id="contactModalLabel{{ place.id }}">{{ place.name }}</h1>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p><strong>Местоположение:</strong> {{ place.location }}</p>
                             <p><strong>Телефон:</strong> {{ place.phone }}</p>
                             <p><strong>Email:</strong> {{ place.place_email }}</p>
                         </div>
-                        <div class="modal-footer button_user">
-                            <button type="button" class="custom-button bg_dark" data-bs-dismiss="modal">Закрыть</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn custom-button" data-bs-dismiss="modal">Закрыть</button>
                         </div>
                     </div>
                 </div>
@@ -56,24 +63,13 @@
             {% endfor %}
         </div>
         {% if user.role == "owner" %}
-        <div class="button_user pt-4">
-            <a href="{% url 'create_places' %}" class="custom-button">Создать заведение</a>
-        </div>
-        {% endif %}
-    {% else %}
-        <div class="alert alert-info" role="alert">
-            На данный момент заведений нет. Следите за обновлениями!
-        </div>
-        {% if user.role == "owner" %}
-        <div class="button_user pt-4">
-            <a href="{% url 'create_places' %}" class="custom-button">Создать заведение</a>
+        <div class="button_user pt-3 text-center mb-3">
+            <a href="{% url 'create_places' %}" class="btn custom-button">Создать заведение</a>
         </div>
         {% endif %}
     {% endif %}
-</div>
-
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center flex-wrap">
         {% if places.has_previous %}
             <li class="page-item button_user">
                 <a class="page-link bg_dark" href="?page=1">Первая</a>
@@ -82,9 +78,11 @@
                 <a class="page-link bg_dark" href="?page={{ places.previous_page_number }}">Назад</a>
             </li>
         {% endif %}
+
         <li class="page-item">
-            <span class="bg_dark pag_size">Страница {{ places.number }} из {{ places.paginator.num_pages }}</span>
+            <span class=" bg_dark pag_size">Страница {{ places.number }} из {{ places.paginator.num_pages }}</span>
         </li>
+
         {% if places.has_next %}
             <li class="page-item button_user">
                 <a class="page-link bg_dark" href="?page={{ places.next_page_number }}">Вперёд</a>

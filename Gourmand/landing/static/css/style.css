@@ -446,21 +446,16 @@ header .container-fluid {
     fill: yellow;
 }
 .pag_size {
-    float: left;
+    display: flex;
     min-width: 100px;
     height: 35px;
     text-align: center;
     line-height: 35px;
-    /*position: relative;*/
     padding: 0 15px!important;
-    margin: 0 2px!important;
     border: thin;
 
 }
-.pag_size a:hover,
-.pag_size a:active,
-.pag_size a:focus {
-    background: #e3d105;
-    color: #000000;
-    border: none !important;
+
+.zero-mp {
+    gap: 2px;
 }

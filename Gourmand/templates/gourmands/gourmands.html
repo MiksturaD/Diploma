@@ -2,74 +2,67 @@
 {% load static %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="mb-2 pt-2 custom-text-color">Наши гурманы</h1>
-    
+<div class="container my-4 my-md-5">
+    <h1 class="mb-3 custom-text-color">Гурманы</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-4 mb-2">
+            <form method="GET" class="d-flex gap-2">
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="id" {% if current_sort == 'id' %}selected{% endif %}>По умолчанию</option>
+                    <option value="rating" {% if current_sort == 'rating' %}selected{% endif %}>По рейтингу</option>
+                    <option value="experience" {% if current_sort == 'experience' %}selected{% endif %}>По стажу</option>
+                    <option value="reviews" {% if current_sort == 'reviews' %}selected{% endif %}>По количеству отзывов</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
     {% if gourmands %}
-        <div class="row row-cols-1 row-cols-md-3 g-4"> 
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 g-md-4 mb-3">
             {% for gourmand in gourmands %}
             <div class="col">
                 <div class="card h-100 shadow">
                     <img src="{% if gourmand.image %}{{ gourmand.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
-                         class="card-img-top img-fluid" 
-                         alt="image"
-                         style="height: 200px; object-fit: cover;">
-                    
-                    <div class="card-body bg-dark">
-                        <h3 class="card-title bg-dark custom-text-color">{{ gourmand.user.first_name }} {{ gourmand.last_name }}</h3>
-                        <p class="card-text custom-text-color">{{ gourmand.description|truncatewords:20 }}</p>
+                         class="card-img-top img-fluid"
+                         alt="{{ gourmand.user.first_name }} {{ gourmand.user.last_name }}"
+                         style="height: 150px; object-fit: cover;">
+                    <div class="card-body bg-dark custom-text-color p-2 p-md-3">
+                        <h5 class="custom-text-color mb-1">{{ gourmand.user.first_name }} {{ gourmand.user.last_name }}</h5>
+                        <p class="small mb-0">Рейтинг: {{ gourmand.rating }} | Отзывов: {{ gourmand.user.reviews.count }}</p>
                     </div>
-                    
-                    <ul class="list-group list-group-flush bg-dark">
-                        <li class="list-group-item bg-dark">
-                            <i class="bi bi-geo-alt me-2"></i>
-                                <span class="badge bg-secondary me-1 bg-dark">
-                                    Рейтинг Гурмана - <span class="text-warning">★{{ gourmand.rating }}</span>
-                                </span>
-                        </li>
-                    </ul>
-                    
-                    <div class="card-body text-center bg-dark">
-                        <div class="button_user">
-                            <a href="{% url 'gourmand' gourmand.user.id %}" class="custom-button">
-                                Подробнее <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
+                    <div class="card-footer bg-dark p-2 text-center">
+                        <a href="{% url 'gourmand' gourmand.user.id %}" class="btn custom-button btn-sm">Профиль</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-    {% else %}
-        <div class="alert alert-info" role="alert">
-            На данный момент гурманов нет. Следите за обновлениями!
-        </div>
     {% endif %}
-</div>
-<nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center">
-    {% if gourmands.has_previous %}
-      <li class="page-item button_user">
-        <a class="page-link bg_dark " href="?page=1">Первая</a>
-      </li>
-      <li class="page-item button_user">
-        <a class="page-link bg_dark " href="?page={{ gourmands.previous_page_number }}">Назад</a>
-      </li>
-    {% endif %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center flex-wrap">
+        {% if gourmands.has_previous %}
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page=1">Первая</a>
+            </li>
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page={{ gourmands.previous_page_number }}">Назад</a>
+            </li>
+        {% endif %}
 
-    <li class="page-item">
-      <span class="bg_dark pag_size ">Страница {{ gourmands.number }} из {{ gourmands.paginator.num_pages }}</span>
-    </li>
+        <li class="page-item">
+            <span class=" bg_dark pag_size">Страница {{ gourmands.number }} из {{ gourmands.paginator.num_pages }}</span>
+        </li>
 
-    {% if gourmands.has_next %}
-      <li class="page-item button_user">
-        <a class="page-link bg_dark" href="?page={{ gourmands.next_page_number }}">Вперед</a>
-      </li>
-      <li class="page-item button_user">
-        <a class="page-link bg_dark" href="?page={{ gourmands.paginator.num_pages }}">Последняя</a>
-      </li>
-    {% endif %}
-  </ul>
+        {% if gourmands.has_next %}
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page={{ gourmands.next_page_number }}">Вперёд</a>
+            </li>
+            <li class="page-item button_user">
+                <a class="page-link bg_dark" href="?page={{ gourmands.paginator.num_pages }}">Последняя</a>
+            </li>
+        {% endif %}
+    </ul>
 </nav>
 {% endblock %}
 

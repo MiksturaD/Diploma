@@ -6,40 +6,55 @@
 {% url 'gourmands' as gourmands_url %}
 {% url 'contacts' as contacts_url %}
 
-<div class="container">
-  <div class="right_header_info fixed-top navbar-light bg-dark">
-    <ul class="nav nav-tabs nav nav-link contact-info">
-      <li class="nav-item button_user">
-        <a class="button nav-link {% if request.path == index_url %}active{% endif %}" href="{% url 'index' %}">Главная</a>
-      </li>
-      <li class="nav-item button_user">
-        <a class="button nav-link {% if request.path == events_url %}active{% endif %}" href="{% url 'events' %}">Афиша</a>
-      </li>
-      <li class="nav-item button_user">
-        <a class="button nav-link {% if request.path == places_url %}active{% endif %}" href="{% url 'places' %}">Заведения</a>
-      </li>
-      <li class="nav-item button_user">
-        <a class="button nav-link {% if request.path == gourmands_url %}active{% endif %}" href="{% url 'gourmands' %}">Гурманы</a>
-      </li>
-      <li class="nav-item button_user">
-        <a class="button nav-link {% if request.path == reviews_url %}active{% endif %}" href="{% url 'reviews' %}">Отзывы</a>
-      </li>
-      <li class="nav-item button_user">
-        <a class="button nav-link {% if request.path == contacts_url %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
-      </li>
 
-      {% if request.user.is_authenticated %}
-        <li class="nav-item button_user">
-          <a class="button nav-link active" href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>
-          <a class="button nav-link" href="{% url 'signout' %}">Выход</a>
-        </li>
-      {% else %}
-        <li class="button_user">
-          <a class="button nav-link" href="{% url 'signin' %}" >Вход</a>
-          <a class="button nav-link" href="{% url 'signup' %}" >Регистрация</a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
-</div>
+<nav class="navbar navbar-expand-lg bg_dark fixed-top">
+    <div class="container-fluid px-3">
+            <!-- Логотип -->
+            <a class="navbar-brand custom-text-color" href="{% url 'index' %}">Проект Гурман</a>
+
+            <!-- Кнопка "бутерброд" -->
+            <button class="navbar-toggler custom-text-color" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon custom-text-color"></span>
+            </button>
+
+            <!-- Навигация -->
+              <div class="collapse navbar-collapse right_header_info fixed-top bg-dark" id="navbarNav">
+                <ul class="navbar-nav ms-auto nav nav-tabs nav nav-link contact-info">
+                  <li class="nav-item button_user">
+                    <a class="button nav-link {% if request.path == index_url %}active{% endif %}" href="{% url 'index' %}">Главная</a>
+                  </li>
+                  <li class="nav-item button_user">
+                    <a class="button nav-link {% if request.path == events_url %}active{% endif %}" href="{% url 'events' %}">Афиша</a>
+                  </li>
+                  <li class="nav-item button_user">
+                    <a class="button nav-link {% if request.path == places_url %}active{% endif %}" href="{% url 'places' %}">Заведения</a>
+                  </li>
+                  <li class="nav-item button_user">
+                    <a class="button nav-link {% if request.path == gourmands_url %}active{% endif %}" href="{% url 'gourmands' %}">Гурманы</a>
+                  </li>
+                  <li class="nav-item button_user">
+                    <a class="button nav-link {% if request.path == reviews_url %}active{% endif %}" href="{% url 'reviews' %}">Отзывы</a>
+                  </li>
+                  <li class="nav-item button_user">
+                    <a class="button nav-link {% if request.path == contacts_url %}active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
+                  </li>
+
+                  {% if request.user.is_authenticated %}
+                    <li class="nav-item button_user">
+                      <a class="button nav-link active" href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                      <a class="button nav-link" href="{% url 'signout' %}">Выход</a>
+                    </li>
+                  {% else %}
+                    <li class="button_user">
+                      <a class="button nav-link" href="{% url 'signin' %}" >Вход</a>
+                      <a class="button nav-link" href="{% url 'signup' %}" >Регистрация</a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+              </div>
+
+</nav>
+
 

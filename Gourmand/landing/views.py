@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
     EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage, PlaceImage, \
-    ReviewVote
+    ReviewVote, EventImage
 
 
 def index(request):
@@ -170,6 +170,9 @@ def create_event(request):
             event = form.save(commit=False)
             event.save()
             form.save_m2m()  # Сохранение связей ManyToMany
+            if 'images' in request.FILES:
+                for image in request.FILES.getlist('images'):
+                    EventImage.objects.create(event=event, image=image)
 
             print("Сохраненные места:", event.places.all())  # 👀 Проверяем сохраненные места
             return redirect("events")

@@ -25,9 +25,8 @@
                         {{ form.event_date.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="id_image" class="form-label">Фото мероприятия</label>
-                        {{ form.image }}
-                        {{ form.image.errors }}
+                        <label for="images" class="form-label">Фотографии заведения (можно выбрать несколько, необязательно)</label>
+                        <input type="file" name="images" id="images" class="form-control" multiple>
                     </div>
                     <div class="mb-3">
                         <label for="id_places" class="form-label">Выберите заведения</label>

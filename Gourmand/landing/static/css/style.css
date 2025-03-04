@@ -459,3 +459,14 @@ header .container-fluid {
 .zero-mp {
     gap: 2px;
 }
+
+.dropdown-item.active{
+    background-color: #e3d105;
+    color: #1c1c1c;
+}
+
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: none;
+}

@@ -148,16 +148,19 @@ class Event(models.Model):
   description = models.TextField()
   event_date = models.DateField()
   places = models.ManyToManyField(Place)
-  image = models.ImageField(
-    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
-    verbose_name="Изображение события",
-    upload_to="events/",
-    blank=True,
-    null=True
-  )
+
 
   def __str__(self):
       return f'{self.name}, {self.description}, {", ".join(str(place) for place in self.places.all())}'
 
 
+class EventImage(models.Model):
+  event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='images')
+  image = models.ImageField(
+    validators=[FileExtensionValidator(allowed_extensions=["jpg", "png", "webp"])],
+    verbose_name="Фото мероприятия",
+    upload_to="events/",
+    blank=True,
+    null=True
+  )
 

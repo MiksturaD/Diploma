@@ -30,8 +30,8 @@
                         <h5 class="custom-text-color mb-1">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h5>
                         <p class="small mb-0">{{ place.description|truncatewords:8 }}</p>
                     </div>
-                    <div class="card-footer bg-dark p-2 text-center">
-                        <div class="d-flex flex-column flex-md-row justify-content-center gap-2 button_user">
+                    <div class="card-body bg-dark p-1 text-center flex-wrap">
+                        <div class="d-flex flex-column flex-md-row justify-content-center mb-2 gap-2 button_user flex-wrap">
                             <a href="{% url 'place' place.id %}" class="btn custom-button btn-sm custom-text-color custom-button">Подробнее</a>
                             <button type="button" class="btn custom-button btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal{{ place.id }}">Контакты</button>
                             {% if user.is_authenticated and user.is_owner and place.owner == user %}
@@ -52,6 +52,9 @@
                         <div class="modal-body">
                             <p><strong>Местоположение:</strong> {{ place.location }}</p>
                             <p><strong>Телефон:</strong> {{ place.phone }}</p>
+                            {% if place.website %}
+                                <p><strong>Сайт:<a href="{{ place.website }}" target="_blank" class="custom-text-color small text-decoration-none"> </strong>{{ place.website|truncatechars:30 }}</p></a>
+                        {% endif %}
                             <p><strong>Email:</strong> {{ place.place_email }}</p>
                         </div>
                         <div class="modal-footer">

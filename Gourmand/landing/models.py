@@ -70,6 +70,7 @@ class Place(models.Model):
   location = models.TextField()
   rating = models.DecimalField(max_digits=10, decimal_places=0)
   phone = models.TextField(max_length=50)
+  website = models.URLField(max_length=200, blank=True, null=True)
   owner = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='owned_places')
 
   def __str__(self):

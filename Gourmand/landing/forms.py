@@ -125,7 +125,7 @@ class ReviewCreateForm(forms.ModelForm):
 class PlaceCreateForm(forms.ModelForm):
     class Meta:
         model = Place
-        fields = ['name', 'description', 'place_email', 'location', 'rating', 'phone']
+        fields = ['name', 'description', 'place_email', 'location', 'rating', 'phone', 'website']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
@@ -133,6 +133,7 @@ class PlaceCreateForm(forms.ModelForm):
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'rating': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 10}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}),
         }
         labels = {
             'name': 'Название заведения',
@@ -141,6 +142,7 @@ class PlaceCreateForm(forms.ModelForm):
             'location': 'Местоположение',
             'rating': 'Рейтинг',
             'phone': 'Телефон',
+            'website':'Сайт',
         }
 
 class EventCreateForm(forms.ModelForm):

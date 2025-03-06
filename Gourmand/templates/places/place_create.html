@@ -40,6 +40,10 @@
                         {{ form.phone.errors }}
                     </div>
                     <div class="mb-3">
+                        <label for="{{ form.website.id_for_label }}" class="form-label custom-text-color">Сайт</label>
+                        {{ form.website }}
+                    </div>
+                    <div class="mb-3">
                         <label for="images" class="form-label">Фотографии заведения (можно выбрать несколько, необязательно)</label>
                         <input type="file" name="images" id="images" class="form-control" multiple>
                     </div>

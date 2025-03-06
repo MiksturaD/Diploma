@@ -377,6 +377,11 @@ header .container-fluid {
     color: #222 !important;
     border-color: #e3d105 !important;
 }
+.nav-link{
+    border-top: none!important;
+    border-left: none!important;
+    border-right: none!important;
+}
 
 .carousel-controls-bottom {
     position: relative;
@@ -469,4 +474,20 @@ header .container-fluid {
     text-decoration: none;
     outline: 0;
     box-shadow: none;
+}
+
+/* Базовые стили для всех form-select */
+.form-select {
+    background-color: #2a2a2a; /* Тёмный фон в твоём стиле */
+    color: #f8f9fa; /* Цвет текста как custom-text-color */
+    border: 1px solid #444; /* Обводка в неактивном состоянии */
+}
+
+/* Стили при фокусе для всех form-select */
+.form-select:focus {
+    border-color: #e3d105 !important; /* Оранжевая обводка */
+    outline: 0 !important; /* Убираем стандартный outline */
+    box-shadow: none !important; /* Тень */
+    background-color: #333 !important; /* Лёгкое затемнение фона */
+    color: #f8f9fa !important; /* Цвет текста не меняется */
 }

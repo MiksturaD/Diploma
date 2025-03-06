@@ -44,13 +44,18 @@
                         <p class="small mb-0">{{ review.description|truncatewords:8 }}</p>
                         <p class="small mb-0">Заведение: {{ review.place.name }}</p>
                     </div>
-                    <div class="card-footer bg-dark p-2 text-center">
-                        <a href="{% url 'review' review.id %}" class="btn custom-button btn-sm">Подробнее</a>
+                    <div class="card-footer bg-dark p-2 text-center button_user">
+                        <a href="{% url 'review' review.id %}" class="btn custom-button btn-sm custom-text-color">Подробнее</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        {% if user.role == "gourmand" %}
+            <div class="button_user pt-3 text-center mb-3">
+                <a href="{% url 'create_review' %}" class="btn custom-button">Создать отзыв</a>
+            </div>
+        {% endif %} 
     {% endif %}
 <nav aria-label="Page navigation" class="mt-4">
     <ul class="pagination justify-content-center flex-wrap">
@@ -77,6 +82,7 @@
         {% endif %}
     </ul>
 </nav>
+</div>    
 {% endblock %}
 
 {% include 'includes/footer.html' %}

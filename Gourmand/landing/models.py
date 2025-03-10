@@ -54,13 +54,25 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class GourmandProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gourmand_profile')
-    description = models.TextField(blank=True)
-    rating = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-    image = models.ImageField(upload_to="gourmands/", blank=True, null=True)
+  user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gourmand_profile')
+  rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
+  image = models.ImageField(upload_to='gourmand_images/', blank=True, null=True)
+  description = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name} - рейтинг {self.rating}"
+  def __str__(self):
+    return f"{self.user.first_name} {self.user.last_name}"
+
+  def update_rating(self):
+    """Обновляет рейтинг гурмана на основе позитивных и негативных голосов его отзывов"""
+    reviews = self.user.reviews.all()
+    if reviews.exists():
+      total_positive = sum(review.positive_rating for review in reviews)
+      total_negative = sum(review.negative_rating for review in reviews)
+      total_reactions = total_positive + total_negative
+      self.rating = (total_positive / total_reactions) * 5 if total_reactions > 0 else 0.0
+    else:
+      self.rating = 0.0
+    self.save()
 
 
 class Place(models.Model):
@@ -68,13 +80,32 @@ class Place(models.Model):
   description = models.TextField()
   place_email = models.EmailField()
   location = models.TextField()
-  rating = models.DecimalField(max_digits=10, decimal_places=0)
+  rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
   phone = models.TextField(max_length=50)
   website = models.URLField(max_length=200, blank=True, null=True)
-  owner = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='owned_places')
+  owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='owned_places')
 
   def __str__(self):
     return self.name
+
+  def update_rating(self):
+    """Обновляет рейтинг заведения на основе отзывов гурманов"""
+    reviews = self.reviews.all()
+    if reviews.exists():
+      total_weighted_rating = sum(
+        review.gourmand_rating * review.gourmand.gourmand_profile.rating
+        for review in reviews
+        if review.gourmand_rating is not None and hasattr(review.gourmand, 'gourmand_profile')
+      )
+      total_weight = sum(
+        review.gourmand.gourmand_profile.rating
+        for review in reviews
+        if review.gourmand_rating is not None and hasattr(review.gourmand, 'gourmand_profile')
+      )
+      self.rating = total_weighted_rating / total_weight if total_weight > 0 else 0.0
+    else:
+      self.rating = 0.0
+    self.save()
 
 
 class PlaceImage(models.Model):
@@ -106,13 +137,19 @@ class Review(models.Model):
   review_date = models.DateTimeField(auto_now_add=True)
   description = models.TextField()
   gourmand_rating = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, default=None)
-  positive_rating = models.IntegerField(default=0)  # Количество позитивных голосов
-  negative_rating = models.IntegerField(default=0)  # Количество негативных голосов
-  gourmand = models.ForeignKey('User', on_delete=models.DO_NOTHING, related_name='reviews')
-  place = models.ForeignKey('Place', on_delete=models.DO_NOTHING)
+  positive_rating = models.IntegerField(default=0)
+  negative_rating = models.IntegerField(default=0)
+  gourmand = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='reviews')
+  place = models.ForeignKey(Place, on_delete=models.DO_NOTHING, related_name='reviews')
 
   def __str__(self):
     return f"{self.name} от {self.gourmand} о {self.place}"
+
+  def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
+    self.place.update_rating()
+    if hasattr(self.gourmand, 'gourmand_profile'):
+      self.gourmand.gourmand_profile.update_rating()
 
 
 class ReviewImage(models.Model):

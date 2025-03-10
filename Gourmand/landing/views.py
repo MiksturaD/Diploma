@@ -320,17 +320,13 @@ def create_review(request):
     if request.method == "POST":
         form = ReviewCreateForm(request.POST)
         if form.is_valid():
-            # Сохраняем отзыв
             review = form.save(commit=False)
             review.gourmand = request.user
             review.save()
-
-            # Обрабатываем загруженные изображения
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     ReviewImage.objects.create(review=review, image=image)
-
-            return redirect("reviews")
+            return redirect("place", place_id=review.place.id)  # Перенаправляем на страницу заведения
         return render(request, "review/create.html", {"form": form})
 
     form = ReviewCreateForm()
@@ -378,34 +374,30 @@ def gourmand_reviews(request, user_id):
 @login_required
 def vote_review(request, review_id, vote_type):
     if not request.user.is_gourmand():
-        return redirect('index')  # Только гурманы могут голосовать
+        return redirect('index')
 
     review = get_object_or_404(Review, pk=review_id)
     if vote_type not in ['positive', 'negative']:
         return HttpResponseBadRequest("Недопустимый тип голоса")
 
-    # Проверяем, голосовал ли пользователь ранее
     existing_vote = ReviewVote.objects.filter(review=review, user=request.user).first()
 
     if existing_vote:
-        # Если голос уже есть и тип тот же, ничего не делаем
         if existing_vote.vote_type == vote_type:
-            return redirect('review', review_id=review.id)
-        # Если тип другой, удаляем старый голос
+            return redirect('place', place_id=review.place.id)  # Унифицируем с place
         existing_vote.delete()
         if existing_vote.vote_type == 'positive':
-            review.positive_rating -= 1
+            review.positive_rating = max(0, review.positive_rating - 1)
         else:
-            review.negative_rating -= 1
+            review.negative_rating = max(0, review.negative_rating - 1)
 
-    # Добавляем новый голос
     ReviewVote.objects.create(review=review, user=request.user, vote_type=vote_type)
     if vote_type == 'positive':
         review.positive_rating += 1
     else:
         review.negative_rating += 1
-    review.save()
+    review.save()  # Сохраняем и запускаем пересчёт рейтингов
 
-    return redirect('review', review_id=review.id)
+    return redirect('place', place_id=review.place.id)
 
 

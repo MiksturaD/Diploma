@@ -194,6 +194,8 @@ def places(request):
         places_list = places_list.order_by('name')
     elif sort_by == 'rating':
         places_list = places_list.order_by('-rating')  # По убыванию
+    else:
+        places_list = places_list.order_by('id')
 
     paginator = Paginator(places_list, 12)
     page_number = request.GET.get('page')
@@ -286,6 +288,9 @@ def reviews(request):
         reviews_list = reviews_list.order_by('-review_date')
     elif sort_by == 'name':
         reviews_list = reviews_list.order_by('name')
+    else:
+        reviews_list = reviews_list.order_by('id')
+
 
     paginator = Paginator(reviews_list, 12)
     page_number = request.GET.get('page')

@@ -2,35 +2,40 @@
 {% load static %}
 {% block content %}
 <div class="container my-5">
- <div class="row gx-1">
   <h2 class="mb-4 pt-4 custom-text-color">Редактирование профиля гурмана</h2>
+  <div class="row mb-4">
+    <div class="col-md-12">
+      {% if profile.image %}
+        <img src="{{ profile.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
+      {% else %}
+        <img src="{% static 'img/default.png' %}" alt="Фото гурмана" class="img-thumbnail" width="150">
+      {% endif %}
+    </div>
+  </div>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-        {% if profile.image %}
-            <img src="{{ profile.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
-        {% else %}
-            <img src="{% static 'img/default.png' %}" alt="Фото гурмана" class="img-thumbnail" width="150">
-        {% endif %}
-    <div class="col-md-3">
-      <label for="first_name" class="form-label">Имя</label>
-      <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
-    </div>
-    <div class="col-md-3">
-      <label for="last_name" class="form-label">Фамилия</label>
-      <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
-    </div>
-    <div class="col-md-3">
-      <label for="description" class="form-label">Описание</label>
-      <textarea class="form-control" id="description" name="description" rows="3">{{ profile.description }}</textarea>
-    </div>
-    <div class="col-md-3">
-      <label for="image" class="form-label">Фото профиля</label>
-      <input type="file" class="form-control" id="image" name="image">
-    </div>
-    <div class="mt-4 button_user">
+    <div class="row gx-3">
+      <div class="col-md-6 mb-3">
+        <label for="first_name" class="form-label custom-text-color">Имя</label>
+        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="last_name" class="form-label custom-text-color">Фамилия</label>
+        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+      </div>
+      <div class="col-md-12 mb-3">
+        <label for="description" class="form-label custom-text-color">Описание</label>
+        <textarea class="form-control" id="description" name="description" rows="3">{{ profile.description }}</textarea>
+      </div>
+      <div class="col-md-12 mb-3">
+        <label for="image" class="form-label custom-text-color">Фото профиля</label>
+        <input type="file" class="form-control" id="image" name="image">
+      </div>
+      <div class="col-md-12 mt-4 button_user">
         <button type="submit" class="custom-button bg_dark">Сохранить изменения</button>
+        <a href="{% url 'profile' %}" class="custom-button bg_dark ms-2">Отмена</a>
+      </div>
     </div>
   </form>
- </div>
 </div>
 {% endblock %}

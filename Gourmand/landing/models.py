@@ -140,7 +140,7 @@ class Review(models.Model):
   positive_rating = models.IntegerField(default=0)
   negative_rating = models.IntegerField(default=0)
   gourmand = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='reviews')
-  place = models.ForeignKey(Place, on_delete=models.DO_NOTHING, related_name='reviews')
+  place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='reviews')
 
   def __str__(self):
     return f"{self.name} от {self.gourmand} о {self.place}"

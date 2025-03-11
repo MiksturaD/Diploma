@@ -27,13 +27,15 @@
                          alt="{{ place.name }}"
                          style="height: 150px; object-fit: cover;">
                     <div class="card-body bg-dark custom-text-color p-2 p-md-3">
-                        <h5 class="custom-text-color mb-1">{{ place.name }} <span class="text-warning">★{{ place.rating }}</span></h5>
+                        <h3 class="custom-text-color mb-1 d-flex justify-content-between">{{ place.name }} <span class="ms-auto text-warning">★{{ place.rating }}</span></h3>
                         <p class="small mb-0">{{ place.description|truncatewords:8 }}</p>
                     </div>
                     <div class="card-body bg-dark p-1 text-center flex-wrap">
                         <div class="d-flex flex-column flex-md-row justify-content-center mb-2 gap-2 button_user flex-wrap">
                             <a href="{% url 'place' place.id %}" class="btn custom-button btn-sm custom-text-color custom-button">Подробнее</a>
-                            <button type="button" class="btn custom-button btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal{{ place.id }}">Контакты</button>
+                            {% if  not user.is_authenticated or user.is_gourmand or not place.owner == user%}
+                                <button type="button" class="btn custom-button btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal{{ place.id }}">Контакты</button>
+                            {% endif %}
                             {% if user.is_authenticated and user.is_owner and place.owner == user %}
                                 <a href="{% url 'edit_place' place.id %}" class="btn custom-button btn-sm custom-text-color">Редактировать</a>
                             {% endif %}

@@ -109,29 +109,33 @@ class CustomUserChangeForm(UserChangeForm):
 class ReviewCreateForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['name', 'description', 'place']
+        fields = ['name', 'description', 'place', 'gourmand_rating']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'place': forms.Select(attrs={'class': 'form-select'}),
+            'gourmand_rating': forms.Select(
+                attrs={'class': 'form-control'},
+                choices=[(i, str(i)) for i in range(1, 6)]  # Оценка от 1 до 5
+            ),
         }
         labels = {
             'name': 'Название отзыва',
             'description': 'Описание',
             'place': 'Заведение',
+            'gourmand_rating': 'Оценка',
         }
 
 
 class PlaceCreateForm(forms.ModelForm):
     class Meta:
         model = Place
-        fields = ['name', 'description', 'place_email', 'location', 'rating', 'phone', 'website']
+        fields = ['name', 'description', 'place_email', 'location', 'phone', 'website']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'place_email': forms.EmailInput(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'rating': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 10}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}),
         }
@@ -140,7 +144,6 @@ class PlaceCreateForm(forms.ModelForm):
             'description': 'Описание',
             'place_email': 'Email',
             'location': 'Местоположение',
-            'rating': 'Рейтинг',
             'phone': 'Телефон',
             'website':'Сайт',
         }

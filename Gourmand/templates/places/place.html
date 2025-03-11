@@ -52,6 +52,11 @@
 
     <div class="mt-4 button_user">
         <a href="{% url 'places' %}" class="custom-button">Назад к заведениям</a>
+    
+        {% if user.role == "gourmand" %}
+            <a href="{% url 'create_review' %}?place={{ place.id }}" class="btn custom-button">Создать отзыв</a>
+        {% endif %} 
+
         {% if user.is_authenticated and user.is_owner and place.owner == user %}
             <a href="{% url 'edit_place' place.id %}" class="custom-button ms-2">Редактировать</a>
         {% endif %}

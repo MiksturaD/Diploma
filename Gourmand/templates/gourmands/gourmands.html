@@ -28,8 +28,8 @@
                          alt="{{ gourmand.user.first_name }} {{ gourmand.user.last_name }}"
                          style="height: 150px; object-fit: cover;">
                     <div class="card-body bg-dark custom-text-color p-2 p-md-3">
-                        <h5 class="custom-text-color mb-1">{{ gourmand.user.first_name }} {{ gourmand.user.last_name }}</h5>
-                        <p class="small mb-0">Рейтинг: {{ gourmand.rating }} | Отзывов: {{ gourmand.user.reviews.count }}</p>
+                        <h1 class="custom-text-color mb-1">{{ gourmand.user.first_name }} {{ gourmand.user.last_name }}</h1>
+                        <p class="small mb-0">Рейтинг: {{ gourmand.rating }} <span class="text-warning">★</span> | Отзывов: {{ gourmand.user.reviews.count }}</p>
                     </div>
                     <div class="card-footer bg-dark p-2 text-center button_user">
                         <a href="{% url 'gourmand' gourmand.user.id %}" class="btn custom-button btn-sm custom-text-color">Профиль</a>

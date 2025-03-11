@@ -322,6 +322,16 @@ def create_review(request):
     if not request.user.is_gourmand():
         return redirect('index')
 
+    # Получаем place_id из GET-параметра, если есть
+    place_id = request.GET.get('place')
+    initial_data = {}
+    if place_id:
+        try:
+            place = Place.objects.get(id=place_id)
+            initial_data['place'] = place
+        except Place.DoesNotExist:
+            pass  # Если place_id некорректен, просто игнорируем
+
     if request.method == "POST":
         form = ReviewCreateForm(request.POST)
         if form.is_valid():
@@ -331,10 +341,11 @@ def create_review(request):
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     ReviewImage.objects.create(review=review, image=image)
-            return redirect("place", place_id=review.place.id)  # Перенаправляем на страницу заведения
+            return redirect('review', review_id=review.id)
         return render(request, "review/create.html", {"form": form})
 
-    form = ReviewCreateForm()
+    # Передаём initial_data в форму при GET-запросе
+    form = ReviewCreateForm(initial=initial_data)
     return render(request, "review/create.html", {"form": form})
 
 def about(request):
@@ -385,11 +396,15 @@ def vote_review(request, review_id, vote_type):
     if vote_type not in ['positive', 'negative']:
         return HttpResponseBadRequest("Недопустимый тип голоса")
 
+    # Проверяем, что пользователь не является автором отзыва
+    if review.gourmand == request.user:
+        return redirect('review', review_id=review.id)  # Нельзя голосовать за свой отзыв
+
     existing_vote = ReviewVote.objects.filter(review=review, user=request.user).first()
 
     if existing_vote:
         if existing_vote.vote_type == vote_type:
-            return redirect('place', place_id=review.place.id)  # Унифицируем с place
+            return redirect('review', review_id=review.id)
         existing_vote.delete()
         if existing_vote.vote_type == 'positive':
             review.positive_rating = max(0, review.positive_rating - 1)
@@ -401,8 +416,8 @@ def vote_review(request, review_id, vote_type):
         review.positive_rating += 1
     else:
         review.negative_rating += 1
-    review.save()  # Сохраняем и запускаем пересчёт рейтингов
+    review.save()  # Сохраняем и пересчитываем рейтинги
 
-    return redirect('place', place_id=review.place.id)
+    return redirect('review', review_id=review.id)
 
 

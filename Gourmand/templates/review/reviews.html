@@ -40,9 +40,12 @@
                          alt="{{ review.name }}"
                          style="height: 150px; object-fit: cover;">
                     <div class="card-body bg-dark custom-text-color p-2 p-md-3">
-                        <h5 class="custom-text-color mb-1">{{ review.name }}</h5>
+                        <h2 class="custom-text-color mb-1">Заведение: {{ review.place.name }}</h2>
+                        <h5 class="custom-text-color mb-0">Автор отзыва: {{ review.gourmand.first_name }} {{ review.gourmand.last_name }}</h5>
+                        <h5 class="custom-text-color mb-0">Название отзыва: {{ review.name }}</h5>
                         <p class="small mb-0">{{ review.description|truncatewords:8 }}</p>
-                        <p class="small mb-0">Заведение: {{ review.place.name }}</p>
+                        <h5 class="custom-text-color mb-1">Оценка гурмана: {{ review.gourmand_rating }}<span class="text-warning">★</span></h5>
+
                     </div>
                     <div class="card-footer bg-dark p-2 text-center button_user">
                         <a href="{% url 'review' review.id %}" class="btn custom-button btn-sm custom-text-color">Подробнее</a>
@@ -55,7 +58,13 @@
             <div class="button_user pt-3 text-center mb-3">
                 <a href="{% url 'create_review' %}" class="btn custom-button">Создать отзыв</a>
             </div>
-        {% endif %} 
+        {% endif %}
+        {% else %}
+                {% if user.role == "gourmand" %}
+                    <div class="button_user pt-3 text-center mb-3">
+                        <a href="{% url 'create_review' %}" class="btn custom-button">Создать отзыв</a>
+                    </div>
+                {% endif %}
     {% endif %}
 <nav aria-label="Page navigation" class="mt-4">
     <ul class="pagination justify-content-center flex-wrap">

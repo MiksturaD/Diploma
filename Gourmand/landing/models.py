@@ -181,15 +181,37 @@ class ReviewVote(models.Model):
   def __str__(self):
     return f"{self.user} проголосовал {self.vote_type} за {self.review}"
 
+
 class Event(models.Model):
+  WEEKDAYS = [
+    (0, 'Понедельник'),
+    (1, 'Вторник'),
+    (2, 'Среда'),
+    (3, 'Четверг'),
+    (4, 'Пятница'),
+    (5, 'Суббота'),
+    (6, 'Воскресенье'),
+  ]
   name = models.CharField(max_length=100)
   description = models.TextField()
-  event_date = models.DateField()
+  event_date = models.DateTimeField(null=True, blank=True)
   place = models.ForeignKey('Place', on_delete=models.CASCADE, related_name='events')
-
+  is_weekly = models.BooleanField(default=False)  # Еженедельное мероприятие
+  day_of_week = models.IntegerField(choices=WEEKDAYS, null=True, blank=True)
 
   def __str__(self):
-      return f'{self.name}, {self.description}'
+    return self.name
+
+  def save(self, *args, **kwargs):
+    # Если событие не еженедельное, очищаем day_of_week
+    if not self.is_weekly:
+      self.day_of_week = None
+    super().save(*args, **kwargs)
+
+  @property
+  def is_recurring(self):
+    """Просто для удобства, чтобы знать, повторяется ли событие."""
+    return self.is_weekly
 
 
 class EventImage(models.Model):

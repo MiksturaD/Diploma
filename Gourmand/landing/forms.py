@@ -151,11 +151,13 @@ class PlaceCreateForm(forms.ModelForm):
 class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'description', 'event_date', 'place']
+        fields = ['name', 'description', 'event_date', 'place','is_weekly', 'day_of_week']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'event_date': forms.DateTimeInput(attrs={'class': 'form-control','type': 'datetime-local'}),
             'place': forms.Select(attrs={'class': 'form-control'}),
+            'is_weekly': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'day_of_week': forms.Select(attrs={'class': 'form-control'}),
         }
 

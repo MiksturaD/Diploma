@@ -32,13 +32,9 @@
           <h5 class="card-title">Информация о событии</h5>
           <p class="card-text">
             <p class="mt-3 custom-text-color">{{ event.description }}</p>
-            <strong>Дата события:</strong> {{ event.event_date|date:"d M Y" }}<br>
-            <strong>Места:</strong> 
-            {% for place in event.places.all %}
-              {{ place.name }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-              Нет привязанных заведений
-            {% endfor %}
+            <strong>Дата события:</strong> {{ event.event_date|date:"d E Y - H:i" }}<br>
+            <strong>Место проведения:</strong>
+              {{ event.place.name }}
           </p>
     </div>
       <div class="mt-4 button_user">

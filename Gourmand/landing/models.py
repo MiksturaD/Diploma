@@ -182,14 +182,24 @@ class ReviewVote(models.Model):
     return f"{self.user} проголосовал {self.vote_type} за {self.review}"
 
 class Event(models.Model):
+  WEEKDAYS = [
+      (0, 'Понедельник'),
+      (1, 'Вторник'),
+      (2, 'Среда'),
+      (3, 'Четверг'),
+      (4, 'Пятница'),
+      (5, 'Суббота'),
+      (6, 'Воскресенье'),
+  ]
   name = models.CharField(max_length=100)
   description = models.TextField()
-  event_date = models.DateField()
-  places = models.ManyToManyField(Place)
-
+  event_datetime = models.DateTimeField()
+  place = models.ForeignKey('Place', on_delete=models.CASCADE, related_name='events')
+  is_weekly = models.BooleanField(default=False)  # Еженедельное мероприятие
+  day_of_week = models.IntegerField(choices=WEEKDAYS, null=True, blank=True)
 
   def __str__(self):
-      return f'{self.name}, {self.description}, {", ".join(str(place) for place in self.places.all())}'
+      return self.name
 
 
 class EventImage(models.Model):

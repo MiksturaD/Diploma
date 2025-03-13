@@ -135,7 +135,7 @@ def events(request):
     # Сортировка
     sort_by = request.GET.get('sort', 'id')  # По умолчанию по ID
     if sort_by == 'date':
-        events_list = events_list.order_by('event_date')
+        events_list = events_list.order_by('event_datetime')
     elif sort_by == 'name':
         events_list = events_list.order_by('name')
 
@@ -157,32 +157,24 @@ def event(request, event_id):
     return render(request, 'events/event.html', context={'event': event_obj})
 
 
-@login_required
 def create_event(request):
     if not request.user.is_owner():
-        return redirect('index')  # Ограничиваем доступ
+        return redirect("index")
 
     if request.method == "POST":
-        print("POST DATA:", request.POST)  # 👀 Вывод данных в консоль
-        form = EventCreateForm(request.POST, request.FILES)
-
+        form = EventCreateForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
+            event.owner = request.user
             event.save()
-            form.save_m2m()  # Сохранение связей ManyToMany
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     EventImage.objects.create(event=event, image=image)
+            return redirect("event", event_id=event.id)
+        return render(request, "events/create.html", {"form": form})
 
-            print("Сохраненные места:", event.places.all())  # 👀 Проверяем сохраненные места
-            return redirect("events")
-        else:
-            print("Ошибки формы:", form.errors)  # 👀 Проверяем ошибки формы
-
-    else:
-        form = EventCreateForm()
-
-    return render(request, 'events/create.html', {'form': form})
+    form = EventCreateForm()
+    return render(request, "events/create.html", {"form": form})
 
 
 def places(request):

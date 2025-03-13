@@ -10,28 +10,38 @@
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     <div class="mb-3">
-                        <label for="id_name" class="form-label">Название события</label>
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Название события</label>
                         {{ form.name }}
                         {{ form.name.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="id_description" class="form-label">Описание</label>
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Описание</label>
                         {{ form.description }}
                         {{ form.description.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="id_event_date" class="form-label">Дата события</label>
-                        {{ form.event_date }}
-                        {{ form.event_date.errors }}
+                        <label for="{{ form.event_datetime.id_for_label }}" class="form-label">Дата и время события</label>
+                        {{ form.event_datetime }}
+                        {{ form.event_datetime.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="images" class="form-label">Фотографии заведения (можно выбрать несколько, необязательно)</label>
+                        <label for="{{ form.place.id_for_label }}" class="form-label">Выберите заведение</label>
+                        {{ form.place }}
+                        {{ form.place.errors }}
+                    </div>
+                    <div class="mb-3 form-check">
+                        <label for="{{ form.is_weekly.id_for_label }}" class="form-label">Еженедельное событие</label>
+                        {{ form.is_weekly }}
+                        {{ form.is_weekly.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.day_of_week.id_for_label }}" class="form-label">День недели (для еженедельных)</label>
+                        {{ form.day_of_week }}
+                        {{ form.day_of_week.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="images" class="form-label">Фотографии события (можно выбрать несколько, необязательно)</label>
                         <input type="file" name="images" id="images" class="form-control" multiple>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_places" class="form-label">Выберите заведения</label>
-                        {{ form.places }}
-                        {{ form.places.errors }}
                     </div>
                     {% if form.errors %}
                     <div class="alert alert-danger">
@@ -44,7 +54,7 @@
                         </ul>
                     </div>
                     {% endif %}
-                    <div class="button_user pt-4">
+                    <div class="button_user pt-4 text-center">
                         <button type="submit" class="custom-button custom-text-color bg_dark">Создать событие</button>
                     </div>
                 </form>

@@ -151,15 +151,24 @@ class PlaceCreateForm(forms.ModelForm):
 class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'description', 'event_date', 'places']
+        fields = ['name', 'description', 'event_datetime', 'place', 'is_weekly', 'day_of_week']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'places': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'event_datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'place': forms.Select(attrs={'class': 'form-control'}),
+            'is_weekly': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'day_of_week': forms.Select(attrs={'class': 'form-control'}),
         }
-
+        labels = {
+            'name': 'Название события',
+            'description': 'Описание',
+            'event_datetime': 'Дата и время события',
+            'place': 'Заведение',
+            'is_weekly': 'Еженедельное событие',
+            'day_of_week': 'День недели',
+        }
 
     def __init__(self, *args, **kwargs):
         super(EventCreateForm, self).__init__(*args, **kwargs)
-        self.fields['places'].queryset = Place.objects.all()
+        self.fields['place'].queryset = Place.objects.all()

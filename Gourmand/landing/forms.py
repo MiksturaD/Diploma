@@ -151,15 +151,11 @@ class PlaceCreateForm(forms.ModelForm):
 class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'description', 'event_date', 'places']
+        fields = ['name', 'description', 'event_date', 'place']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'places': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'place': forms.Select(attrs={'class': 'form-control'}),
         }
 
-
-    def __init__(self, *args, **kwargs):
-        super(EventCreateForm, self).__init__(*args, **kwargs)
-        self.fields['places'].queryset = Place.objects.all()

@@ -185,11 +185,11 @@ class Event(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField()
   event_date = models.DateField()
-  places = models.ManyToManyField(Place)
+  place = models.ForeignKey('Place', on_delete=models.CASCADE, related_name='events')
 
 
   def __str__(self):
-      return f'{self.name}, {self.description}, {", ".join(str(place) for place in self.places.all())}'
+      return f'{self.name}, {self.description}'
 
 
 class EventImage(models.Model):

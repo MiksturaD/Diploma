@@ -30,7 +30,6 @@
             <p><strong>Описание:</strong> {{ place.description }}</p>
             <p><strong>Email:</strong> {{ place.place_email }}</p>
             <p><strong>Местоположение:</strong> {{ place.location }}</p>
-            <p></p>
             <p><strong>Телефон:</strong> {{ place.phone }}</p>
         </div>
     </div>
@@ -55,6 +54,43 @@
                 </div>
             </div>
         {% endfor %}
+    {% endif %}
+
+    <!-- NPS-статистика только для владельца -->
+    {% if user.is_authenticated and place.owner == user %}
+        <div class="mt-4">
+            <h3 class="custom-text-color">NPS-статистика</h3>
+            <div class="card bg-dark text-white shadow p-3">
+                {% if nps_data %}
+                    <p><strong>Средний NPS:</strong> {{ nps_data.avg_score|floatformat:1 }}</p>
+                    <p><strong>Всего отзывов:</strong> {{ nps_data.total_reviews }}</p>
+
+                    <h4 class="custom-text-color">Распределение тегов</h4>
+                    <ul class="list-group">
+                        {% for tag in tag_stats %}
+                            <li class="list-group-item bg-dark text-white">
+                                {{ tag.tags__label }}: {{ tag.tag_count }} упоминаний
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item bg-dark text-white">Нет данных</li>
+                        {% endfor %}
+                    </ul>
+
+                    <h4 class="custom-text-color mt-3">Динамика по месяцам</h4>
+                    <ul class="list-group">
+                        {% for stat in monthly_stats %}
+                            <li class="list-group-item bg-dark text-white">
+                                {{ stat.month }}: Средний NPS {{ stat.avg_score|floatformat:1 }}, Отзывов: {{ stat.review_count }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item bg-dark text-white">Нет данных</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Пока нет NPS-данных.</p>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 
     <div class="mt-4 button_user">

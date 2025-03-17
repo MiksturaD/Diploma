@@ -224,3 +224,31 @@ class EventImage(models.Model):
     null=True
   )
 
+class NPSResponse(models.Model):
+  TAGS = [
+    ('kitchen', 'Кухня'),
+    ('service', 'Обслуживание'),
+    ('atmosphere', 'Атмосфера'),
+    ('cozy', 'Уют'),
+    ('comfort', 'Комфорт'),
+    ('dishes', 'Блюда'),
+    ('music', 'Музыка'),
+    ('price', 'Цена'),
+    ('cleanliness', 'Чистота'),
+  ]
+
+  review = models.OneToOneField(Review, on_delete=models.CASCADE, related_name='nps')
+  score = models.IntegerField(choices=[(i, str(i)) for i in range(1, 11)])  # 1-10
+  tags = models.ManyToManyField('NPSTag', blank=True)  # Теги влияния
+  created_at = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return f"NPS {self.score} для {self.review.place}"
+
+
+class NPSTag(models.Model):
+  name = models.CharField(max_length=20, unique=True)
+  label = models.CharField(max_length=50)
+
+  def __str__(self):
+    return self.label

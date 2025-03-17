@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.password_validation import MinimumLengthValidator
 from django.core.exceptions import ValidationError
 
-from landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile
+from landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile, NPSTag, NPSResponse
 
 
 class SignupForm(UserCreationForm):
@@ -107,6 +107,20 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class ReviewCreateForm(forms.ModelForm):
+    nps_score = forms.IntegerField(
+        label="Оцените ваш визит (1-10)",
+        min_value=1,
+        max_value=10,
+        widget=forms.NumberInput(attrs={'type': 'range', 'min': '1', 'max': '10', 'step': '1', 'class': 'form-range'}),
+        initial=5  # Начальное значение по центру
+    )
+    nps_tags = forms.ModelMultipleChoiceField(
+        label="Что повлияло на вашу оценку?",
+        queryset=NPSTag.objects.all(),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        required=False
+    )
+
     class Meta:
         model = Review
         fields = ['name', 'description', 'place', 'gourmand_rating']
@@ -116,7 +130,7 @@ class ReviewCreateForm(forms.ModelForm):
             'place': forms.Select(attrs={'class': 'form-select'}),
             'gourmand_rating': forms.Select(
                 attrs={'class': 'form-control'},
-                choices=[(i, str(i)) for i in range(1, 6)]  # Оценка от 1 до 5
+                choices=[(i, str(i)) for i in range(1, 6)]
             ),
         }
         labels = {
@@ -125,6 +139,17 @@ class ReviewCreateForm(forms.ModelForm):
             'place': 'Заведение',
             'gourmand_rating': 'Оценка',
         }
+
+    def save(self, commit=True):
+        review = super().save(commit=False)
+        if commit:
+            review.save()
+            nps = NPSResponse.objects.create(
+                review=review,
+                score=self.cleaned_data['nps_score'],
+            )
+            nps.tags.set(self.cleaned_data['nps_tags'])
+        return review
 
 
 class PlaceCreateForm(forms.ModelForm):

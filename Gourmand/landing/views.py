@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Avg
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
@@ -10,7 +11,7 @@ from django.views.decorators.http import require_POST
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
     EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage, PlaceImage, \
-    ReviewVote, EventImage
+    ReviewVote, EventImage, NPSResponse
 
 
 def index(request):
@@ -70,7 +71,34 @@ def profile(request):
 
     elif user.is_owner():
         profile, _ = OwnerProfile.objects.get_or_create(user=user)
-        return render(request, "places/owner_profile.html", {"profile": profile})
+
+        # NPS-статистика по всем заведениям владельца
+        places = Place.objects.filter(owner=user)
+        if places.exists():
+            nps_data = NPSResponse.objects.filter(review__place__in=places).aggregate(
+                avg_score=Avg('score'),
+                total_reviews=Count('id')
+            )
+            tag_stats = NPSResponse.objects.filter(review__place__in=places).values('tags__label').annotate(
+                tag_count=Count('tags__label')
+            ).order_by('-tag_count')
+            monthly_stats = NPSResponse.objects.filter(review__place__in=places).extra(
+                select={'month': "strftime('%%Y-%%m', created_at)"}
+            ).values('month').annotate(
+                avg_score=Avg('score'),
+                review_count=Count('id')
+            ).order_by('month')
+        else:
+            nps_data = tag_stats = monthly_stats = None
+
+        context = {
+            'profile': profile,
+            'nps_data': nps_data,
+            'tag_stats': tag_stats,
+            'monthly_stats': monthly_stats,
+            'places': places,
+        }
+        return render(request, "places/owner_profile.html", context)
 
     return redirect("index")
 
@@ -203,9 +231,32 @@ def places(request):
 def place(request, place_id):
     place_obj = get_object_or_404(Place, pk=place_id)
     reviews = Review.objects.filter(place=place_obj)
+
+    # NPS-статистика (только для владельца)
+    nps_data = None
+    tag_stats = None
+    monthly_stats = None
+    if request.user.is_authenticated and place_obj.owner == request.user:
+        nps_data = NPSResponse.objects.filter(review__place=place_obj).aggregate(
+            avg_score=Avg('score'),
+            total_reviews=Count('id')
+        )
+        tag_stats = NPSResponse.objects.filter(review__place=place_obj).values('tags__label').annotate(
+            tag_count=Count('tags__label')
+        ).order_by('-tag_count')
+        monthly_stats = NPSResponse.objects.filter(review__place=place_obj).extra(
+            select={'month': "strftime('%%Y-%%m', created_at)"}
+        ).values('month').annotate(
+            avg_score=Avg('score'),
+            review_count=Count('id')
+        ).order_by('month')
+
     context = {
         'place': place_obj,
         'reviews': reviews,
+        'nps_data': nps_data,
+        'tag_stats': tag_stats,
+        'monthly_stats': monthly_stats,
     }
     return render(request, 'places/place.html', context)
 
@@ -311,10 +362,10 @@ def review(request, review_id):
 
 @login_required
 def create_review(request):
-    if not request.user.is_gourmand():
+    if not request.user.is_gourmand():  # Проверка на гурмана
         return redirect('index')
 
-    # Получаем place_id из GET-параметра, если есть
+    # Получаем place_id из GET-параметра
     place_id = request.GET.get('place')
     initial_data = {}
     if place_id:
@@ -322,21 +373,25 @@ def create_review(request):
             place = Place.objects.get(id=place_id)
             initial_data['place'] = place
         except Place.DoesNotExist:
-            pass  # Если place_id некорректен, просто игнорируем
+            pass  # Игнорируем, если place_id некорректен
 
     if request.method == "POST":
-        form = ReviewCreateForm(request.POST)
+        form = ReviewCreateForm(request.POST, request.FILES)  # Добавили request.FILES для изображений
         if form.is_valid():
             review = form.save(commit=False)
-            review.gourmand = request.user
+            review.gourmand = request.user  # Гурман, а не user
             review.save()
+            # Сохраняем изображения
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     ReviewImage.objects.create(review=review, image=image)
+            # NPS уже сохраняется в форме через save(), ничего дополнительно не надо
             return redirect('review', review_id=review.id)
-        return render(request, "review/create.html", {"form": form})
+        else:
+            print(form.errors)  # Чтоб этот гад не молчал, если что-то не так!
+            return render(request, "review/create.html", {"form": form})
 
-    # Передаём initial_data в форму при GET-запросе
+    # Передаём initial_data при GET
     form = ReviewCreateForm(initial=initial_data)
     return render(request, "review/create.html", {"form": form})
 

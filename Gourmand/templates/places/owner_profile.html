@@ -1,19 +1,92 @@
-{% extends "landing/base.html" %}
+{#{% extends "landing/base.html" %}#}
+{#{% load static %}#}
+{#{% block content %}#}
+{#<div class="container text-white mt-2 pt-4">#}
+{#  <h2 class="mb-4 pt-4 custom-text-color">Профиль владельца заведения(й)</h2>#}
+{#  {% if profile.image %}#}
+{#    <img src="{{ profile.image.url }}" alt="Фото владельца" class="img-thumbnail" width="150">#}
+{#  {% else %}#}
+{#    <img src="{% static 'img/default.png' %}" alt="Фото владельца" class="img-thumbnail" width="150">#}
+{#  {% endif %}#}
+{#  <p>Имя: {{ user.first_name }}</p>#}
+{#  <p>Фамилия: {{ user.last_name }}</p>#}
+{#  <p>Описание: {{ user.description }}</p>#}
+{#  <p>Заведения: {{ user.places }}</p>#}
+{#  <div class="mt-4 button_user">#}
+{#    <a href="{% url 'edit_profile' %}" class="custom-button">Редактировать профиль</a>#}
+{#  </div>#}
+{#</div>#}
+{#{% endblock %}#}
+
+<!-- places/owner_profile.html -->
+{% extends 'landing/base.html' %}
 {% load static %}
 {% block content %}
-<div class="container text-white mt-2 pt-4">
-  <h2 class="mb-4 pt-4 custom-text-color">Профиль владельца заведения(й)</h2>
-  {% if profile.image %}
-    <img src="{{ profile.image.url }}" alt="Фото владельца" class="img-thumbnail" width="150">
-  {% else %}
-    <img src="{% static 'img/default.png' %}" alt="Фото владельца" class="img-thumbnail" width="150">
-  {% endif %}
-  <p>Имя: {{ user.first_name }}</p>
-  <p>Фамилия: {{ user.last_name }}</p>
-  <p>Описание: {{ user.description }}</p>
-  <p>Заведения: {{ user.places }}</p>
-  <div class="mt-4 button_user">
-    <a href="{% url 'edit_profile' %}" class="custom-button">Редактировать профиль</a>
-  </div>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-dark text-white shadow-lg p-4">
+                <h2 class="text-center mb-4 custom-text-color">Профиль владельца</h2>
+
+                <!-- Информация о профиле -->
+                <div class="mb-4">
+                    <h3 class="custom-text-color">{{ user.first_name }} {{ user.last_name }}</h3>
+                </div>
+
+                <!-- Список заведений -->
+                <div class="mb-4">
+                    <h3 class="custom-text-color">Ваши заведения</h3>
+                    {% if places.exists %}
+                        <ul class="list-group">
+                            {% for place in places %}
+                                <li class="list-group-item bg-dark text-white">
+                                    <a href="{% url 'place' place.id %}" class="text-white">{{ place.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>У вас пока нет заведений.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Общая NPS-статистика -->
+                {% if places.exists %}
+                    <div class="mb-4">
+                        <h3 class="custom-text-color">Общая NPS-статистика</h3>
+                        <div class="card bg-dark text-white shadow p-3">
+                            {% if nps_data %}
+                                <p><strong>Средний NPS:</strong> {{ nps_data.avg_score|floatformat:1 }}</p>
+                                <p><strong>Всего отзывов:</strong> {{ nps_data.total_reviews }}</p>
+
+                                <h4 class="custom-text-color">Распределение тегов</h4>
+                                <ul class="list-group">
+                                    {% for tag in tag_stats %}
+                                        <li class="list-group-item bg-dark text-white">
+                                            {{ tag.tags__label }}: {{ tag.tag_count }} упоминаний
+                                        </li>
+                                    {% empty %}
+                                        <li class="list-group-item bg-dark text-white">Нет данных</li>
+                                    {% endfor %}
+                                </ul>
+
+                                <h4 class="custom-text-color mt-3">Динамика по месяцам</h4>
+                                <ul class="list-group">
+                                    {% for stat in monthly_stats %}
+                                        <li class="list-group-item bg-dark text-white">
+                                            {{ stat.month }}: Средний NPS {{ stat.avg_score|floatformat:1 }}, Отзывов: {{ stat.review_count }}
+                                        </li>
+                                    {% empty %}
+                                        <li class="list-group-item bg-dark text-white">Нет данных</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>Пока нет NPS-данных.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg
@@ -228,35 +231,80 @@ def places(request):
     })
 
 
+@login_required
 def place(request, place_id):
     place_obj = get_object_or_404(Place, pk=place_id)
     reviews = Review.objects.filter(place=place_obj)
 
     # NPS-статистика (только для владельца)
     nps_data = None
+    current_month_nps = None
+    last_month_nps = None
     tag_stats = None
-    monthly_stats = None
+    tag_dynamics = None
     if request.user.is_authenticated and place_obj.owner == request.user:
+        # Текущий и прошлый месяц
+        today = datetime.today()
+        current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_start = current_month_start - relativedelta(months=1)
+        last_month_end = current_month_start - relativedelta(seconds=1)
+
+        # Общая статистика
         nps_data = NPSResponse.objects.filter(review__place=place_obj).aggregate(
             avg_score=Avg('score'),
             total_reviews=Count('id')
         )
+        # NPS за текущий месяц
+        current_month_nps = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=current_month_start
+        ).aggregate(avg_score=Avg('score'))
+        # NPS за прошлый месяц
+        last_month_nps = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=last_month_start,
+            created_at__lte=last_month_end
+        ).aggregate(avg_score=Avg('score'))
+        # Топ-теги за всё время
         tag_stats = NPSResponse.objects.filter(review__place=place_obj).values('tags__label').annotate(
             tag_count=Count('tags__label')
-        ).order_by('-tag_count')
-        monthly_stats = NPSResponse.objects.filter(review__place=place_obj).extra(
-            select={'month': "strftime('%%Y-%%m', created_at)"}
-        ).values('month').annotate(
-            avg_score=Avg('score'),
-            review_count=Count('id')
-        ).order_by('month')
+        ).order_by('-tag_count')[:5]  # Ограничим до 5 тегов
+        # Теги за текущий и прошлый месяц для динамики
+        current_month_tags = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=current_month_start
+        ).values('tags__label').annotate(
+            tag_count=Count('tags__label')
+        )
+        last_month_tags = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=last_month_start,
+            created_at__lte=last_month_end
+        ).values('tags__label').annotate(
+            tag_count=Count('tags__label')
+        )
+        # Динамика тегов
+        tag_dynamics = {}
+        all_tags = set([t['tags__label'] for t in current_month_tags] + [t['tags__label'] for t in last_month_tags])
+        for tag in all_tags:
+            current_count = next((t['tag_count'] for t in current_month_tags if t['tags__label'] == tag), 0)
+            last_count = next((t['tag_count'] for t in last_month_tags if t['tags__label'] == tag), 0)
+            tag_dynamics[tag] = {
+                'current': current_count,
+                'last': last_count,
+                'change': current_count - last_count
+            }
 
     context = {
         'place': place_obj,
         'reviews': reviews,
         'nps_data': nps_data,
+        'current_month_nps': current_month_nps,
+        'last_month_nps': last_month_nps,
         'tag_stats': tag_stats,
-        'monthly_stats': monthly_stats,
+        'tag_dynamics': tag_dynamics,
+        'current_month': current_month_start.strftime('%Y-%m'),
+        'last_month': last_month_start.strftime('%Y-%m'),
     }
     return render(request, 'places/place.html', context)
 

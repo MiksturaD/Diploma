@@ -1,3 +1,4 @@
+<!-- places/place.html -->
 {% extends 'landing/base.html' %}
 {% load static %}
 
@@ -61,26 +62,31 @@
         <div class="mt-4">
             <h3 class="custom-text-color">NPS-статистика</h3>
             <div class="card bg-dark text-white shadow p-3">
-                {% if nps_data %}
-                    <p><strong>Средний NPS:</strong> {{ nps_data.avg_score|floatformat:1 }}</p>
+                {% if nps_data and nps_data.total_reviews %}
+                    <p><strong>Средний NPS (всего):</strong> {{ nps_data.avg_score|floatformat:1 }}</p>
                     <p><strong>Всего отзывов:</strong> {{ nps_data.total_reviews }}</p>
+                    <p><strong>Средний NPS ({{ current_month }}):</strong> {{ current_month_nps.avg_score|floatformat:1|default:"Нет данных" }}</p>
+                    <p><strong>Средний NPS ({{ last_month }}):</strong> {{ last_month_nps.avg_score|floatformat:1|default:"Нет данных" }}</p>
 
-                    <h4 class="custom-text-color">Распределение тегов</h4>
-                    <ul class="list-group">
+                    <h4 class="custom-text-color mt-3">Популярные теги</h4>
+                    <ul class="list-group mb-3">
                         {% for tag in tag_stats %}
                             <li class="list-group-item bg-dark text-white">
                                 {{ tag.tags__label }}: {{ tag.tag_count }} упоминаний
                             </li>
                         {% empty %}
-                            <li class="list-group-item bg-dark text-white">Нет данных</li>
+                            <li class="list-group-item bg-dark text-white">Нет тегов</li>
                         {% endfor %}
                     </ul>
 
-                    <h4 class="custom-text-color mt-3">Динамика по месяцам</h4>
+                    <h4 class="custom-text-color">Динамика тегов ({{ last_month }} → {{ current_month }})</h4>
                     <ul class="list-group">
-                        {% for stat in monthly_stats %}
+                        {% for tag, dynamics in tag_dynamics.items %}
                             <li class="list-group-item bg-dark text-white">
-                                {{ stat.month }}: Средний NPS {{ stat.avg_score|floatformat:1 }}, Отзывов: {{ stat.review_count }}
+                                {{ tag }}: {{ dynamics.last }} → {{ dynamics.current }}
+                                <span class="{% if dynamics.change > 0 %}text-success{% elif dynamics.change < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                    ({{ dynamics.change|floatformat:0 }})
+                                </span>
                             </li>
                         {% empty %}
                             <li class="list-group-item bg-dark text-white">Нет данных</li>
@@ -95,11 +101,9 @@
 
     <div class="mt-4 button_user">
         <a href="{% url 'places' %}" class="custom-button">Назад к заведениям</a>
-    
         {% if user.role == "gourmand" %}
             <a href="{% url 'create_review' %}?place={{ place.id }}" class="btn custom-button">Создать отзыв</a>
-        {% endif %} 
-
+        {% endif %}
         {% if user.is_authenticated and user.is_owner and place.owner == user %}
             <a href="{% url 'edit_place' place.id %}" class="custom-button ms-2">Редактировать</a>
         {% endif %}
@@ -119,7 +123,6 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
@@ -137,5 +140,3 @@
     });
 </script>
 {% endblock %}
-
-{% include 'includes/footer.html' %}

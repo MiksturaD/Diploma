@@ -32,7 +32,7 @@
                     </div>
                     <div class="card-body bg-dark p-1 text-center flex-wrap">
                         <div class="d-flex flex-column flex-md-row justify-content-center mb-2 gap-2 button_user flex-wrap">
-                            <a href="{% url 'place' place.id %}" class="btn custom-button btn-sm custom-text-color custom-button">Подробнее</a>
+                            <a href="{% url 'place' place.id %}" class="btn custom-button btn-sm custom-text-color">Подробнее</a>
                             {% if  not user.is_authenticated or user.is_gourmand or not place.owner == user%}
                                 <button type="button" class="btn custom-button btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal{{ place.id }}">Контакты</button>
                             {% endif %}

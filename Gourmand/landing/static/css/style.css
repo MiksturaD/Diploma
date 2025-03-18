@@ -491,3 +491,72 @@ header .container-fluid {
     background-color: #333 !important; /* Лёгкое затемнение фона */
     color: #f8f9fa !important; /* Цвет текста не меняется */
 }
+
+/* Серый фон для инпутов */
+.form-control, .form-select, .form-check-input {
+    background-color: #333; /* Серый фон (Bootstrap bg-secondary) */
+    color: #fff; /* Белый текст для контраста */
+    border: 1px solid #333; /* Тёмная рамка */
+}
+.form-control:focus, .form-select:focus  {
+    background-color: #333; /* Сохраняем серый фон при фокусе */
+    color: #fff;
+    border-color: #e3d105; /* Светлая рамка при фокусе */
+    box-shadow: none !important; /* Тень Bootstrap */
+}
+
+/* Кастомный чекбокс: жёлтый фон и чёрная галочка */
+.form-check-input {
+    position: absolute;
+    opacity: 0;
+}
+.form-check-label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+}
+.form-check-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: #2a2a2a   ; /* Белый фон для неотмеченного */
+    border: 1px solid #495057;
+    border-radius: 3px;
+}
+.form-check-input:checked + .form-check-label::before {
+    background-color: #ffc107; /* Жёлтый фон при выборе */
+    border-color: #ffc107;
+}
+.form-check-input:checked + .form-check-label::after {
+    content: '✔'; /* Чёрная галочка */
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    color: #000; /* Чёрный цвет галочки */
+    font-size: 12px;
+}
+.form-check-input:focus + .form-check-label::before {
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+/* Жёлтый ползунок */
+.form-range::-webkit-slider-thumb {
+    background: #ffc107; /* Жёлтый цвет (Bootstrap warning) */
+}
+.form-range::-moz-range-thumb {
+    background: #ffc107; /* Для Firefox */
+}
+.form-range::-ms-thumb {
+    background: #ffc107; /* Для Edge/IE */
+}
+.form-range::-webkit-slider-runnable-track {
+    background-color: #495057; /* Тёмный трек для контраста */
+}
+.form-range::-moz-range-track {
+    background-color: #495057; /* Для Firefox */
+}
+.form-range::-ms-track {
+    background-color: #495057; /* Для Edge/IE */
+}

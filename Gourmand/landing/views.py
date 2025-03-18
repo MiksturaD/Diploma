@@ -75,31 +75,112 @@ def profile(request):
     elif user.is_owner():
         profile, _ = OwnerProfile.objects.get_or_create(user=user)
 
-        # NPS-статистика по всем заведениям владельца
+        today = datetime.today()
+        current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_start = current_month_start - relativedelta(months=1)
+        last_month_end = current_month_start - relativedelta(seconds=1)
+
         places = Place.objects.filter(owner=user)
+        place_stats = {}
+
         if places.exists():
-            nps_data = NPSResponse.objects.filter(review__place__in=places).aggregate(
-                avg_score=Avg('score'),
-                total_reviews=Count('id')
-            )
-            tag_stats = NPSResponse.objects.filter(review__place__in=places).values('tags__label').annotate(
-                tag_count=Count('tags__label')
-            ).order_by('-tag_count')
-            monthly_stats = NPSResponse.objects.filter(review__place__in=places).extra(
-                select={'month': "strftime('%%Y-%%m', created_at)"}
-            ).values('month').annotate(
-                avg_score=Avg('score'),
-                review_count=Count('id')
-            ).order_by('month')
-        else:
-            nps_data = tag_stats = monthly_stats = None
+            for place in places:
+                # Общее количество ответов
+                total_responses = NPSResponse.objects.filter(review__place=place).count()
+                # Промоутеры (9-10)
+                promoters = NPSResponse.objects.filter(review__place=place, score__gte=9).count()
+                # Критики (0-6)
+                detractors = NPSResponse.objects.filter(review__place=place, score__lte=6).count()
+                # NPS = % промоутеров - % критиков
+                nps = (
+                            promoters / total_responses * 100 - detractors / total_responses * 100) if total_responses > 0 else 0
+
+                # NPS за текущий месяц
+                current_total = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=current_month_start
+                ).count()
+                current_promoters = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=current_month_start,
+                    score__gte=9
+                ).count()
+                current_detractors = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=current_month_start,
+                    score__lte=6
+                ).count()
+                current_nps = (
+                            current_promoters / current_total * 100 - current_detractors / current_total * 100) if current_total > 0 else None
+
+                # NPS за прошлый месяц
+                last_total = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=last_month_start,
+                    created_at__lte=last_month_end
+                ).count()
+                last_promoters = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=last_month_start,
+                    created_at__lte=last_month_end,
+                    score__gte=9
+                ).count()
+                last_detractors = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=last_month_start,
+                    created_at__lte=last_month_end,
+                    score__lte=6
+                ).count()
+                last_nps = (
+                            last_promoters / last_total * 100 - last_detractors / last_total * 100) if last_total > 0 else None
+
+                # Топ-теги за всё время
+                tag_stats = NPSResponse.objects.filter(review__place=place).values('tags__label').annotate(
+                    tag_count=Count('tags__label')
+                ).order_by('-tag_count')[:3]
+                # Теги за текущий месяц
+                current_month_tags = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=current_month_start
+                ).values('tags__label').annotate(
+                    tag_count=Count('tags__label')
+                ).order_by('-tag_count')
+                # Теги за прошлый месяц
+                last_month_tags = NPSResponse.objects.filter(
+                    review__place=place,
+                    created_at__gte=last_month_start,
+                    created_at__lte=last_month_end
+                ).values('tags__label').annotate(
+                    tag_count=Count('tags__label')
+                ).order_by('-tag_count')
+
+                # Динамика тегов
+                tag_dynamics = {}
+                for tag in set(
+                        [t['tags__label'] for t in current_month_tags] + [t['tags__label'] for t in last_month_tags]):
+                    current_count = next((t['tag_count'] for t in current_month_tags if t['tags__label'] == tag), 0)
+                    last_count = next((t['tag_count'] for t in last_month_tags if t['tags__label'] == tag), 0)
+                    tag_dynamics[tag] = {
+                        'current': current_count,
+                        'last': last_count,
+                        'change': current_count - last_count
+                    }
+
+                place_stats[place.id] = {
+                    'place': place,
+                    'nps': nps,
+                    'total_responses': total_responses,
+                    'current_nps': current_nps,
+                    'last_nps': last_nps,
+                    'tag_stats': tag_stats,
+                    'tag_dynamics': tag_dynamics,
+                }
 
         context = {
             'profile': profile,
-            'nps_data': nps_data,
-            'tag_stats': tag_stats,
-            'monthly_stats': monthly_stats,
-            'places': places,
+            'place_stats': place_stats,
+            'current_month': current_month_start.strftime('%Y-%m'),
+            'last_month': last_month_start.strftime('%Y-%m'),
         }
         return render(request, "places/owner_profile.html", context)
 
@@ -231,62 +312,86 @@ def places(request):
     })
 
 
-@login_required
 def place(request, place_id):
     place_obj = get_object_or_404(Place, pk=place_id)
     reviews = Review.objects.filter(place=place_obj)
 
-    # NPS-статистика (только для владельца)
-    nps_data = None
-    current_month_nps = None
-    last_month_nps = None
-    tag_stats = None
-    tag_dynamics = None
+    context = {
+        'place': place_obj,
+        'reviews': reviews,
+    }
+
     if request.user.is_authenticated and place_obj.owner == request.user:
-        # Текущий и прошлый месяц
+        # Определяем текущий и прошлый месяц
         today = datetime.today()
         current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         last_month_start = current_month_start - relativedelta(months=1)
         last_month_end = current_month_start - relativedelta(seconds=1)
 
-        # Общая статистика
-        nps_data = NPSResponse.objects.filter(review__place=place_obj).aggregate(
-            avg_score=Avg('score'),
-            total_reviews=Count('id')
-        )
+        # Общий NPS
+        total_responses = NPSResponse.objects.filter(review__place=place_obj).count()
+        promoters = NPSResponse.objects.filter(review__place=place_obj, score__gte=9).count()
+        detractors = NPSResponse.objects.filter(review__place=place_obj, score__lte=6).count()
+        nps = (promoters / total_responses * 100 - detractors / total_responses * 100) if total_responses > 0 else 0
+
         # NPS за текущий месяц
-        current_month_nps = NPSResponse.objects.filter(
+        current_total = NPSResponse.objects.filter(
             review__place=place_obj,
             created_at__gte=current_month_start
-        ).aggregate(avg_score=Avg('score'))
+        ).count()
+        current_promoters = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=current_month_start,
+            score__gte=9
+        ).count()
+        current_detractors = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=current_month_start,
+            score__lte=6
+        ).count()
+        current_nps = (
+                    current_promoters / current_total * 100 - current_detractors / current_total * 100) if current_total > 0 else None
+
         # NPS за прошлый месяц
-        last_month_nps = NPSResponse.objects.filter(
+        last_total = NPSResponse.objects.filter(
             review__place=place_obj,
             created_at__gte=last_month_start,
             created_at__lte=last_month_end
-        ).aggregate(avg_score=Avg('score'))
-        # Топ-теги за всё время
+        ).count()
+        last_promoters = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=last_month_start,
+            created_at__lte=last_month_end,
+            score__gte=9
+        ).count()
+        last_detractors = NPSResponse.objects.filter(
+            review__place=place_obj,
+            created_at__gte=last_month_start,
+            created_at__lte=last_month_end,
+            score__lte=6
+        ).count()
+        last_nps = (last_promoters / last_total * 100 - last_detractors / last_total * 100) if last_total > 0 else None
+
+        # Топ-теги и динамика
         tag_stats = NPSResponse.objects.filter(review__place=place_obj).values('tags__label').annotate(
             tag_count=Count('tags__label')
-        ).order_by('-tag_count')[:5]  # Ограничим до 5 тегов
-        # Теги за текущий и прошлый месяц для динамики
+        ).order_by('-tag_count')[:3]
         current_month_tags = NPSResponse.objects.filter(
             review__place=place_obj,
             created_at__gte=current_month_start
         ).values('tags__label').annotate(
             tag_count=Count('tags__label')
-        )
+        ).order_by('-tag_count')
         last_month_tags = NPSResponse.objects.filter(
             review__place=place_obj,
             created_at__gte=last_month_start,
             created_at__lte=last_month_end
         ).values('tags__label').annotate(
             tag_count=Count('tags__label')
-        )
-        # Динамика тегов
+        ).order_by('-tag_count')
+
         tag_dynamics = {}
-        all_tags = set([t['tags__label'] for t in current_month_tags] + [t['tags__label'] for t in last_month_tags])
-        for tag in all_tags:
+        for tag in set([t['tags__label'] for t in current_month_tags] + [t['tags__label'] for t in last_month_tags]):
             current_count = next((t['tag_count'] for t in current_month_tags if t['tags__label'] == tag), 0)
             last_count = next((t['tag_count'] for t in last_month_tags if t['tags__label'] == tag), 0)
             tag_dynamics[tag] = {
@@ -295,17 +400,17 @@ def place(request, place_id):
                 'change': current_count - last_count
             }
 
-    context = {
-        'place': place_obj,
-        'reviews': reviews,
-        'nps_data': nps_data,
-        'current_month_nps': current_month_nps,
-        'last_month_nps': last_month_nps,
-        'tag_stats': tag_stats,
-        'tag_dynamics': tag_dynamics,
-        'current_month': current_month_start.strftime('%Y-%m'),
-        'last_month': last_month_start.strftime('%Y-%m'),
-    }
+        context.update({
+            'nps': nps,
+            'total_responses': total_responses,
+            'current_nps': current_nps,
+            'last_nps': last_nps,
+            'tag_stats': tag_stats,
+            'tag_dynamics': tag_dynamics,
+            'current_month': current_month_start.strftime('%Y-%m'),
+            'last_month': last_month_start.strftime('%Y-%m'),
+        })
+
     return render(request, 'places/place.html', context)
 
 

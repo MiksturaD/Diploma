@@ -67,6 +67,7 @@ TEMPLATES = [
             ],
         'libraries': {
                 'review_tags': 'landing.templatetags.review_tags',  # Регистрируем теги
+                'math_filters':'landing.templatetags.math_filters',
             },
         },
     },

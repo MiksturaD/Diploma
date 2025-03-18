@@ -62,13 +62,13 @@
         <div class="mt-4">
             <h3 class="custom-text-color">NPS-статистика</h3>
             <div class="card bg-dark text-white shadow p-3">
-                {% if nps_data and nps_data.total_reviews %}
-                    <p><strong>Средний NPS (всего):</strong> {{ nps_data.avg_score|floatformat:1 }}</p>
-                    <p><strong>Всего отзывов:</strong> {{ nps_data.total_reviews }}</p>
-                    <p><strong>Средний NPS ({{ current_month }}):</strong> {{ current_month_nps.avg_score|floatformat:1|default:"Нет данных" }}</p>
-                    <p><strong>Средний NPS ({{ last_month }}):</strong> {{ last_month_nps.avg_score|floatformat:1|default:"Нет данных" }}</p>
+                {% if total_responses %}
+                    <p><strong>NPS (всего):</strong> {{ nps|floatformat:1 }}%</p>
+                    <p><strong>Всего ответов:</strong> {{ total_responses }}</p>
+                    <p><strong>NPS ({{ current_month }}):</strong> {{ current_nps|floatformat:1|default:"Нет данных" }}%</p>
+                    <p><strong>NPS ({{ last_month }}):</strong> {{ last_nps|floatformat:1|default:"Нет данных" }}%</p>
 
-                    <h4 class="custom-text-color mt-3">Популярные теги</h4>
+                    <h4 class="custom-text-color mt-3">Популярные теги (всего):</h4>
                     <ul class="list-group mb-3">
                         {% for tag in tag_stats %}
                             <li class="list-group-item bg-dark text-white">
@@ -79,7 +79,7 @@
                         {% endfor %}
                     </ul>
 
-                    <h4 class="custom-text-color">Динамика тегов ({{ last_month }} → {{ current_month }})</h4>
+                    <h4 class="custom-text-color">Динамика тегов ({{ last_month }} → {{ current_month }}):</h4>
                     <ul class="list-group">
                         {% for tag, dynamics in tag_dynamics.items %}
                             <li class="list-group-item bg-dark text-white">
@@ -130,7 +130,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         const modalImage = document.getElementById('modalImage');
         const images = document.querySelectorAll('[data-bs-toggle="modal"]');
-
         images.forEach(image => {
             image.addEventListener('click', function () {
                 const imageUrl = this.getAttribute('data-bs-image');
@@ -140,3 +139,5 @@
     });
 </script>
 {% endblock %}
+
+{% include 'includes/footer.html' %}

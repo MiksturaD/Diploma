@@ -108,10 +108,10 @@ class CustomUserChangeForm(UserChangeForm):
 
 class ReviewCreateForm(forms.ModelForm):
     nps_score = forms.IntegerField(
-        label="Оцените ваш визит (1-10)",
-        min_value=1,
+        label="Насколько вы порекомендуете данное заведение своим друзьям, коллегам, родственникам (0-10)",
+        min_value=0,
         max_value=10,
-        widget=forms.NumberInput(attrs={'type': 'range', 'min': '1', 'max': '10', 'step': '1', 'class': 'form-range'}),
+        widget=forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '10', 'step': '1', 'class': 'form-range'}),
         initial=5  # Начальное значение по центру
     )
     nps_tags = forms.ModelMultipleChoiceField(

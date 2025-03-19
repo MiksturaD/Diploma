@@ -560,3 +560,12 @@ header .container-fluid {
 .form-range::-ms-track {
     background-color: #495057; /* Для Edge/IE */
 }
+
+.gauge-needle {
+        transition: transform 1s ease-in-out;
+    }
+
+#npsGauge {
+    max-width: 300px; /* Ограничиваем ширину графика */
+    margin: 0 auto; /* Центрируем */
+}

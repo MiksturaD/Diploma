@@ -322,19 +322,16 @@ def place(request, place_id):
     }
 
     if request.user.is_authenticated and place_obj.owner == request.user:
-        # Определяем текущий и прошлый месяц
         today = datetime.today()
         current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         last_month_start = current_month_start - relativedelta(months=1)
         last_month_end = current_month_start - relativedelta(seconds=1)
 
-        # Общий NPS
         total_responses = NPSResponse.objects.filter(review__place=place_obj).count()
         promoters = NPSResponse.objects.filter(review__place=place_obj, score__gte=9).count()
         detractors = NPSResponse.objects.filter(review__place=place_obj, score__lte=6).count()
         nps = (promoters / total_responses * 100 - detractors / total_responses * 100) if total_responses > 0 else 0
 
-        # NPS за текущий месяц
         current_total = NPSResponse.objects.filter(
             review__place=place_obj,
             created_at__gte=current_month_start
@@ -352,7 +349,6 @@ def place(request, place_id):
         current_nps = (
                     current_promoters / current_total * 100 - current_detractors / current_total * 100) if current_total > 0 else None
 
-        # NPS за прошлый месяц
         last_total = NPSResponse.objects.filter(
             review__place=place_obj,
             created_at__gte=last_month_start,
@@ -372,7 +368,6 @@ def place(request, place_id):
         ).count()
         last_nps = (last_promoters / last_total * 100 - last_detractors / last_total * 100) if last_total > 0 else None
 
-        # Топ-теги и динамика
         tag_stats = NPSResponse.objects.filter(review__place=place_obj).values('tags__label').annotate(
             tag_count=Count('tags__label')
         ).order_by('-tag_count')[:3]

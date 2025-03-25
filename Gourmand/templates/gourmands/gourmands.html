@@ -32,38 +32,42 @@
                         <p class="small mb-0">Рейтинг: {{ gourmand.rating }} <span class="text-warning">★</span> | Отзывов: {{ gourmand.user.reviews.count }}</p>
                     </div>
                     <div class="card-footer bg-dark p-2 text-center button_user">
-                        <a href="{% url 'gourmand' gourmand.user.id %}" class="btn custom-button btn-sm custom-text-color">Профиль</a>
+                        <a href="{% url 'gourmand' gourmand.user.slug %}" class="btn custom-button btn-sm custom-text-color">Профиль</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+    {% else %}
+        <div class="alert alert-info text-center">На данный момент гурманов нет.</div>
     {% endif %}
-<nav aria-label="Page navigation" class="mt-4">
-    <ul class="pagination justify-content-center flex-wrap">
-        {% if gourmands.has_previous %}
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page=1">Первая</a>
-            </li>
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page={{ gourmands.previous_page_number }}">Назад</a>
-            </li>
-        {% endif %}
 
-        <li class="page-item">
-            <span class=" bg_dark pag_size">Страница {{ gourmands.number }} из {{ gourmands.paginator.num_pages }}</span>
-        </li>
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center flex-wrap">
+            {% if gourmands.has_previous %}
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page=1{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Первая</a>
+                </li>
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page={{ gourmands.previous_page_number }}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Назад</a>
+                </li>
+            {% endif %}
 
-        {% if gourmands.has_next %}
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page={{ gourmands.next_page_number }}">Вперёд</a>
+            <li class="page-item">
+                <span class="bg_dark pag_size">Страница {{ gourmands.number }} из {{ gourmands.paginator.num_pages }}</span>
             </li>
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page={{ gourmands.paginator.num_pages }}">Последняя</a>
-            </li>
-        {% endif %}
-    </ul>
-</nav>
+
+            {% if gourmands.has_next %}
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page={{ gourmands.next_page_number }}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Вперёд</a>
+                </li>
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page={{ gourmands.paginator.num_pages }}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Последняя</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 {% endblock %}
 
 {% include 'includes/footer.html' %}

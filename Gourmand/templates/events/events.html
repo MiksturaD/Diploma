@@ -12,7 +12,7 @@
                 <select name="place" class="form-select" onchange="this.form.submit()">
                     <option value="">Все заведения</option>
                     {% for place in places %}
-                        <option value="{{ place.id }}" {% if current_place == place.id|stringformat:"s" %}selected{% endif %}>
+                        <option value="{{ place.slug }}" {% if current_place == place.slug %}selected{% endif %}>
                             {{ place.name }}
                         </option>
                     {% endfor %}
@@ -44,23 +44,22 @@
                         <h5 class="card-title custom-text-color mb-1">{{ event.name }}</h5>
                         <p class="card-text custom-text-color small">{{ event.description|truncatewords:5 }}</p>
                     </div>
-                     <ul class="list-group list-group-flush bg-dark">
+                    <ul class="list-group list-group-flush bg-dark">
                         <li class="list-group-item bg-dark">
                             <i class="bi bi-geo-alt me-2"></i>
-                    {% for place in event.places.all %}
-                        <span class="badge bg-secondary me-1 bg-dark">
-                            {{ place.name }} <span class="text-warning">★{{ place.rating }}</span>
-                        </span>
-                    {% endfor %}
+                            <span class="badge bg-secondary me-1 bg-dark">
+                                <a href="{% url 'place' event.place.slug %}" class="text-decoration-none text-light">
+                                    {{ event.place.name }} <span class="text-warning">★{{ event.place.rating }}</span>
+                                </a>
+                            </span>
                         </li>
-                        
                         <li class="list-group-item bg-dark custom-text-color">
                             <i class="bi bi-calendar-event me-2"></i>
                             {{ event.event_date|date:"d E Y - H:i" }}
                         </li>
                     </ul>
                     <div class="card-footer bg-dark p-2 text-center button_user">
-                        <a href="{% url 'event' event.id %}" class="btn custom-button btn-sm">Подробнее</a>
+                        <a href="{% url 'event' event.slug %}" class="btn custom-button btn-sm">Подробнее</a>
                     </div>
                 </div>
             </div>
@@ -80,30 +79,30 @@
         {% endif %}
     {% endif %}
 
-<nav aria-label="Page navigation" class="mt-4">
-    <ul class="pagination justify-content-center flex-wrap">
-        {% if events.has_previous %}
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page=1">Первая</a>
-            </li>
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page={{ events.previous_page_number }}">Назад</a>
-            </li>
-        {% endif %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center flex-wrap">
+            {% if events.has_previous %}
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page=1{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Первая</a>
+                </li>
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page={{ events.previous_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Назад</a>
+                </li>
+            {% endif %}
 
-        <li class="page-item">
-            <span class=" bg_dark pag_size">Страница {{ events.number }} из {{ events.paginator.num_pages }}</span>
-        </li>
+            <li class="page-item">
+                <span class="bg_dark pag_size">Страница {{ events.number }} из {{ events.paginator.num_pages }}</span>
+            </li>
 
-        {% if events.has_next %}
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page={{ events.next_page_number }}">Вперёд</a>
-            </li>
-            <li class="page-item button_user">
-                <a class="page-link bg_dark" href="?page={{ events.paginator.num_pages }}">Последняя</a>
-            </li>
-        {% endif %}
-    </ul>
-</nav>
+            {% if events.has_next %}
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page={{ events.next_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Вперёд</a>
+                </li>
+                <li class="page-item button_user">
+                    <a class="page-link bg_dark" href="?page={{ events.paginator.num_pages }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Последняя</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
 {% endblock %}

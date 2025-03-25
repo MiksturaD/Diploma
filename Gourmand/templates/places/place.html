@@ -28,6 +28,7 @@
         {% endif %}
         <div class="card-body">
             <p><strong>Описание:</strong> {{ place.description }}</p>
+            <p><strong>Сайт:</strong> {{ place.website }}</p>
             <p><strong>Email:</strong> {{ place.place_email }}</p>
             <p><strong>Местоположение:</strong> {{ place.location }}</p>
             <p><strong>Телефон:</strong> {{ place.phone }}</p>
@@ -66,7 +67,7 @@
                     <p>Авторизован как владелец</p>
                     <p>Total responses: {{ total_responses }}</p>
                     <p>NPS: {{ nps|floatformat:1 }}</p> <!-- Округляем здесь -->
-                    
+
                     <p><strong>Всего ответов:</strong> {{ total_responses }}</p>
                     <p><strong>NPS ({{ current_month }}):</strong> {{ current_nps|floatformat:1|default:"Нет данных" }}%</p>
                     <p><strong>NPS ({{ last_month }}):</strong> {{ last_nps|floatformat:1|default:"Нет данных" }}%</p>
@@ -149,7 +150,7 @@
         window.npsValue = {{ nps|default:"0" }};
         console.log("window.npsValue:", window.npsValue);
     </script>
-    
+
 {% endif %}
 {% endblock %}
 

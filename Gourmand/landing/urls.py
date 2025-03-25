@@ -1,7 +1,5 @@
 from django.urls import path
-
 from landing import views
-
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,21 +10,19 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('signout/', views.signout, name='signout'),
     path('events/', views.events, name='events'),
-    path('event/<int:event_id>/', views.event, name='event'),
+    path('event/<slug:slug>/', views.event, name='event'),  # Обновляем
     path('event/create/', views.create_event, name='create_event'),
     path('places/', views.places, name='places'),
-    path('place/<int:place_id>/', views.place, name='place'),
-    path('place/<int:place_id>/reviews/', views.place_reviews, name='place_reviews'),
+    path('place/<slug:slug>/', views.place, name='place'),  # Обновляем
+    path('place/<slug:slug>/reviews/', views.place_reviews, name='place_reviews'),  # Обновляем
+    path('place/<slug:slug>/edit/', views.edit_place, name='edit_place'),  # Обновляем
     path('places/create/', views.create_places, name='create_places'),
-    path('place/<int:place_id>/edit/', views.edit_place, name='edit_place'),
     path('reviews/', views.reviews, name='reviews'),
-    path('reviews/<int:review_id>/', views.review, name='review'),
-    path('reviews/create/', views.create_review, name='create_review'),
+    path('reviews/<slug:slug>/', views.review, name='review'),  # Обновляем
+    path('reviews/<slug:slug>/vote/<str:vote_type>/', views.vote_review, name='vote_review'),  # Обновляем
     path('about/', views.about, name='about'),
     path('contacts/', views.contacts, name='contacts'),
     path('gourmands/', views.gourmands, name='gourmands'),
-    path('gourmands/<int:user_id>/', views.gourmand, name='gourmand'),
-    path('gourmands/<int:user_id>/reviews/', views.gourmand_reviews, name='gourmand_reviews'),
-    path('reviews/<int:review_id>/vote/<str:vote_type>/', views.vote_review, name='vote_review'),
-
+    path('gourmands/<slug:slug>/', views.gourmand, name='gourmand'),  # Обновляем
+    path('gourmands/<slug:slug>/reviews/', views.gourmand_reviews, name='gourmand_reviews'),  # Обновляем
 ]

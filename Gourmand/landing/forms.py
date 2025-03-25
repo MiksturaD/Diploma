@@ -162,7 +162,7 @@ class PlaceCreateForm(forms.ModelForm):
             'place_email': forms.EmailInput(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'}),
+            'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'example.com'}),
         }
         labels = {
             'name': 'Название заведения',

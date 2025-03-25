@@ -240,14 +240,14 @@ def events(request):
     events_list = Event.objects.all()
 
     # Фильтр по заведениям
-    place_id = request.GET.get('place')
-    if place_id:
-        events_list = events_list.filter(places__id=place_id)
+    place_slug = request.GET.get('place')  # Обновляем
+    if place_slug:
+        events_list = events_list.filter(place__slug=place_slug)  # Обновляем
 
     # Сортировка
-    sort_by = request.GET.get('sort', 'id')  # По умолчанию по ID
+    sort_by = request.GET.get('sort', 'id')
     if sort_by == 'date':
-        events_list = events_list.order_by('event_datetime')
+        events_list = events_list.order_by('event_date')  # Исправляем event_datetime на event_date
     elif sort_by == 'name':
         events_list = events_list.order_by('name')
 
@@ -255,17 +255,17 @@ def events(request):
     page_number = request.GET.get('page')
     events_page = paginator.get_page(page_number)
 
-    places = Place.objects.all()  # Для выпадающего списка
+    places = Place.objects.all()
     return render(request, 'events/events.html', {
         'events': events_page,
         'places': places,
-        'current_place': place_id,
+        'current_place': place_slug,  # Обновляем
         'current_sort': sort_by,
     })
 
 
-def event(request, event_id):
-    event_obj= get_object_or_404(Event, pk=event_id)
+def event(request, slug):
+    event_obj= get_object_or_404(Event, slug=slug)
     return render(request, 'events/event.html', context={'event': event_obj})
 
 
@@ -282,7 +282,7 @@ def create_event(request):
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     EventImage.objects.create(event=event, image=image)
-            return redirect("event", event_id=event.id)
+            return redirect("event", slug=event.slug)
         return render(request, "events/create.html", {"form": form})
 
     form = EventCreateForm()
@@ -312,8 +312,8 @@ def places(request):
     })
 
 
-def place(request, place_id):
-    place_obj = get_object_or_404(Place, pk=place_id)
+def place(request, slug):
+    place_obj = get_object_or_404(Place, slug=slug)
     reviews = Review.objects.filter(place=place_obj)
 
     context = {
@@ -409,8 +409,8 @@ def place(request, place_id):
     return render(request, 'places/place.html', context)
 
 
-def place_reviews(request, place_id):
-  place_obj = get_object_or_404(Place, pk=place_id)
+def place_reviews(request, slug):
+  place_obj = get_object_or_404(Place, slug=slug)
   reviews = Review.objects.filter(place=place_obj)
   context = {
     'place': place_obj,
@@ -433,7 +433,7 @@ def create_places(request):
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     PlaceImage.objects.create(place=place, image=image)
-            return redirect("place", place.id)
+            return redirect("place", slug=place.slug)
         return render(request, "places/place_create.html", {"form": form})
 
     form = PlaceCreateForm()
@@ -441,8 +441,8 @@ def create_places(request):
 
 
 @login_required
-def edit_place(request, place_id):
-    place = get_object_or_404(Place, pk=place_id)
+def edit_place(request, slug):
+    place = get_object_or_404(Place, slug=slug)
 
     # Проверяем, что текущий пользователь — владелец заведения
     if not request.user.is_owner() or place.owner != request.user:
@@ -458,7 +458,7 @@ def edit_place(request, place_id):
                 place.images.all().delete()
                 for image in request.FILES.getlist('images'):
                     PlaceImage.objects.create(place=place, image=image)
-            return redirect("place", place.id)
+            return redirect("place", slug)
         return render(request, "places/place_edit.html", {"form": form, "place": place})
 
     form = PlaceCreateForm(instance=place)
@@ -496,8 +496,8 @@ def reviews(request):
     })
 
 
-def review(request, review_id):
-    review = get_object_or_404(Review, pk=review_id)
+def review(request, slug):
+    review = get_object_or_404(Review, slug=slug)
     user_vote = None
     if request.user.is_authenticated:
         user_vote = ReviewVote.objects.filter(review=review, user=request.user).first()
@@ -510,10 +510,9 @@ def review(request, review_id):
 
 @login_required
 def create_review(request):
-    if not request.user.is_gourmand():  # Проверка на гурмана
+    if not request.user.is_gourmand():
         return redirect('index')
 
-    # Получаем place_id из GET-параметра
     place_id = request.GET.get('place')
     initial_data = {}
     if place_id:
@@ -521,25 +520,22 @@ def create_review(request):
             place = Place.objects.get(id=place_id)
             initial_data['place'] = place
         except Place.DoesNotExist:
-            pass  # Игнорируем, если place_id некорректен
+            pass
 
     if request.method == "POST":
-        form = ReviewCreateForm(request.POST, request.FILES)  # Добавили request.FILES для изображений
+        form = ReviewCreateForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
-            review.gourmand = request.user  # Гурман, а не user
+            review.gourmand = request.user
             review.save()
-            # Сохраняем изображения
             if 'images' in request.FILES:
                 for image in request.FILES.getlist('images'):
                     ReviewImage.objects.create(review=review, image=image)
-            # NPS уже сохраняется в форме через save(), ничего дополнительно не надо
-            return redirect('review', review_id=review.id)
+            return redirect('review', slug=review.slug)  # Обновляем
         else:
-            print(form.errors)  # Чтоб этот гад не молчал, если что-то не так!
+            print(form.errors)
             return render(request, "review/create.html", {"form": form})
 
-    # Передаём initial_data при GET
     form = ReviewCreateForm(initial=initial_data)
     return render(request, "review/create.html", {"form": form})
 
@@ -572,34 +568,33 @@ def gourmands(request):
         'current_sort': sort_by,
     })
 
-def gourmand(request, user_id):
-    gourmand_obj = get_object_or_404(User, pk=user_id)
+def gourmand(request, slug):
+    gourmand_obj = get_object_or_404(User, slug=slug)
     return render(request, 'gourmands/gourmand.html', {'gourmand': gourmand_obj})
 
-def gourmand_reviews(request, user_id):
-    gourmand_obj = get_object_or_404(User, pk=user_id)
+def gourmand_reviews(request, slug):
+    gourmand_obj = get_object_or_404(User, slug=slug)
     reviews = Review.objects.filter(gourmand=gourmand_obj)
     return render(request, 'gourmands/gourmand_reviews.html', {'gourmand': gourmand_obj, 'reviews': reviews})
 
 
 @login_required
-def vote_review(request, review_id, vote_type):
+def vote_review(request, slug, vote_type):
     if not request.user.is_gourmand():
         return redirect('index')
 
-    review = get_object_or_404(Review, pk=review_id)
+    review = get_object_or_404(Review, slug=slug)  # Обновляем
     if vote_type not in ['positive', 'negative']:
         return HttpResponseBadRequest("Недопустимый тип голоса")
 
-    # Проверяем, что пользователь не является автором отзыва
     if review.gourmand == request.user:
-        return redirect('review', review_id=review.id)  # Нельзя голосовать за свой отзыв
+        return redirect('review', slug=review.slug)  # Обновляем
 
     existing_vote = ReviewVote.objects.filter(review=review, user=request.user).first()
 
     if existing_vote:
         if existing_vote.vote_type == vote_type:
-            return redirect('review', review_id=review.id)
+            return redirect('review', slug=review.slug)  # Обновляем
         existing_vote.delete()
         if existing_vote.vote_type == 'positive':
             review.positive_rating = max(0, review.positive_rating - 1)
@@ -611,8 +606,8 @@ def vote_review(request, review_id, vote_type):
         review.positive_rating += 1
     else:
         review.negative_rating += 1
-    review.save()  # Сохраняем и пересчитываем рейтинги
+    review.save()
 
-    return redirect('review', review_id=review.id)
+    return redirect('review', slug=review.slug)  # Обновляем
 
 

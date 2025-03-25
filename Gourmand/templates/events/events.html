@@ -1,13 +1,60 @@
 {% extends 'landing/base.html' %}
 {% load static %}
-
+{% block extra_head %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Афиша мероприятий в Красноярске",
+        "description": "Афиша гастрономических мероприятий в ресторанах и кафе Красноярска.",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "Красноярск",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Красноярск",
+                "addressCountry": "RU"
+            }
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock"
+        },
+        "subEvents": [
+            {% for event in events %}
+            {
+                "@type": "Event",
+                "name": "{{ event.name }}",
+                "description": "{{ event.description|truncatewords:20 }}",
+                "startDate": "{{ event.event_date|date:'c' }}",
+                "location": {
+                    "@type": "Place",
+                    "name": "{{ event.place.name }}",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Красноярск",
+                        "addressCountry": "RU"
+                    }
+                },
+                "image": "{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}",
+                "url": "{% url 'event' event.slug %}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+    </script>
+{% endblock %}
 {% block content %}
 <div class="container my-4 my-md-5">
-    <h1 class="mb-3 pt-5 pt-xl-4 custom-text-color">Афиша мероприятий</h1>
+    <h1 class="mb-3 pt-4 pt-md-5 pt-xl-4 custom-text-color">Афиша мероприятий</h1>
 
     <!-- Фильтры и сортировка -->
     <div class="row mb-4">
-        <div class="col-md-6 col-lg-4 mb-2">
+        <div class="col-12 col-md-6 col-lg-4 mb-2">
             <form method="GET" class="d-flex gap-2">
                 <select name="place" class="form-select" onchange="this.form.submit()">
                     <option value="">Все заведения</option>
@@ -37,12 +84,12 @@
             <div class="col">
                 <div class="card h-100 shadow">
                     <img src="{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" 
-                         class="card-img-top img-fluid" 
+                         class="ratio ratio-4x3"
                          alt="{{ event.name }}"
                          style="height: 150px; object-fit: cover;">
                     <div class="card-body bg-dark p-2 p-md-3">
                         <h5 class="card-title custom-text-color mb-1">{{ event.name }}</h5>
-                        <p class="card-text custom-text-color small">{{ event.description|truncatewords:5 }}</p>
+                        <p class="card-text custom-text-color fs-6">{{ event.description|truncatewords:5 }}</p>
                     </div>
                     <ul class="list-group list-group-flush bg-dark">
                         <li class="list-group-item bg-dark">
@@ -59,7 +106,7 @@
                         </li>
                     </ul>
                     <div class="card-footer bg-dark p-2 text-center button_user">
-                        <a href="{% url 'event' event.slug %}" class="btn custom-button btn-sm">Подробнее</a>
+                        <a href="{% url 'event' event.slug %}" class="btn custom-button">Подробнее</a>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,16 @@ body {
     background-color: #1c1c1c;
     color: white;
     font-family: 'LXGW WenKai Mono TC', 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
 }
 
 a {
@@ -439,6 +449,14 @@ header .container-fluid {
     color: #000000;
     border: none !important;
 }
+
+
+@media (max-width: 992px) {
+    .button.nav-link {
+        font-size: 0.95rem;
+    }
+}
+
 .link_yellow {
     color: #e3d105;
 }
@@ -470,10 +488,24 @@ header .container-fluid {
     color: #1c1c1c;
 }
 
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+@media (max-width: 576px) {
+    .dropdown-item {
+        font-size: 0.95rem;
+    }
+}
+
 .navbar-toggler:focus {
     text-decoration: none;
     outline: 0;
     box-shadow: none;
+}
+
+.navbar-toggler {
+    padding: 0.75rem;
 }
 
 /* Базовые стили для всех form-select */
@@ -481,7 +513,14 @@ header .container-fluid {
     background-color: #2a2a2a; /* Тёмный фон в твоём стиле */
     color: #f8f9fa; /* Цвет текста как custom-text-color */
     border: 1px solid #444; /* Обводка в неактивном состоянии */
+    font-size: 1rem;
 }
+@media (max-width: 576px) {
+    .form-select {
+        font-size: 0.9rem;
+    }
+}
+
 
 /* Стили при фокусе для всех form-select */
 .form-select:focus {

@@ -1,5 +1,23 @@
-<div class="right_header_info fixed-bottom bg-dark">
-  <div class="d-flex justify-content-center">
-    <span>Создано в целях обучения. Автор Губанов Алексей. 2025 год. Красноярск</span>
-  </div>
-</div>
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <p class="fs-6 mb-0">Создано в целях обучения. Автор Губанов Алексей. 2025 год. Красноярск</p>
+                <p class="fs-6 mb-0 mt-2">Email: <a href="mailto:info@gourmand.ru" class="text-white text-decoration-none">info@gourmand.ru</a></p>
+                <p class="fs-6 mb-0">Телефон: <a href="tel:+79991234567" class="text-white text-decoration-none">+7 (999) 123-45-67</a></p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'index' %}" class="text-white text-decoration-none fs-6 me-2" aria-label="Перейти на главную страницу">Главная</a>
+                <a href="{% url 'places' %}" class="text-white text-decoration-none fs-6 me-2" aria-label="Перейти к заведениям">Заведения</a>
+                <a href="{% url 'events' %}" class="text-white text-decoration-none fs-6 me-2" aria-label="Перейти к афише">Афиша</a>
+                <a href="{% url 'reviews' %}" class="text-white text-decoration-none fs-6 me-2" aria-label="Перейти к отзывам">Отзывы</a>
+                <a href="{% url 'gourmands' %}" class="text-white text-decoration-none fs-6 me-2" aria-label="Перейти к гурманам">Гурманы</a>
+                <a href="{% url 'contacts' %}" class="text-white text-decoration-none fs-6" aria-label="Перейти к контактам">Контакты</a>
+                <div class="mt-2">
+                    <a href="#" class="text-white text-decoration-none fs-6 me-2" aria-label="Политика конфиденциальности">Политика конфиденциальности</a>
+                    <a href="#" class="text-white text-decoration-none fs-6" aria-label="Условия использования">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -7,22 +7,22 @@
 {% url 'contacts' as contacts_url %}
 
 
-<nav class="navbar navbar-expand-xl bg_dark fixed-top pb-0">
+<nav class="navbar navbar-expand-xl bg_dark fixed-top pb-0" aria-label="Основная навигация" >
     <div class="container-fluid px-3">
             <!-- Логотип -->
-            <a class="navbar-brand custom-text-color pb-0" href="{% url 'index' %}">Проект Гурман</a>
+            <a class="navbar-brand custom-text-color pb-0 fs-5" href="{% url 'index' %}">Проект Гурман</a>
 
            <!-- Кнопка "бутерброд" с dropdown -->
             <div class="dropdown ms-auto">
                 <button class="navbar-toggler custom-button" type="button" data-bs-toggle="dropdown" 
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Открыть меню навигации">
                     <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-list" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" class="bi bi-list" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                         </svg>
                     </span>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end bg_dark" style="min-width: 200px;">
+                <ul class="dropdown-menu dropdown-menu-end bg_dark" style="min-width: 250px;">
                     <li><a class="dropdown-item custom-text-color custom-button {% if request.path == index_url %}active{% endif %}" href="{% url 'index' %}">Главная</a></li>
                     <li><a class="dropdown-item custom-text-color {% if request.path == events_url %}active{% endif %}" href="{% url 'events' %}">Афиша</a></li>
                     <li><a class="dropdown-item custom-text-color {% if request.path == places_url %}active{% endif %}" href="{% url 'places' %}">Заведения</a></li>
@@ -41,7 +41,9 @@
 
             <!-- Навигация -->
               <div class="collapse navbar-collapse right_header_info fixed-top bg-dark" id="navbarNav">
+                <a class="navbar-brand custom-text-color m-auto pl-1 fs-5" href="{% url 'index' %}">Проект Гурман</a>
                 <ul class="navbar-nav ms-auto nav nav-tabs nav nav-link contact-info">
+
                   <li class="nav-item button_user">
                     <a class="button nav-link  {% if request.path == index_url %}active{% endif %}" href="{% url 'index' %}">Главная</a>
                   </li>

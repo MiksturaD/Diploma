@@ -600,11 +600,76 @@ header .container-fluid {
     background-color: #495057; /* Для Edge/IE */
 }
 
-.gauge-needle {
-        transition: transform 1s ease-in-out;
-    }
+/* Стили для упрощённой карусели */
+#mobile_slider .carousel-item {
+    padding: 15px;
+}
 
-#npsGauge {
-    max-width: 300px; /* Ограничиваем ширину графика */
-    margin: 0 auto; /* Центрируем */
+/* Индикаторы */
+#mobile_slider .carousel-indicators {
+    bottom: -40px;
+}
+
+#mobile_slider .carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin: 0 5px;
+}
+
+#mobile_slider .carousel-indicators .active {
+    background-color: #007bff;
+}
+
+/* Кнопки управления */
+#mobile_slider .custom-carousel-control {
+    width: 40px; /* Уменьшаем ширину кнопок */
+    height: 40px; /* Уменьшаем высоту кнопок */
+    top: 50%; /* Центрируем по вертикали */
+    transform: translateY(-50%);
+    background: none; /* Полупрозрачный фон */
+    border-radius: 50%; /* Делаем кнопки круглыми */
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+#mobile_slider .custom-carousel-control:hover {
+    opacity: 1;
+}
+
+/* Иконки внутри кнопок */
+#mobile_slider .custom-carousel-control .carousel-control-prev-icon,
+#mobile_slider .custom-carousel-control .carousel-control-next-icon {
+    width: 20px; /* Уменьшаем размер иконок */
+    height: 20px;
+}
+
+/* Убедимся, что кнопки не перекрывают контент */
+#mobile_slider .carousel-control-prev {
+    left: 10px; /* Отступ слева */
+}
+
+#mobile_slider .carousel-control-next {
+    right: 10px; /* Отступ справа */
+}
+
+/* Текст и изображения */
+#mobile_slider .slider_image img {
+    margin: 0 auto; /* Центрируем изображение */
+}
+
+#mobile_slider h3 {
+    font-size: 1.25rem; /* Уменьшаем заголовок для маленьких экранов */
+    margin-bottom: 0.5rem;
+}
+
+#mobile_slider p {
+    font-size: 0.9rem; /* Уменьшаем текст описания */
+    margin-bottom: 1rem;
+}
+
+#mobile_slider .main_bt_border {
+    font-size: 0.9rem; /* Уменьшаем размер кнопки */
+    padding: 0.5rem 1rem;
 }

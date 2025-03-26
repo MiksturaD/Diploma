@@ -25,6 +25,10 @@
                             <button type="submit" class="btn custom-button btn-sm">Войти</button>
                         </div>
                     </form>
+                    <!-- Добавляем ссылку "Забыли пароль?" -->
+                    <div class="text-center mt-3">
+                        <a href="{% url 'password_reset' %}" class="custom-text-color text-warning">Забыли пароль?</a>
+                    </div>
                 </div>
                 <div class="card-footer text-center">
                     <p>Нет аккаунта? <a href="{% url 'signup' %}" class="custom-text-color text-warning">Зарегистрироваться</a></p>

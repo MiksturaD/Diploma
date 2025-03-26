@@ -1,11 +1,11 @@
 {% load static %}
 
-
 <div class="slider_section">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="full">
+                <!-- Карусель для XL и больше (вертикальная, кастомная) -->
+                <div class="full d-none d-xl-block">
                     <div id="main_slider" class="carousel vert slide" data-bs-ride="carousel" data-bs-interval="5000">
                         <div class="carousel-inner">
                             <div class="carousel-controls-bottom text-center mt-4">
@@ -121,7 +121,7 @@
                                                     <h3>Отзывы<br>Обзоры на заведения</h3>
                                                     <p>Здесь вы увидите отзывы наших гурманов о кафе и ресторанах города Красноярска</p>
                                                     <div class="d-flex align-items-center justify-content-center gap-3">
-                                                        <a class="main_bt_border" href="#">Отзывы</a>
+                                                        <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,7 +143,7 @@
                                                     <h3>О сайте<br>А также о создателе</h3>
                                                     <p>Здесь вы увидите кто все это построил и на чем</p>
                                                     <div class="d-flex align-items-center justify-content-center gap-3">
-                                                        <a class="main_bt_border" href="#">Контакты</a>
+                                                        <a class="main_bt_border" href="{% url 'contacts' %}">Контакты</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,6 +157,142 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Карусель для экранов меньше XL (упрощённая, горизонтальная) -->
+                <div class="full d-xl-none">
+                    <div id="mobile_slider" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                        <!-- Индикаторы -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                        </div>
+
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="text-center">
+                                    <div class="slider_image mb-2">
+                                        <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" style="max-height: 250px; width: auto;" />
+                                    </div>
+                                    <div class="slider_cont">
+                                        <div class="hero-section">
+                                            <div class="content-wrapper">
+                                                <h3>Изучай обзоры на рестораны и кафе</h3>
+                                                <p>Отзывы составлены людьми, которые искушены в еде и знают места, где поесть</p>
+                                                <div class="d-flex align-items-center justify-content-center gap-3">
+                                                    <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <div class="slider_image mb-2">
+                                        <img class="img-responsive" src="{% static 'img/poster.png' %}" alt="#" style="max-height: 250px; width: auto;" />
+                                    </div>
+                                    <div class="slider_cont">
+                                        <div class="hero-section">
+                                            <div class="content-wrapper">
+                                                <h3>Афиша мероприятий</h3>
+                                                <p>Здесь вы увидите афишу мероприятий в кафе и ресторанах города Красноярска</p>
+                                                <div class="d-flex align-items-center justify-content-center gap-3">
+                                                    <a class="main_bt_border" href="{% url 'events' %}">Афиша</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <div class="slider_image mb-2">
+                                        <img class="img-responsive" src="{% static 'img/places.png' %}" alt="#" style="max-height: 250px; width: auto;" />
+                                    </div>
+                                    <div class="slider_cont">
+                                        <div class="hero-section">
+                                            <div class="content-wrapper">
+                                                <h3>Места для посиделок</h3>
+                                                <p>Здесь вы увидите самые классные кафе и рестораны города Красноярска</p>
+                                                <div class="d-flex align-items-center justify-content-center gap-3">
+                                                    <a class="main_bt_border" href="{% url 'places' %}">Места</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <div class="slider_image mb-2">
+                                        <img class="img-responsive" src="{% static 'img/gourmans.png' %}" alt="#" style="max-height: 250px; width: auto;" />
+                                    </div>
+                                    <div class="slider_cont">
+                                        <div class="hero-section">
+                                            <div class="content-wrapper">
+                                                <h3>Гурманы в городе</h3>
+                                                <p>Здесь вы увидите Гурманов города Красноярска</p>
+                                                <div class="d-flex align-items-center justify-content-center gap-3">
+                                                    <a class="main_bt_border" href="{% url 'gourmands' %}">Гурманы</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <div class="slider_image mb-2">
+                                        <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" style="max-height: 250px; width: auto;" />
+                                    </div>
+                                    <div class="slider_cont">
+                                        <div class="hero-section">
+                                            <div class="content-wrapper">
+                                                <h3>Отзывы</h3>
+                                                <p>Здесь вы увидите отзывы наших гурманов о кафе и ресторанах города Красноярска</p>
+                                                <div class="d-flex align-items-center justify-content-center gap-3">
+                                                    <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <div class="slider_image mb-2">
+                                        <img class="img-responsive" src="{% static 'img/author.png' %}" alt="#" style="max-height: 250px; width: auto;" />
+                                    </div>
+                                    <div class="slider_cont">
+                                        <div class="hero-section">
+                                            <div class="content-wrapper">
+                                                <h3>О сайте</h3>
+                                                <p>Здесь вы увидите кто все это построил и на чем</p>
+                                                <div class="d-flex align-items-center justify-content-center gap-3">
+                                                    <a class="main_bt_border" href="{% url 'contacts' %}">Контакты</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Стрелки управления -->
+                        <button class="carousel-control-prev custom-carousel-control button_user" type="button" data-bs-target="#mobile_slider" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon custom-button" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next custom-carousel-control button_user" type="button" data-bs-target="#mobile_slider" data-bs-slide="next">
+                            <span class="carousel-control-next-icon custom-button" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
             </div>

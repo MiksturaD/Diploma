@@ -80,6 +80,7 @@ def profile(request):
         last_month_start = current_month_start - relativedelta(months=1)
         last_month_end = current_month_start - relativedelta(seconds=1)
 
+        # Получаем заведения владельца
         places = Place.objects.filter(owner=user)
         place_stats = {}
 
@@ -93,7 +94,8 @@ def profile(request):
                 detractors = NPSResponse.objects.filter(review__place=place, score__lte=6).count()
                 # NPS = % промоутеров - % критиков
                 nps = (
-                            promoters / total_responses * 100 - detractors / total_responses * 100) if total_responses > 0 else 0
+                    promoters / total_responses * 100 - detractors / total_responses * 100
+                ) if total_responses > 0 else 0
 
                 # NPS за текущий месяц
                 current_total = NPSResponse.objects.filter(
@@ -111,7 +113,8 @@ def profile(request):
                     score__lte=6
                 ).count()
                 current_nps = (
-                            current_promoters / current_total * 100 - current_detractors / current_total * 100) if current_total > 0 else None
+                    current_promoters / current_total * 100 - current_detractors / current_total * 100
+                ) if current_total > 0 else None
 
                 # NPS за прошлый месяц
                 last_total = NPSResponse.objects.filter(
@@ -132,7 +135,8 @@ def profile(request):
                     score__lte=6
                 ).count()
                 last_nps = (
-                            last_promoters / last_total * 100 - last_detractors / last_total * 100) if last_total > 0 else None
+                    last_promoters / last_total * 100 - last_detractors / last_total * 100
+                ) if last_total > 0 else None
 
                 # Топ-теги за всё время
                 tag_stats = NPSResponse.objects.filter(review__place=place).values('tags__label').annotate(
@@ -176,11 +180,21 @@ def profile(request):
                     'tag_dynamics': tag_dynamics,
                 }
 
+        # Средний NPS по всем заведениям
+        total_responses = NPSResponse.objects.filter(review__place__owner=user).count()
+        total_promoters = NPSResponse.objects.filter(review__place__owner=user, score__gte=9).count()
+        total_detractors = NPSResponse.objects.filter(review__place__owner=user, score__lte=6).count()
+        average_nps = (
+            total_promoters / total_responses * 100 - total_detractors / total_responses * 100
+        ) if total_responses > 0 else 0
+
         context = {
+            'user': user,
             'profile': profile,
             'place_stats': place_stats,
             'current_month': current_month_start.strftime('%Y-%m'),
             'last_month': last_month_start.strftime('%Y-%m'),
+            'average_nps': average_nps,
         }
         return render(request, "places/owner_profile.html", context)
 
@@ -210,6 +224,7 @@ def edit_profile(request):
             places_ids = request.POST.getlist("places")
             places = Place.objects.filter(id__in=places_ids)
             profile.places.set(places)
+            profile.description = description
             if "image" in request.FILES:
                 profile.image = request.FILES["image"]
             profile.save()

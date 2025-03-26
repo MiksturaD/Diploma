@@ -157,3 +157,18 @@ LOGGING = {
         },
     },
 }
+
+# Настройки для отправки email (тестовый режим через консоль)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Для продакшена (например, Gmail):
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'  # Используй пароль приложения, а не обычный пароль
+# DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
+
+# Укажем имя сайта и домен для писем
+SITE_NAME = 'Gourmand'

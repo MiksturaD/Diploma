@@ -10,7 +10,11 @@
 <nav class="navbar navbar-expand-xl bg_dark fixed-top pb-0" aria-label="Основная навигация" >
     <div class="container-fluid px-3">
             <!-- Логотип -->
-            <a class="navbar-brand custom-text-color pb-0 fs-5" href="{% url 'index' %}">Проект Гурман</a>
+            <ul class="navbar-nav ms-auto ">
+              <li class="nav-item button_user">
+                <a class="navbar-brand custom-text-color pb-0 fs-5" href="{% url 'index' %}">Проект Гурман</a>
+              </li>
+            </ul>
 
            <!-- Кнопка "бутерброд" с dropdown -->
             <div class="dropdown ms-auto">
@@ -41,7 +45,11 @@
 
             <!-- Навигация -->
               <div class="collapse navbar-collapse right_header_info fixed-top bg-dark" id="navbarNav">
-                <a class="navbar-brand custom-text-color m-auto pl-1 fs-5" href="{% url 'index' %}">Проект Гурман</a>
+              <ul class="navbar-nav ms-auto ">
+                <li class="nav-item button_user nav-tabs">
+                    <a class="button nav-link" href="{% url 'index' %}">Проект Гурман</a>
+                </li>
+              </ul>
                 <ul class="navbar-nav ms-auto nav nav-tabs nav nav-link contact-info">
 
                   <li class="nav-item button_user">

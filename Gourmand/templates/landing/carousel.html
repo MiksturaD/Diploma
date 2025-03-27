@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-md-7">
                                         <div class="slider_image full text_align_center">
-                                            <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" />
+                                            <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="Обзоры на рестораны" loading="lazy" />
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="col-md-7 full text_align_center">
                                         <div class="slider_image">
-                                            <img class="img-responsive" src="{% static 'img/poster.png' %}" alt="#" />
+                                            <img class="img-responsive" src="{% static 'img/poster.png' %}" alt="Афиша мероприятий" loading="lazy" />
                                         </div>
                                     </div>
                                 </div>
@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="col-md-7 full text_align_center">
                                         <div class="slider_image">
-                                            <img class="img-responsive" src="{% static 'img/places.png' %}" alt="#" />
+                                            <img class="img-responsive" src="{% static 'img/places.png' %}" alt="Места для посиделок" loading="lazy" />
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="col-md-7 full text_align_center">
                                         <div class="slider_image">
-                                            <img class="img-responsive" src="{% static 'img/gourmans.png' %}" alt="#" />
+                                            <img class="img-responsive" src="{% static 'img/gourmans.png' %}" alt="Гурманы" loading="lazy" />
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@
                                     </div>
                                     <div class="col-md-7 full text_align_center">
                                         <div class="slider_image">
-                                            <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" />
+                                            <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="Отзывы" loading="lazy" />
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                     </div>
                                     <div class="col-md-7 full text_align_center">
                                         <div class="slider_image">
-                                            <img class="img-responsive" src="{% static 'img/author.png' %}" alt="#" />
+                                            <img class="img-responsive" src="{% static 'img/author.png' %}" alt="О сайте" loading="lazy" />
                                         </div>
                                     </div>
                                 </div>
@@ -160,142 +160,201 @@
                     </div>
                 </div>
 
-                <!-- Карусель для экранов меньше XL (упрощённая, горизонтальная) -->
+                <!-- Карусель для экранов меньше XL (Swiper, горизонтальная) -->
                 <div class="full d-xl-none">
-                    <div id="mobile_slider" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                        <!-- Индикаторы -->
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="4" aria-label="Slide 5"></button>
-                            <button type="button" data-bs-target="#mobile_slider" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                        <div class="swiper-button-prev">
+                            <i class="bi bi-arrow-left-square-fill">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="element style bg_dark" viewBox="0 0 16 16">
+                                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                                </svg>
+                            </i>
+                        </div>
+                        <div class="swiper-button-next">
+                            <i class="bi bi-arrow-right-square-fill">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="element style bg_dark" viewBox="0 0 16 16">
+                                    <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                                </svg>
+                            </i>
+                        </div>
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="slider_cont text-center">
+                                            <div class="hero-section">
+                                                <div class="content-wrapper text-center">
+                                                    <h3>Изучай обзоры на рестораны и кафе<br>В любимом Красноярске</h3>
+                                                    <p>Отзывы составлены людьми, которые искушены в еде и знают места, где поесть</p>
+                                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                                        <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="">
+                                            <img src="{% static 'img/reviews.png' %}" class="d-block w-100 h-100" alt="Обзоры на рестораны" loading="lazy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="slider_cont text-center">
+                                            <div class="hero-section">
+                                                <div class="content-wrapper text-center">
+                                                    <h3>Афиша мероприятий<br>События в заведениях города</h3>
+                                                    <p>Здесь вы увидите афишу мероприятий в кафе и ресторанах города Красноярска</p>
+                                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                                        <a class="main_bt_border" href="{% url 'events' %}">Афиша</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="">
+                                            <img src="{% static 'img/poster.png' %}" class="d-block w-100" alt="Афиша мероприятий" loading="lazy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="slider_cont text-center">
+                                            <div class="hero-section">
+                                                <div class="content-wrapper text-center">
+                                                    <h3>Места для посиделок<br>Приятные места для поедания пищи и бесед</h3>
+                                                    <p>Здесь вы увидите самые классные кафе и рестораны города Красноярска</p>
+                                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                                        <a class="main_bt_border" href="{% url 'places' %}">Места</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="">
+                                            <img src="{% static 'img/places.png' %}" class="d-block w-100" alt="Места для посиделок" loading="lazy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="slider_cont text-center">
+                                            <div class="hero-section">
+                                                <div class="content-wrapper text-center">
+                                                    <h3>Гурманы в городе<br>Ребята, которые знают толк в еде</h3>
+                                                    <p>Здесь вы увидите Гурманов города Красноярска</p>
+                                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                                        <a class="main_bt_border" href="{% url 'gourmands' %}">Гурманы</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="">
+                                            <img src="{% static 'img/gourmans.png' %}" class="d-block w-100" alt="Гурманы" loading="lazy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="slider_cont text-center">
+                                            <div class="hero-section">
+                                                <div class="content-wrapper text-center">
+                                                    <h3>Отзывы<br>Обзоры на заведения</h3>
+                                                    <p>Здесь вы увидите отзывы наших гурманов о кафе и ресторанах города Красноярска</p>
+                                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                                        <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="">
+                                            <img src="{% static 'img/reviews.png' %}" class="d-block w-100" alt="Отзывы" loading="lazy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="slider_cont text-center">
+                                            <div class="hero-section">
+                                                <div class="content-wrapper text-center">
+                                                    <h3>О сайте<br>А также о создателе</h3>
+                                                    <p>Здесь вы увидите кто все это построил и на чем</p>
+                                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                                        <a class="main_bt_border" href="{% url 'contacts' %}">Контакты</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="">
+                                            <img src="{% static 'img/author.png' %}" class="d-block w-100" alt="О сайте" loading="lazy">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="text-center">
-                                    <div class="slider_image mb-2">
-                                        <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" style="max-height: 250px; width: auto;" />
-                                    </div>
-                                    <div class="slider_cont">
-                                        <div class="hero-section">
-                                            <div class="content-wrapper">
-                                                <h3>Изучай обзоры на рестораны и кафе</h3>
-                                                <p>Отзывы составлены людьми, которые искушены в еде и знают места, где поесть</p>
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="text-center">
-                                    <div class="slider_image mb-2">
-                                        <img class="img-responsive" src="{% static 'img/poster.png' %}" alt="#" style="max-height: 250px; width: auto;" />
-                                    </div>
-                                    <div class="slider_cont">
-                                        <div class="hero-section">
-                                            <div class="content-wrapper">
-                                                <h3>Афиша мероприятий</h3>
-                                                <p>Здесь вы увидите афишу мероприятий в кафе и ресторанах города Красноярска</p>
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <a class="main_bt_border" href="{% url 'events' %}">Афиша</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="text-center">
-                                    <div class="slider_image mb-2">
-                                        <img class="img-responsive" src="{% static 'img/places.png' %}" alt="#" style="max-height: 250px; width: auto;" />
-                                    </div>
-                                    <div class="slider_cont">
-                                        <div class="hero-section">
-                                            <div class="content-wrapper">
-                                                <h3>Места для посиделок</h3>
-                                                <p>Здесь вы увидите самые классные кафе и рестораны города Красноярска</p>
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <a class="main_bt_border" href="{% url 'places' %}">Места</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="text-center">
-                                    <div class="slider_image mb-2">
-                                        <img class="img-responsive" src="{% static 'img/gourmans.png' %}" alt="#" style="max-height: 250px; width: auto;" />
-                                    </div>
-                                    <div class="slider_cont">
-                                        <div class="hero-section">
-                                            <div class="content-wrapper">
-                                                <h3>Гурманы в городе</h3>
-                                                <p>Здесь вы увидите Гурманов города Красноярска</p>
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <a class="main_bt_border" href="{% url 'gourmands' %}">Гурманы</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="text-center">
-                                    <div class="slider_image mb-2">
-                                        <img class="img-responsive" src="{% static 'img/reviews.png' %}" alt="#" style="max-height: 250px; width: auto;" />
-                                    </div>
-                                    <div class="slider_cont">
-                                        <div class="hero-section">
-                                            <div class="content-wrapper">
-                                                <h3>Отзывы</h3>
-                                                <p>Здесь вы увидите отзывы наших гурманов о кафе и ресторанах города Красноярска</p>
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <a class="main_bt_border" href="{% url 'reviews' %}">Отзывы</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="text-center">
-                                    <div class="slider_image mb-2">
-                                        <img class="img-responsive" src="{% static 'img/author.png' %}" alt="#" style="max-height: 250px; width: auto;" />
-                                    </div>
-                                    <div class="slider_cont">
-                                        <div class="hero-section">
-                                            <div class="content-wrapper">
-                                                <h3>О сайте</h3>
-                                                <p>Здесь вы увидите кто все это построил и на чем</p>
-                                                <div class="d-flex align-items-center justify-content-center gap-3">
-                                                    <a class="main_bt_border" href="{% url 'contacts' %}">Контакты</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Стрелки управления -->
-                        <button class="carousel-control-prev custom-carousel-control button_user" type="button" data-bs-target="#mobile_slider" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon custom-button" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next custom-carousel-control button_user" type="button" data-bs-target="#mobile_slider" data-bs-slide="next">
-                            <span class="carousel-control-next-icon custom-button" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper('.mySwiper', {
+            direction: 'horizontal',
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            spaceBetween: 20,
+            slidesPerView: 1,
+            centeredSlides: true,
+            grabCursor: true,
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                },
+                576: {
+                    slidesPerView: 1,
+                    spaceBetween: 15,
+                },
+                768: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                },
+            },
+        });
+    });
+</script>

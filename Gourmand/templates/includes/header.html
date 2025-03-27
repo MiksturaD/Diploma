@@ -45,13 +45,10 @@
 
             <!-- Навигация -->
               <div class="collapse navbar-collapse right_header_info fixed-top bg-dark" id="navbarNav">
-              <ul class="navbar-nav ms-auto ">
-                <li class="nav-item button_user nav-tabs">
-                    <a class="button nav-link" href="{% url 'index' %}">Проект Гурман</a>
-                </li>
-              </ul>
                 <ul class="navbar-nav ms-auto nav nav-tabs nav nav-link contact-info">
-
+                  <li class="nav-item button_user">
+                    <a class="button nav-link" href="{% url 'index' %}">Проект Гурман</a>
+                  </li>
                   <li class="nav-item button_user">
                     <a class="button nav-link  {% if request.path == index_url %}active{% endif %}" href="{% url 'index' %}">Главная</a>
                   </li>

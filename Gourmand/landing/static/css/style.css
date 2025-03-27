@@ -673,3 +673,135 @@ header .container-fluid {
     font-size: 0.9rem; /* Уменьшаем размер кнопки */
     padding: 0.5rem 1rem;
 }
+
+.foot-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Стили для Swiper */
+.mySwiper {
+    width: 100%;
+    padding: 20px 0;
+    position: relative;
+}
+
+.swiper-slide {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 15px;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Стили для стрелок Swiper */
+.swiper-button-next,
+.swiper-button-prev {
+    width: 50px;
+    height: 50px;
+    background: #fcfcfc; /* Белый фон */
+    color: #212020; /* Чёрный цвет иконки */
+    border-radius: 5px; /* Закруглённые углы */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: #e3d105; /* Жёлтый фон при наведении */
+}
+
+/* Убираем стандартные иконки Swiper */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    display: none; /* Убираем стандартные стрелки Swiper */
+}
+
+/* Стили для иконок */
+.swiper-button-next i,
+.swiper-button-prev i {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Позиционирование стрелок */
+.swiper-button-prev {
+    left: 10px;
+}
+
+.swiper-button-next {
+    right: 10px;
+}
+
+/* Стили для пагинации */
+.swiper-pagination-bullet {
+    background: #ccc;
+}
+
+.swiper-pagination-bullet-active {
+    background: #e3d105;
+}
+
+/* Убедимся, что Swiper отображается только на маленьких экранах */
+@media (min-width: 1200px) {
+    .mySwiper {
+        display: none;
+    }
+}
+
+/* Убедимся, что основная карусель отображается только на больших экранах */
+@media (max-width: 1199.98px) {
+    #main_slider {
+        display: none;
+    }
+}
+
+/* Адаптивные стили для контента внутри слайдов */
+.slider_cont h3 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.slider_cont p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 576px) {
+    .slider_cont h3 {
+        font-size: 20px;
+    }
+    .slider_cont p {
+        font-size: 14px;
+    }
+    .main_bt_border {
+        min-width: 120px;
+        min-height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+    }
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+    }
+    .swiper-button-next i,
+    .swiper-button-prev i {
+        font-size: 20px;
+    }
+}

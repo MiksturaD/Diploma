@@ -2,9 +2,10 @@
 {% load static %}
 
 {% block content %}
-<div class="container my-5">
-  <h1 class="mb-2 pt-2 custom-text-color">{{ event.name }}</h1>
-
+<div class="container my-4 my-md-5">
+    <div class="full d-xl-none mt-5">
+        <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">{{ event.name }}</h1>
+    </div>
   <div class="card bg-dark text-white shadow">
     {% if event.images.exists %}
       <div class="row g-2 p-3">

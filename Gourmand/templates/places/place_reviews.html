@@ -2,9 +2,10 @@
 {% load static %}
 
 {% block content %}
-<div class="container my-5">
-  <h1 class="mb-4 pt-4 custom-text-color">Отзывы о {{ place.name }}</h1>
-
+<div class="container my-4 my-md-5">
+    <div class="full d-xl-none mt-5">
+        <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">Отзывы о {{ place.name }}</h1>
+    </div>
   {% if reviews %}
     {% for review in reviews %}
       <div class="card bg-dark text-white mb-3">

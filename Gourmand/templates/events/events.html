@@ -50,7 +50,10 @@
 {% endblock %}
 {% block content %}
 <div class="container my-4 my-md-5">
-    <h1 class="mb-3 pt-4 pt-md-5 pt-xl-4 custom-text-color">Афиша мероприятий</h1>
+    <div class="full d-xl-none mt-5">
+       <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">Афиша мероприятий</h1>
+    </div>
+
 
     <!-- Фильтры и сортировка -->
     <div class="row mb-4">
@@ -82,7 +85,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 g-md-4 mb-3">
             {% for event in events %}
             <div class="col">
-                <div class="card h-100 shadow">
+                <div class="card h-100 shadow   ">
                     <img src="{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" 
                          class="ratio ratio-4x3"
                          alt="{{ event.name }}"

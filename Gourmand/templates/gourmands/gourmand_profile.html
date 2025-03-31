@@ -1,8 +1,10 @@
 {% extends "landing/base.html" %}
 {% load static %}
 {% block content %}
-<div class="container text-white mt-2 pt-4">
-  <h2 class="mb-4 pt-4 custom-text-color">Профиль гурмана</h2>
+<div class="container my-4 my-md-5">
+    <div class="full d-xl-none mt-5">
+        <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">Профиль гурмана</h1>
+    </div>
   {% if profile.image %}
     <img src="{{ profile.image.url }}" alt="Фото гурмана" class="img-thumbnail" width="150">
   {% else %}

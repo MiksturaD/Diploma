@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="pt-4 custom-text-color">Автор отзыва: {{ review.gourmand.first_name }} {{ review.gourmand.last_name }}</h1>
-    <h1 class=" custom-text-color">Оценка от гурмана: {{ review.gourmand_rating }}<span class="text-warning">★</span></h1>
+<div class="container my-4 my-md-5">
+    <div class="full d-xl-none mt-5">
+        <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">Автор отзыва: {{ review.gourmand.first_name }} {{ review.gourmand.last_name }}</h1>
+        <h1 class=" custom-text-color">Оценка от гурмана: {{ review.gourmand_rating }}<span class="text-warning">★</span></h1>
+    </div>
 
     <div class="card bg-dark text-white shadow">
         {% if review.images.exists %}

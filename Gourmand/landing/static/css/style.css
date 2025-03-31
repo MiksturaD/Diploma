@@ -351,7 +351,7 @@ header .container-fluid {
   align-items: center; /* Вертикальное центрирование */
   justify-content: center; /* Горизонтальное центрирование */
   color: white; /* Цвет текста */
-  padding: 2rem;
+  /*padding: 2rem;*/
 }
 .event-image:hover {
     transform: scale(1.03);
@@ -750,6 +750,9 @@ header .container-fluid {
 /* Стили для пагинации */
 .swiper-pagination-bullet {
     background: #ccc;
+}
+.swiper-pagination{
+    position: relative;
 }
 
 .swiper-pagination-bullet-active {

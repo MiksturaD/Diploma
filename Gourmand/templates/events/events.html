@@ -115,19 +115,16 @@
             </div>
             {% endfor %}
         </div>
-        {% if user.role == "owner" %}
-        <div class="button_user pt-3 text-center mb-3">
-            <a href="{% url 'create_event' %}" class="btn custom-button">Создать мероприятие</a>
-        </div>
-        {% endif %}
     {% else %}
         <div class="alert alert-info text-center">На данный момент мероприятий нет.</div>
-        {% if user.role == "owner" %}
-            <div class="button_user pt-3 text-center mb-3">
-                <a href="{% url 'create_event' %}" class="btn custom-button">Создать мероприятие</a>
-            </div>
-        {% endif %}
     {% endif %}
+</div>
+    {% if user.role == "owner" %}
+        <div class="button_user text-center d-flex justify-content-center">
+            <a href="{% url 'create_event' %}" class="btn custom-button">Создать мероприятие</a>
+        </div>
+    {% endif %}
+
 
     <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center flex-wrap">
@@ -154,6 +151,5 @@
             {% endif %}
         </ul>
     </nav>
-</div>
     {% include 'includes/footer.html' %}
 {% endblock %}

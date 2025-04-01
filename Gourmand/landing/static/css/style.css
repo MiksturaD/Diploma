@@ -346,12 +346,12 @@ header .container-fluid {
     max-width: 50px;
 }
 .hero-section {
-  min-height: 60vh; /* Высота блока */
+  min-height: 50vh; /* Высота блока */
   display: flex;
   align-items: center; /* Вертикальное центрирование */
   justify-content: center; /* Горизонтальное центрирование */
   color: white; /* Цвет текста */
-  /*padding: 2rem;*/
+  padding: 1rem;
 }
 .event-image:hover {
     transform: scale(1.03);
@@ -381,6 +381,8 @@ header .container-fluid {
 }
 .custom-text-color {
     color: #eaeaea;
+    padding-right: 1rem;
+    padding-left: 1rem;
 }
 .nav-link.active {
     background: #e3d105 !important;
@@ -470,13 +472,17 @@ header .container-fluid {
 }
 .pag_size {
     display: flex;
-    min-width: 100px;
+    min-width: 10px;
     height: 35px;
     text-align: center;
     line-height: 35px;
-    padding: 0 15px!important;
+    padding: 0 5px!important;
     border: thin;
 
+}
+.page-link{
+    padding: 0!important;
+    min-width: 40px!important;
 }
 
 .zero-mp {
@@ -678,6 +684,16 @@ header .container-fluid {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.card-body{
+    padding-top: 1rem!important;
+    padding-right: 1rem!important;
 }
 
 /* Стили для Swiper */

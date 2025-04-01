@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.db.models import Sum
 from django.utils.text import slugify
 from pytils.translit import slugify as pytils_slugify  # Для транслитерации кириллицы
 from decimal import Decimal
@@ -32,10 +33,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="gourmand")
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="gourmand", db_index=True)  # Индекс на role
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     slug = models.SlugField(max_length=100, blank=True, unique=True, verbose_name="Слаг")
+    date_joined = models.DateTimeField(auto_now_add=True, db_index=True)  # Индекс на date_joined
 
     objects = UserManager()
 
@@ -44,15 +46,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            # Формируем base_slug из first_name и last_name, если они есть, иначе из email
             base_slug = (
                 f"{self.first_name}-{self.last_name}"
                 if self.first_name and self.last_name
                 else self.email.split('@')[0]
             )
-            # Используем pytils для транслитерации кириллицы
             self.slug = pytils_slugify(base_slug)
-            if not self.slug:  # Если pytils не справился (например, base_slug содержит только спецсимволы)
+            if not self.slug:
                 self.slug = f"user-{self.id or 'new'}"
             original_slug = self.slug
             counter = 1
@@ -80,17 +80,23 @@ class GourmandProfile(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
     def update_rating(self):
-        reviews = self.user.reviews.all()
-        if reviews.exists():
-            total_positive = sum(review.positive_rating for review in reviews)
-            total_negative = sum(review.negative_rating for review in reviews)
-            total_reactions = total_positive + total_negative
-            self.rating = (total_positive / total_reactions) * 5 if total_reactions > 0 else 0.0
+        # Используем агрегацию для подсчёта суммы positive_rating и negative_rating
+        reviews_stats = self.user.reviews.aggregate(
+            total_positive=Sum('positive_rating'),
+            total_negative=Sum('negative_rating')
+        )
+        total_positive = reviews_stats['total_positive'] or 0
+        total_negative = reviews_stats['total_negative'] or 0
+        total_reactions = total_positive + total_negative
+
+        # Вычисляем рейтинг
+        if total_reactions > 0:
+            self.rating = (total_positive / total_reactions) * 5
         else:
             self.rating = 0.0
-        self.save()
 
-
+        # Сохраняем без вызова save(), чтобы избежать рекурсии
+        GourmandProfile.objects.filter(id=self.id).update(rating=self.rating)
 
 class Place(models.Model):
     name = models.CharField(max_length=100)

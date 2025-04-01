@@ -563,7 +563,8 @@ def contacts(request):
 
 
 def gourmands(request):
-    gourmands_list = GourmandProfile.objects.all()
+    # Фильтруем только гурманов
+    gourmands_list = GourmandProfile.objects.select_related('user').filter(user__role='gourmand')
 
     # Сортировка
     sort_by = request.GET.get('sort', 'id')
@@ -573,6 +574,8 @@ def gourmands(request):
         gourmands_list = gourmands_list.order_by('user__date_joined')
     elif sort_by == 'reviews':
         gourmands_list = gourmands_list.annotate(review_count=Count('user__reviews')).order_by('-review_count')
+    else:
+        gourmands_list = gourmands_list.order_by('id')
 
     paginator = Paginator(gourmands_list, 12)
     page_number = request.GET.get('page')

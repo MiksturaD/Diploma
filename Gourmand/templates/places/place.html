@@ -35,29 +35,6 @@
             <p><strong>Телефон:</strong> {{ place.phone }}</p>
         </div>
     </div>
-
-    {% if reviews %}
-        <h3 class="mt-4 custom-text-color">Отзывы</h3>
-        {% for review in reviews %}
-            <div class="card bg-dark text-white shadow mt-3">
-                <div class="card-body">
-                    <h5 class="custom-text-color">Отзыв от - {{ review.gourmand.first_name }} {{ review.gourmand.last_name }} Оценка от гурмана {{ review.gourmand_rating }} <span class="text-warning">★</span></h5>
-                    <p>{{ review.description|truncatewords:20 }}</p>
-                    <p><strong>Дата отзыва:</strong> {{ review.review_date|date:"d.m.Y" }}</p>
-                    <p>
-                        <strong>Положительная оценка от гурманов:</strong>
-                        <span class="text-success">{{ review.positive_rating }} ★</span><br>
-                        <strong>Отрицательная оценка от гурманов:</strong>
-                        <span class="text-danger">{{ review.negative_rating }} ★</span>
-                    </p>
-                    <div class="button_user">
-                        <a href="{% url 'review' review.id %}" class="custom-button custom-text-color">Подробнее</a>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-
     <!-- NPS-статистика только для владельца -->
     {% if user.is_authenticated and place.owner == user %}
         <div class="mt-4">
@@ -103,6 +80,30 @@
             </div>
         </div>
     {% endif %}
+
+    {% if reviews %}
+        <h3 class="mt-4 custom-text-color">Отзывы</h3>
+        {% for review in reviews %}
+            <div class="card bg-dark text-white shadow mt-3">
+                <div class="card-body">
+                    <h5 class="custom-text-color">Отзыв от - {{ review.gourmand.first_name }} {{ review.gourmand.last_name }} Оценка от гурмана {{ review.gourmand_rating }} <span class="text-warning">★</span></h5>
+                    <p>{{ review.description|truncatewords:20 }}</p>
+                    <p><strong>Дата отзыва:</strong> {{ review.review_date|date:"d.m.Y" }}</p>
+                    <p>
+                        <strong>Положительная оценка от гурманов:</strong>
+                        <span class="text-success">{{ review.positive_rating }} ★</span><br>
+                        <strong>Отрицательная оценка от гурманов:</strong>
+                        <span class="text-danger">{{ review.negative_rating }} ★</span>
+                    </p>
+                    <div class="button_user">
+                        <a href="{% url 'review' review.id %}" class="custom-button custom-text-color">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    
 
     <div class="mt-4 button_user">
         <a href="{% url 'places' %}" class="custom-button">Назад к заведениям</a>

@@ -42,8 +42,8 @@
                          alt="{{ review.name }}"
                          style="height: 150px; object-fit: cover;">
                     <div class="card-body bg-dark custom-text-color p-2 p-md-3">
-                        <h2 class="custom-text-color mb-1">
-                            Заведение: 
+                        <h2 class="custom-text-color">
+                            <span>Заведение:</span>
                             <a href="{% url 'place' review.place.slug %}" class="text-decoration-none custom-text-color">
                                 {{ review.place.name }}
                             </a>
@@ -58,7 +58,7 @@
                         <p class="small mb-0">{{ review.description|truncatewords:8 }}</p>
                         <h5 class="custom-text-color mb-1">Оценка гурмана: {{ review.gourmand_rating }}<span class="text-warning">★</span></h5>
                     </div>
-                    <div class="card-footer bg-dark p-2 text-center button_user">
+                    <div class="card-footer bg-dark p-2 text-center  button_user">
                         <a href="{% url 'review' review.slug %}" class="btn custom-button btn-sm custom-text-color">Подробнее</a>
                     </div>
                 </div>
@@ -78,33 +78,32 @@
             </div>
         {% endif %}
     {% endif %}
-
-    <nav aria-label="Page navigation" class="mt-4">
+</div>
+        <nav aria-label="Page navigation" class="">
         <ul class="pagination justify-content-center flex-wrap">
             {% if reviews.has_previous %}
                 <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page=1{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Первая</a>
+                    <a class="page-link bg_dark" href="?page=1{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}"><<</a>
                 </li>
                 <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page={{ reviews.previous_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Назад</a>
+                    <a class="page-link bg_dark" href="?page={{ reviews.previous_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}"><</a>
                 </li>
             {% endif %}
 
             <li class="page-item">
-                <span class="bg_dark pag_size">Страница {{ reviews.number }} из {{ reviews.paginator.num_pages }}</span>
+                <span class="bg_dark pag_size">{{ reviews.number }} из {{ reviews.paginator.num_pages }}</span>
             </li>
 
             {% if reviews.has_next %}
                 <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page={{ reviews.next_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Вперёд</a>
+                    <a class="page-link bg_dark" href="?page={{ reviews.next_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">></a>
                 </li>
                 <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page={{ reviews.paginator.num_pages }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Последняя</a>
+                    <a class="page-link bg_dark" href="?page={{ reviews.paginator.num_pages }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">>></a>
                 </li>
             {% endif %}
         </ul>
     </nav>
-</div>    
     {% include 'includes/footer.html' %}
 {% endblock %}
 

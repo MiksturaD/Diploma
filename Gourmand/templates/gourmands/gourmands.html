@@ -43,31 +43,47 @@
         <div class="alert alert-info text-center">На данный момент гурманов нет.</div>
     {% endif %}
 
-    <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center flex-wrap">
-            {% if gourmands.has_previous %}
-                <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page=1{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Первая</a>
-                </li>
-                <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page={{ gourmands.previous_page_number }}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Назад</a>
-                </li>
-            {% endif %}
-
+    <nav aria-label="Page navigation" class="">
+    <ul class="pagination justify-content-center flex-wrap">
+        {% if gourmands.has_previous %}
             <li class="page-item">
-                <span class="bg_dark pag_size">Страница {{ gourmands.number }} из {{ gourmands.paginator.num_pages }}</span>
+                <a class="page-link bg_dark button_user" href="?page=1{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" id="Bold" viewBox="0 0 24 24">
+                        <path d="M12,24a1.493,1.493,0,0,1-1.06-.439L3.264,15.889a5.5,5.5,0,0,1,0-7.778L10.936.439a1.5,1.5,0,1,1,2.121,2.122L5.385,10.232a2.5,2.5,0,0,0,0,3.536l7.672,7.671A1.5,1.5,0,0,1,12,24Z"/><path d="M21.542,24a1.5,1.5,0,0,1-1.061-.439L11.4,14.475a3.505,3.505,0,0,1,0-4.95L20.481.439A1.5,1.5,0,0,1,22.6,2.561l-9.086,9.085a.5.5,0,0,0,0,.708L22.6,21.439A1.5,1.5,0,0,1,21.542,24Z"/>
+                    </svg>
+                </a>
             </li>
+            <li class="page-item">
+                <a class="page-link bg_dark" href="?page={{ gourmands.previous_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" id="Bold" viewBox="0 0 24 24">
+                        <path d="M17.921,1.505a1.5,1.5,0,0,1-.44,1.06L9.809,10.237a2.5,2.5,0,0,0,0,3.536l7.662,7.662a1.5,1.5,0,0,1-2.121,2.121L7.688,15.9a5.506,5.506,0,0,1,0-7.779L15.36.444a1.5,1.5,0,0,1,2.561,1.061Z"/>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
 
-            {% if gourmands.has_next %}
-                <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page={{ gourmands.next_page_number }}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Вперёд</a>
-                </li>
-                <li class="page-item button_user">
-                    <a class="page-link bg_dark" href="?page={{ gourmands.paginator.num_pages }}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">Последняя</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+        <li class="page-item">
+            <span class="bg_dark pag_size">{{ gourmands.number }} из {{ gourmands.paginator.num_pages }}</span>
+        </li>
+
+        {% if gourmands.has_next %}
+            <li class="page-item">
+                <a class="page-link bg_dark" href="?page={{ gourmands.next_page_number }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" id="Bold" viewBox="0 0 24 24">
+                        <path d="M6.079,22.5a1.5,1.5,0,0,1,.44-1.06l7.672-7.672a2.5,2.5,0,0,0,0-3.536L6.529,2.565A1.5,1.5,0,0,1,8.65.444l7.662,7.661a5.506,5.506,0,0,1,0,7.779L8.64,23.556A1.5,1.5,0,0,1,6.079,22.5Z"/>
+                    </svg>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link bg_dark" href="?page={{ gourmands.paginator.num_pages }}{% if current_place %}&place={{ current_place }}{% endif %}{% if current_sort != 'id' %}&sort={{ current_sort }}{% endif %}">
+                    <svg class="pagination-icon" xmlns="http://www.w3.org/2000/svg" id="Bold" viewBox="0 0 24 24">
+                        <path d="M11.832,24a1.5,1.5,0,0,1-1.061-2.561l7.672-7.671a2.5,2.5,0,0,0,0-3.536L10.771,2.561A1.5,1.5,0,0,1,12.893.439l7.671,7.672a5.5,5.5,0,0,1,0,7.778l-7.671,7.672A1.5,1.5,0,0,1,11.832,24Z"/><path d="M2.287,24a1.5,1.5,0,0,1-1.06-2.561l9.085-9.085a.5.5,0,0,0,0-.708L1.227,2.561A1.5,1.5,0,0,1,3.348.439l9.086,9.086a3.507,3.507,0,0,1,0,4.949L3.348,23.561A1.5,1.5,0,0,1,2.287,24Z"/>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 </div>
     {% include 'includes/footer.html' %}
 {% endblock %}

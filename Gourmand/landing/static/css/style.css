@@ -473,16 +473,17 @@ header .container-fluid {
 .pag_size {
     display: flex;
     min-width: 10px;
-    height: 35px;
+    height: 36px;
     text-align: center;
-    line-height: 35px;
-    padding: 0 5px!important;
+    line-height: 36px;
+    padding: 0 10px!important;
     border: thin;
 
 }
 .page-link{
-    padding: 0!important;
     min-width: 40px!important;
+    fill: #fcfcfc;
+    border: none;
 }
 
 .zero-mp {
@@ -513,7 +514,10 @@ header .container-fluid {
 .navbar-toggler {
     padding: 0.75rem;
 }
-
+.navbar-nav{
+    display: flex;
+    justify-content: start;
+}
 /* Базовые стили для всех form-select */
 .form-select {
     background-color: #2a2a2a; /* Тёмный фон в твоём стиле */
@@ -549,7 +553,25 @@ header .container-fluid {
     border-color: #e3d105; /* Светлая рамка при фокусе */
     box-shadow: none !important; /* Тень Bootstrap */
 }
+/* Стили для placeholder в форме */
+.form-control::placeholder {
+    color: #ffffff; /* Белый цвет для placeholder */
+    opacity: 0.7; /* Лёгкая прозрачность, чтобы placeholder не сливался с введённым текстом */
+}
 
+/* Для поддержки старых браузеров (например, Edge) */
+.form-control::-webkit-input-placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+.form-control::-moz-placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+.form-control:-ms-input-placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
 /* Кастомный чекбокс: жёлтый фон и чёрная галочка */
 .form-check-input {
     position: absolute;
@@ -764,6 +786,35 @@ header .container-fluid {
 }
 
 /* Стили для пагинации */
+.pagination {
+    margin-top: 2rem;
+}
+
+.page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.page-item .page-link:hover  {
+    background: #e3d105; /* Жёлтый фон при наведении */
+    fill: #111111;
+}
+
+/* Стили для SVG-иконок */
+.pagination-icon:hover{
+    fill: #111111;
+}
+.pagination-icon {
+    width: 20px;
+    height: 20px;
+    transition: fill 0.3s ease;
+}
+
+
 .swiper-pagination-bullet {
     background: #ccc;
 }

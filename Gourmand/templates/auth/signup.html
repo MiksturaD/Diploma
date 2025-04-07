@@ -49,6 +49,13 @@
                         </select>
                         {{ form.role.errors }}
                     </div>
+                    <div class="mb-3">
+                    <!-- Поле для капчи -->
+                        <label class="form-label">Проверка</label>
+                        <div id="captcha-container" class="smart-captcha" data-sitekey="{{ form.captcha.widget.attrs.data_sitekey }}"></div>
+                        <input type="hidden" name="captcha" id="captcha-token">
+                        {{ form.captcha.errors }}
+                    </div>
                     <div class="button_user pt-4 d-flex justify-content-center">
                         <button type="submit" class="custom-button custom-text-color bg_dark">Зарегистрироваться</button>
                     </div>
@@ -61,4 +68,13 @@
         </div>
     </div>
 </div>
+    <!-- Подключаем скрипт Яндекс SmartCaptcha -->
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.smartCaptchaCallback = function(token) {
+            document.getElementById('captcha-token').value = token;
+        };
+    });
+</script>
 {% endblock %}

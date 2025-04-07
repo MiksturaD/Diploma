@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -159,16 +160,19 @@ LOGGING = {
 }
 
 # Настройки для отправки email (тестовый режим через консоль)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # Яндекс использует SSL на порту 465
+EMAIL_USE_TLS = False  # TLS не нужен, так как мы используем SSL
+EMAIL_HOST_USER = 'aagubanoff@yandex.ru'  # Твой email на Яндексе
+EMAIL_HOST_PASSWORD = 'mqtksdpfvmddzutb'  # Пароль приложения (не обычный пароль)
+DEFAULT_FROM_EMAIL = 'aagubanoff@yandex.ru'  # Отправитель по умолчанию
 
-# Для продакшена (например, Gmail):
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'your-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'your-app-password'  # Используй пароль приложения, а не обычный пароль
-# DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
-
-# Укажем имя сайта и домен для писем
+# Имя сайта и домен для писем
 SITE_NAME = 'Gourmand'
+DOMAIN = 'gourmand-project.com'
+
+# Яндекс SmartCaptcha ключи
+YANDEX_CAPTCHA_CLIENT_KEY = 'ysc1_pbO7E6hkijLzojtcxfkeNw6iAn4NlWuXtojC3sIE75e23a80'
+YANDEX_CAPTCHA_SERVER_KEY = 'ysc2_pbO7E6hkijLzojtcxfke1V2CgANhcSaQ2inCvYuN81cc485d'

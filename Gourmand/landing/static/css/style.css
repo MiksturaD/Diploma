@@ -504,7 +504,10 @@ header .container-fluid {
         font-size: 0.95rem;
     }
 }
-
+.navbar{
+    display: flex;
+    justify-content: start;
+}
 .navbar-toggler:focus {
     text-decoration: none;
     outline: 0;

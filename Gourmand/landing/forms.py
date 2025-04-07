@@ -2,9 +2,31 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.password_validation import MinimumLengthValidator
+from django.contrib.sites import requests
 from django.core.exceptions import ValidationError
 
+from Gourmand import settings
 from landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile, NPSTag, NPSResponse
+
+
+class YandexCaptchaField(forms.Field):
+    def validate(self, value):
+        super().validate(value)
+        if not value:
+            raise forms.ValidationError("Пожалуйста, пройдите проверку капчи.")
+
+        # Отправляем запрос к API Яндекса для проверки капчи
+        response = requests.post(
+            'https://smartcaptcha.yandexcloud.net/validate',  # Исправленный URL
+            data={
+                'secret': settings.YANDEX_CAPTCHA_SERVER_KEY,
+                'token': value,
+            }
+        )
+        result = response.json()
+        print(f"Ответ от Яндекса: {result}")
+        if not result.get('status') == 'ok':
+            raise forms.ValidationError("Ошибка проверки капчи. Попробуйте снова.")
 
 
 class SignupForm(UserCreationForm):
@@ -13,10 +35,11 @@ class SignupForm(UserCreationForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Выберите роль"
     )
+    captcha = YandexCaptchaField()  # Добавляем поле капчи
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role']
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'captcha']
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -52,6 +75,12 @@ class SignupForm(UserCreationForm):
                 'required': True
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Добавляем атрибуты для поля капчи
+        self.fields['captcha'].widget.attrs['class'] = 'yandex-captcha'
+        self.fields['captcha'].widget.attrs['data-sitekey'] = settings.YANDEX_CAPTCHA_CLIENT_KEY
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

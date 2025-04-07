@@ -15,7 +15,8 @@ from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, Owne
     EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage, PlaceImage, \
     ReviewVote, EventImage, NPSResponse
-
+from django.core.mail import send_mail
+from django.http import HttpResponse
 
 def index(request):
   return render(request, 'landing/index.html')
@@ -629,3 +630,14 @@ def vote_review(request, slug, vote_type):
     return redirect('review', slug=review.slug)  # Обновляем
 
 
+def test_email(request):
+    try:
+        send_mail(
+            subject='Тестовое письмо от Проекта Гурман',
+            message='Это тестовое письмо. Если ты его получил, значит всё работает!',
+            from_email=None,  # Используется DEFAULT_FROM_EMAIL из settings.py
+            recipient_list=['thereal@mail.ru'],  # Укажи свой тестовый email
+        )
+        return HttpResponse("Письмо успешно отправлено!")
+    except Exception as e:
+        return HttpResponse(f"Ошибка при отправке письма: {str(e)}")

@@ -26,4 +26,5 @@ urlpatterns = [
     path('gourmands/', views.gourmands, name='gourmands'),
     path('gourmands/<slug:slug>/', views.gourmand, name='gourmand'),
     path('gourmands/<slug:slug>/reviews/', views.gourmand_reviews, name='gourmand_reviews'),
+    path('test-email/', views.test_email, name='test_email'),
 ]

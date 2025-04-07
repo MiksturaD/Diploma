@@ -21,6 +21,7 @@
     {% include 'includes/header.html' %}
 <main class="pt-header foot-card">
     {% block content %}
+        <div style="height: 100px" id="captcha-container" class="smart-captcha" data-sitekey="ysc1_pbO7E6hkijLzojtcxfkeNw6iAn4NlWuXtojC3sIE75e23a80"></div>
     {% endblock %}
 </main >
     
@@ -32,8 +33,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
     <script src="{% static 'js/owl.carousel.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 
     {% block extra_js %}
+        
     {% endblock %}
     
 </body>

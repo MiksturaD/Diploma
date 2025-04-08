@@ -23,36 +23,178 @@
                     </div>
                 </div>
 
-                <!-- Список заведений с динамикой NPS -->
+                <!-- Фильтр по периоду -->
+                <div class="mb-4 text-center">
+                    <form method="GET">
+                        <label for="period" class="me-2 custom-text-color">Период анализа отзывов:</label>
+                        <select name="period" id="period" onchange="this.form.submit()" class="form-select d-inline-block w-auto">
+                            <option value="1m" {% if period == '1m' %}selected{% endif %}>1 месяц</option>
+                            <option value="3m" {% if period == '3m' %}selected{% endif %}>3 месяца</option>
+                            <option value="6m" {% if period == '6m' %}selected{% endif %}>6 месяцев</option>
+                        </select>
+                        <!-- Сохраняем сортировку -->
+                        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                    </form>
+                </div>
+
+                <!-- Сортировка -->
+                <div class="mb-4 text-center">
+                    <form method="GET">
+                        <label for="sort_by" class="me-2 custom-text-color">Сортировать по:</label>
+                        <select name="sort_by" id="sort_by" onchange="this.form.submit()" class="form-select d-inline-block w-auto">
+                            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Названию</option>
+                            <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Рейтингу</option>
+                            <option value="reviews" {% if sort_by == 'reviews' %}selected{% endif %}>Количеству отзывов</option>
+                        </select>
+                        <!-- Сохраняем период -->
+                        <input type="hidden" name="period" value="{{ period }}">
+                    </form>
+                </div>
+
+                <!-- Список заведений с динамикой NPS и анализом -->
                 <div class="mb-4">
                     <h3 class="custom-text-color">Ваши заведения</h3>
                     {% if place_stats %}
                         <ul class="list-group">
                             {% for place_id, stats in place_stats.items %}
-                                <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
-                                    {% if stats.place.slug %}
-                                        <a href="{% url 'place' stats.place.slug %}" class="text-white">{{ stats.place.name }}</a>
-                                    {% else %}
-                                        <span class="text-muted">{{ stats.place.name }} (нет slug)</span>
-                                    {% endif %}
-                                    <span>
-                                        {% if stats.total_responses %}
-                                            {% if stats.last_nps is not None and stats.current_nps is not None %}
-                                                NPS: {{ stats.last_nps|floatformat:1 }}% → {{ stats.current_nps|floatformat:1 }}%
-                                                {% if stats.current_nps > stats.last_nps %}
-                                                    <span class="text-success">(+{{ stats.current_nps|subtract:stats.last_nps|floatformat:1 }}%)</span>
-                                                {% elif stats.current_nps < stats.last_nps %}
-                                                    <span class="text-danger">(-{{ stats.last_nps|subtract:stats.current_nps|floatformat:1 }}%)</span>
+                                <li class="list-group-item bg-dark text-white mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        {% if stats.place.slug %}
+                                            <a href="{% url 'place' stats.place.slug %}" class="text-white">{{ stats.place.name }}</a>
+                                        {% else %}
+                                            <span class="text-muted">{{ stats.place.name }} (нет slug)</span>
+                                        {% endif %}
+                                        <span>
+                                            {% if stats.total_responses %}
+                                                {% if stats.last_nps is not None and stats.current_nps is not None %}
+                                                    NPS: {{ stats.last_nps|floatformat:1 }}% → {{ stats.current_nps|floatformat:1 }}%
+                                                    {% if stats.current_nps > stats.last_nps %}
+                                                        <span class="text-success">(+{{ stats.current_nps|subtract:stats.last_nps|floatformat:1 }}%)</span>
+                                                    {% elif stats.current_nps < stats.last_nps %}
+                                                        <span class="text-danger">(-{{ stats.last_nps|subtract:stats.current_nps|floatformat:1 }}%)</span>
+                                                    {% else %}
+                                                        <span class="text-muted">(0%)</span>
+                                                    {% endif %}
                                                 {% else %}
-                                                    <span class="text-muted">(0%)</span>
+                                                    NPS: {{ stats.nps|floatformat:1 }}% (нет данных по месяцам)
                                                 {% endif %}
                                             {% else %}
-                                                NPS: {{ stats.nps|floatformat:1 }}% (нет данных по месяцам)
+                                                NPS: Нет данных
                                             {% endif %}
+                                        </span>
+                                    </div>
+
+                                    <!-- Дополнительная информация о заведении -->
+                                    <div class="mb-2">
+                                        <p><strong>Адрес:</strong> {{ stats.place.address }}</p>
+                                        <p><strong>Рейтинг:</strong> {{ stats.place.rating }}</p>
+                                    </div>
+
+                                    <!-- Карусель для изображений -->
+                                    <div class="mb-3">
+                                        {% if stats.place.images.all %}
+                                            <div id="carousel-{{ place_id }}" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-inner">
+                                                    {% for image in stats.place.images.all %}
+                                                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                            <img src="{{ image.image.url }}" alt="{{ stats.place.name }}" class="d-block w-100" style="max-height: 200px; object-fit: cover;">
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ place_id }}" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ place_id }}" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
+                                            </div>
                                         {% else %}
-                                            NPS: Нет данных
+                                            <p>Нет изображений для этого заведения.</p>
                                         {% endif %}
-                                    </span>
+                                    </div>
+
+                                    <!-- NPS статистика -->
+                                    <h5 class="custom-text-color">NPS статистика</h5>
+                                    <p><strong>Общий NPS:</strong> {{ stats.nps|floatformat:1 }}% (на основе {{ stats.total_responses }} отзывов)</p>
+                                    <p><strong>NPS за текущий месяц ({{ current_month }}):</strong> 
+                                        {% if stats.current_nps is not None %}
+                                            {{ stats.current_nps|floatformat:1 }}%
+                                        {% else %}
+                                            Нет данных
+                                        {% endif %}
+                                    </p>
+                                    <p><strong>NPS за прошлый месяц ({{ last_month }}):</strong> 
+                                        {% if stats.last_nps is not None %}
+                                            {{ stats.last_nps|floatformat:1 }}%
+                                        {% else %}
+                                            Нет данных
+                                        {% endif %}
+                                    </p>
+
+                                    <!-- Топ-теги за всё время -->
+                                    <h5 class="custom-text-color">Топ-теги за всё время:</h5>
+                                    <ul>
+                                        {% for tag in stats.tag_stats %}
+                                            <li>{{ tag.tags__label }}: {{ tag.tag_count }} упоминаний</li>
+                                        {% empty %}
+                                            <li>Нет тегов</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <!-- Динамика тегов -->
+                                    <h5 class="custom-text-color">Динамика тегов (текущий vs прошлый месяц):</h5>
+                                    <ul>
+                                        {% for tag, dynamics in stats.tag_dynamics.items %}
+                                            <li>{{ tag }}: Текущий: {{ dynamics.current }}, Прошлый: {{ dynamics.last }}, Изменение: 
+                                                {% if dynamics.change > 0 %}+{{ dynamics.change }}{% else %}{{ dynamics.change }}{% endif %}
+                                            </li>
+                                        {% empty %}
+                                            <li>Нет данных</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <!-- Сводка от ChatGPT -->
+                                    <h5 class="custom-text-color">Анализ отзывов за выбранный период:</h5>
+                                    <p>{{ stats.summary }}</p>
+
+                                    <!-- Статистика по тегам за выбранный период -->
+                                    <h5 class="custom-text-color">Статистика по тегам за выбранный период:</h5>
+                                    <ul>
+                                        {% for tag, count in stats.period_tag_stats.items %}
+                                            <li>{{ tag }}: {{ count }} упоминаний</li>
+                                        {% empty %}
+                                            <li>Нет тегов за выбранный период</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <!-- График упоминаний тегов -->
+                                    <h5 class="custom-text-color">График упоминаний тегов за выбранный период:</h5>
+                                    <canvas id="tagChart-{{ place_id }}" height="100"></canvas>
+                                    <script>
+                                        const ctx{{ place_id }} = document.getElementById('tagChart-{{ place_id }}').getContext('2d');
+                                        new Chart(ctx{{ place_id }}, {
+                                            type: 'bar',
+                                            data: {
+                                                labels: [{% for tag, count in stats.period_tag_stats.items %}'{{ tag }}',{% endfor %}],
+                                                datasets: [{
+                                                    label: 'Упоминания',
+                                                    data: [{% for tag, count in stats.period_tag_stats.items %}{{ count }},{% endfor %}],
+                                                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                                    borderColor: 'rgba(255, 159, 64, 1)',
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                scales: {
+                                                    y: {
+                                                        beginAtZero: true
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    </script>
                                 </li>
                             {% endfor %}
                         </ul>

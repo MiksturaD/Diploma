@@ -52,12 +52,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Проверка</label>
-                        <div id="captcha-container" class="smart-captcha" data-sitekey="{{ form.captcha.widget.attrs.data_sitekey }}"></div>
-                        <!-- Прямая проверка -->
-                        <p>Direct settings key: {{ settings.YANDEX_CAPTCHA_CLIENT_KEY }}</p>
-                        <p>Debug form.captcha: {{ form.captcha }}</p>
-                        <p>Debug attrs: {{ form.captcha.widget.attrs }}</p>
-                        <p>Debug sitekey: {{ form.captcha.widget.attrs.data_sitekey }}</p>
+                        <div id="captcha-container" class="smart-captcha" data-sitekey="{{ settings.YANDEX_CAPTCHA_CLIENT_KEY }}"></div>
                         <input type="hidden" name="captcha" id="captcha-token">
                         {{ form.captcha.errors }}
                     </div>
@@ -75,17 +70,12 @@
     </div>
 </div>
 
-<!-- Подключаем скрипт Яндекс SmartCaptcha -->
 <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         window.smartCaptchaCallback = function(token) {
-            console.log("Токен капчи:", token);  // Для отладки
             document.getElementById('captcha-token').value = token;
         };
-        // Для отладки
-        const captchaDiv = document.querySelector('.smart-captcha');
-        console.log("Sitekey:", captchaDiv.getAttribute('data-sitekey'));
     });
 </script>
 {% endblock %}

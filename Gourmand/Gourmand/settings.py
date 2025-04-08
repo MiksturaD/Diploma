@@ -176,3 +176,12 @@ DOMAIN = 'gourmand-project.com'
 # Яндекс SmartCaptcha ключи
 YANDEX_CAPTCHA_CLIENT_KEY = 'ysc1_pbO7E6hkijLzojtcxfkeNw6iAn4NlWuXtojC3sIE75e23a80'
 YANDEX_CAPTCHA_SERVER_KEY = 'ysc2_pbO7E6hkijLzojtcxfke1V2CgANhcSaQ2inCvYuN81cc485d'
+
+OPENAI_API_KEY = 'your-openai-api-key'  # Замени на свой ключ
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}

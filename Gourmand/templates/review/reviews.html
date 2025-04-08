@@ -7,7 +7,7 @@
         <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">Отзывы о ресторанах</h1>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-4 mt-4">
         <div class="col-md-6 col-lg-4 mb-2">
             <form method="GET" class="d-flex gap-2">
                 <select name="place" class="form-select" onchange="this.form.submit()">
@@ -55,7 +55,7 @@
                             </a>
                         </h5>
                         <h5 class="custom-text-color mb-0">Название отзыва: {{ review.name }}</h5>
-                        <p class="small mb-0">{{ review.description|truncatewords:8 }}</p>
+                        <p class="custom-text-color mb-0">{{ review.description|truncatewords:8 }}</p>
                         <h5 class="custom-text-color mb-1">Оценка гурмана: {{ review.gourmand_rating }}<span class="text-warning">★</span></h5>
                     </div>
                     <div class="card-footer bg-dark p-2 text-center  button_user">

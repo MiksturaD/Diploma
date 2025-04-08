@@ -1,11 +1,44 @@
-<footer class="bg-dark text-white p-2">
+{% load static %}
+
+<footer class="footer bg_dark">
     <div class="container">
-        <div class="row">
-            <div class="justify-content-between">
-                <p class="fs-6 mb-0">Телефон: <a href="tel:+79991234567" class="text-white text-decoration-none">+7 (999) 123-45-67</a></p>
-                <p class="fs-6 mb-0">Автор Губанов Алексей. 2025 год. Красноярск</p>
-                <p class="fs-6 mb-0">Email: <a href="mailto:info@gourmand.ru" class="text-white text-decoration-none">info@gourmand.ru</a></p>
+        <div class="row justify-content-between">
+            <div class="col mt-4 text-center text-sm-start">
+                <div class="information">
+                    <h6 class="footer-heading text-uppercase text-white fw-bold">
+                        <a class="text-white text-decoration-none fw-semibold" href="{% url 'index' %}">Проект Гурман</a>
+                    </h6>
+                    <ul class="list-unstyled footer-link mt-4">
+                        <li class="mb-1"><a href="{% url 'events' %}" class="text-white text-decoration-none fw-semibold">Афиша</a></li>
+                        <li class="mb-1"><a href="{% url 'places' %}" class="text-white text-decoration-none fw-semibold">Заведения</a></li>
+                        <li class="mb-1"><a href="{% url 'gourmands' %}" class="text-white text-decoration-none fw-semibold">Гурманы</a></li>
+                        <li class="mb-1"><a href="{% url 'reviews' %}" class="text-white text-decoration-none fw-semibold">Отзывы</a></li>
+                        <li class="mb-1"><a href="{% url 'contacts' %}" class="text-white text-decoration-none fw-semibold">Контакты</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col mt-4 text-center text-sm-start">
+                <div class="social">
+                    <h6 class="footer-heading text-uppercase text-white fw-bold">Social</h6>
+                    <ul class="list-inline my-4">
+                        <li class="list-inline-item"><a href="https://t.me/Mascap88" class="bg_dark btn-sm btn btn-primary mb-2 border-white"><i class="bi bi-telegram"></i></a></li>
+                        <li class="list-inline-item"><a href="https://api.whatsapp.com/send?phone=+79233281188" class="bg_dark btn-sm btn btn-primary mb-2 border-white"><i class="bi bi-whatsapp"></i></a></li>
+                        <li class="list-inline-item"><a href="https://codepen.io/Gaurav-Rana-the-reactor" class="bg_dark btn-sm btn btn-primary mb-2 border-white"><i class="bi bi-mailbox"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col mt-4 text-center text-sm-start">
+                <div class="contact">
+                    <h6 class="footer-heading text-uppercase text-white fw-bold">Свяжитесь с нами</h6>
+                    <address class="mt-4 m-0 text-white mb-1"><i class="bi bi-pin-map fw-semibold"></i> г. Красноярск</address>
+                    <a href="tel:+79233281188" class="text-white mb-1 text-decoration-none d-block fw-semibold"><i class="bi bi-telephone"></i> +7 923 328 11 88</a>
+                    <a href="mailto:aagubanoff@yandex.ru" class="text-white mb-1 text-decoration-none d-block fw-semibold"><i class="bi bi-envelope"></i> aagubanoff@yandex.ru</a>
+                </div>
             </div>
         </div>
     </div>
+    <div class="text-center bg-dark text-white mt-4 p-1">
+        <p class="mb-0 fw-bold">2025 © Губанов Алексей, Все права защищены</p>
+    </div>
 </footer>
+

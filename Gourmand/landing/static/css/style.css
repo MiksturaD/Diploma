@@ -575,6 +575,31 @@ header .container-fluid {
     color: #ffffff;
     opacity: 0.7;
 }
+
+.footer .row {
+        display: flex;
+        justify-content: space-between;
+    }
+.footer .col {
+    flex: 1; /* Колонки растягиваются поровну */
+    min-width: 200px; /* Минимальная ширина для читаемости */
+}
+
+.btn-primary:hover{
+    color: #111111;
+    background: #e3d105;
+}
+.footer-link a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+.footer-link a:hover {
+    color: yellow;
+    text-decoration: none;
+}
+
 /* Кастомный чекбокс: жёлтый фон и чёрная галочка */
 .form-check-input {
     position: absolute;

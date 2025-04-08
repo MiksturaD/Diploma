@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from django.core.cache import cache
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
@@ -18,6 +18,9 @@ from landing.models import Review, Event, Place, User, GourmandProfile, OwnerPro
     ReviewVote, EventImage, NPSResponse
 from django.core.mail import send_mail
 from django.http import HttpResponse
+
+from landing.utils import get_reviews_for_last_month, analyze_reviews_with_chatgpt, prepare_reviews_data, get_tag_stats
+
 
 def index(request):
   return render(request, 'landing/index.html')
@@ -80,6 +83,15 @@ def profile(request):
     elif user.is_owner():
         profile, _ = OwnerProfile.objects.get_or_create(user=user)
 
+        # Получаем период из GET-параметра (по умолчанию 1 месяц)
+        period = request.GET.get('period', '1m')
+        if period == '3m':
+            days = 90
+        elif period == '6m':
+            days = 180
+        else:
+            days = 30
+
         today = datetime.today()
         current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         last_month_start = current_month_start - relativedelta(months=1)
@@ -93,11 +105,8 @@ def profile(request):
             for place in places:
                 # Общее количество ответов
                 total_responses = NPSResponse.objects.filter(review__place=place).count()
-                # Промоутеры (9-10)
                 promoters = NPSResponse.objects.filter(review__place=place, score__gte=9).count()
-                # Критики (0-6)
                 detractors = NPSResponse.objects.filter(review__place=place, score__lte=6).count()
-                # NPS = % промоутеров - % критиков
                 nps = (
                     promoters / total_responses * 100 - detractors / total_responses * 100
                 ) if total_responses > 0 else 0
@@ -175,6 +184,22 @@ def profile(request):
                         'change': current_count - last_count
                     }
 
+                # Анализ отзывов через ChatGPT
+                cache_key = f"review_summary_{place.id}_{period}"
+                cached_summary = cache.get(cache_key)
+
+                if cached_summary:
+                    summary = cached_summary
+                else:
+                    reviews = get_reviews_for_last_month(place, days=days)
+                    reviews_data = prepare_reviews_data(reviews)
+                    summary = analyze_reviews_with_chatgpt(reviews_data, place.name)
+                    cache.set(cache_key, summary, timeout=60*60*24)
+
+                # Статистика по тегам за выбранный период
+                period_reviews = get_reviews_for_last_month(place, days=days)
+                period_tag_stats = get_tag_stats(period_reviews)
+
                 place_stats[place.id] = {
                     'place': place,
                     'nps': nps,
@@ -183,6 +208,8 @@ def profile(request):
                     'last_nps': last_nps,
                     'tag_stats': tag_stats,
                     'tag_dynamics': tag_dynamics,
+                    'summary': summary,  # Добавляем сводку от ChatGPT
+                    'period_tag_stats': period_tag_stats,  # Статистика тегов за выбранный период
                 }
 
         # Средний NPS по всем заведениям
@@ -200,6 +227,7 @@ def profile(request):
             'current_month': current_month_start.strftime('%Y-%m'),
             'last_month': last_month_start.strftime('%Y-%m'),
             'average_nps': average_nps,
+            'period': period,  # Передаём период для шаблона
         }
         return render(request, "places/owner_profile.html", context)
 

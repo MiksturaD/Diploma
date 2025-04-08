@@ -7,7 +7,7 @@ from landing.models import User, Review, Place, Event, OwnerProfile, GourmandPro
 
 
 class YandexCaptchaField(forms.Field):
-    widget = forms.TextInput  # Явно задаем виджет
+    widget = forms.HiddenInput
     def validate(self, value):
         super().validate(value)
         if not value:
@@ -22,7 +22,6 @@ class YandexCaptchaField(forms.Field):
             }
         )
         result = response.json()
-        print(f"Ответ от Яндекса: {result}")
         if not result.get('status') == 'ok':
             raise forms.ValidationError("Ошибка проверки капчи. Попробуйте снова.")
 
@@ -79,7 +78,6 @@ class SignupForm(UserCreationForm):
         # Добавляем атрибуты для поля капчи
         self.fields['captcha'].widget.attrs['class'] = 'yandex-captcha'
         self.fields['captcha'].widget.attrs['data-sitekey'] = settings.YANDEX_CAPTCHA_CLIENT_KEY
-        print("Client key in form:", settings.YANDEX_CAPTCHA_CLIENT_KEY)  # Для отладки
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

@@ -1,15 +1,13 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.password_validation import MinimumLengthValidator
-from django.contrib.sites import requests
+import requests
 from django.core.exceptions import ValidationError
-
-from Gourmand import settings
+from django.conf import settings
 from landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile, NPSTag, NPSResponse
 
 
 class YandexCaptchaField(forms.Field):
+    widget = forms.TextInput  # Явно задаем виджет
     def validate(self, value):
         super().validate(value)
         if not value:
@@ -81,6 +79,7 @@ class SignupForm(UserCreationForm):
         # Добавляем атрибуты для поля капчи
         self.fields['captcha'].widget.attrs['class'] = 'yandex-captcha'
         self.fields['captcha'].widget.attrs['data-sitekey'] = settings.YANDEX_CAPTCHA_CLIENT_KEY
+        print("Client key in form:", settings.YANDEX_CAPTCHA_CLIENT_KEY)  # Для отладки
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

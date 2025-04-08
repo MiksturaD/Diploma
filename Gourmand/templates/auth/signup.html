@@ -49,13 +49,19 @@
                         </select>
                         {{ form.role.errors }}
                     </div>
+
                     <div class="mb-3">
-                    <!-- Поле для капчи -->
                         <label class="form-label">Проверка</label>
                         <div id="captcha-container" class="smart-captcha" data-sitekey="{{ form.captcha.widget.attrs.data_sitekey }}"></div>
+                        <!-- Прямая проверка -->
+                        <p>Direct settings key: {{ settings.YANDEX_CAPTCHA_CLIENT_KEY }}</p>
+                        <p>Debug form.captcha: {{ form.captcha }}</p>
+                        <p>Debug attrs: {{ form.captcha.widget.attrs }}</p>
+                        <p>Debug sitekey: {{ form.captcha.widget.attrs.data_sitekey }}</p>
                         <input type="hidden" name="captcha" id="captcha-token">
                         {{ form.captcha.errors }}
                     </div>
+
                     <div class="button_user pt-4 d-flex justify-content-center">
                         <button type="submit" class="custom-button custom-text-color bg_dark">Зарегистрироваться</button>
                     </div>
@@ -68,13 +74,18 @@
         </div>
     </div>
 </div>
-    <!-- Подключаем скрипт Яндекс SmartCaptcha -->
-    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
-    <script>
+
+<!-- Подключаем скрипт Яндекс SmartCaptcha -->
+<script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         window.smartCaptchaCallback = function(token) {
+            console.log("Токен капчи:", token);  // Для отладки
             document.getElementById('captcha-token').value = token;
         };
+        // Для отладки
+        const captchaDiv = document.querySelector('.smart-captcha');
+        console.log("Sitekey:", captchaDiv.getAttribute('data-sitekey'));
     });
 </script>
 {% endblock %}

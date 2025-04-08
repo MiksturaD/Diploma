@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg
@@ -26,6 +27,7 @@ def main(request):
   return None
 
 logger = logging.getLogger(__name__)
+
 def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
@@ -42,10 +44,12 @@ def signup(request):
             login(request, user)
             return redirect("profile")
         else:
+            print("Form errors:", form.errors)
             return render(request, "auth/signup.html", {"form": form, "errors": form.errors})
     else:
         form = SignupForm()
-    return render(request, "auth/signup.html", {"form": form})
+        print("Form created:", form)
+    return render(request, "auth/signup.html", {"form": form, "settings": settings})
 
 
 def signin(request):

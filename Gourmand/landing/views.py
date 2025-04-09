@@ -317,6 +317,7 @@ def event(request, slug):
     return render(request, 'events/event.html', context={'event': event_obj})
 
 
+@login_required
 def create_event(request):
     if not request.user.is_owner():
         return redirect("index")
@@ -455,6 +456,7 @@ def place(request, slug):
         })
 
     return render(request, 'places/place.html', context)
+
 
 
 def place_reviews(request, slug):

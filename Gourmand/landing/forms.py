@@ -202,13 +202,34 @@ class PlaceCreateForm(forms.ModelForm):
 class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'description', 'event_date', 'place','is_weekly', 'day_of_week']
+        fields = ['name', 'description', 'event_date', 'place', 'is_weekly', 'day_of_week']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'event_date': forms.DateTimeInput(attrs={'class': 'form-control','type': 'datetime-local'}),
+            'event_date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'place': forms.Select(attrs={'class': 'form-control'}),
             'is_weekly': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'day_of_week': forms.Select(attrs={'class': 'form-control'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_weekly = cleaned_data.get('is_weekly')
+        day_of_week = cleaned_data.get('day_of_week')
+        event_date = cleaned_data.get('event_date')
+
+        # Проверка: если событие еженедельное, day_of_week обязателен
+        if is_weekly and day_of_week is None:
+            self.add_error('day_of_week', 'Укажите день недели для еженедельного события.')
+        # Если событие не еженедельное, day_of_week должен быть None
+        elif not is_weekly and day_of_week is not None:
+            self.add_error('day_of_week', 'День недели указывается только для еженедельных событий.')
+        # Если событие не еженедельное, event_date обязателен
+        if not is_weekly and not event_date:
+            self.add_error('event_date', 'Укажите дату события для не еженедельного события.')
+        # Если событие еженедельное, event_date не нужен
+        elif is_weekly and event_date:
+            self.add_error('event_date', 'Дата события не указывается для еженедельных событий.')
+
+        return cleaned_data
 

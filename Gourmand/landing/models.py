@@ -288,20 +288,23 @@ class Event(models.Model):
     slug = models.SlugField(max_length=100, blank=True, unique=True, verbose_name="Слаг")
 
     def save(self, *args, **kwargs):
+        # Сначала сохраняем объект, чтобы получить id
         if not self.slug:
-            # Используем pytils для транслитерации кириллицы
-            self.slug = pytils_slugify(self.name) if self.name else f"event-{self.id or 'new'}"
-            if not self.slug:  # Если pytils не справился (например, name содержит только спецсимволы)
-                self.slug = f"event-{self.id or 'new'}"
+            super().save(*args, **kwargs)  # Первое сохранение
+            self.slug = pytils_slugify(self.name) if self.name else f"event-{self.id}"
+            if not self.slug:
+                self.slug = f"event-{self.id}"
             original_slug = self.slug
             counter = 1
             while Event.objects.filter(slug=self.slug).exclude(id=self.id).exists():
                 self.slug = f"{original_slug}-{counter}"
                 counter += 1
-        if not self.is_weekly:
-            self.day_of_week = None
-        super().save(*args, **kwargs)
-
+            # Сохраняем ещё раз с обновлённым slug
+            super().save(*args, **kwargs)
+        else:
+            if not self.is_weekly:
+                self.day_of_week = None
+            super().save(*args, **kwargs)
     def __str__(self):
         return self.name
 

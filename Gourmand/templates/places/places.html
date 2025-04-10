@@ -6,7 +6,15 @@
     <div class="full d-xl-none mt-5">
         <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">Заведения в городе Красноярске</h1>
     </div>
-
+    <div class="mt-4">
+        <form method="get" action="{% url 'places' %}" class="mb-4">
+          <div class="input-group">
+            <input type="text" name="q" value="{{ query|default:'' }}" class="form-control" placeholder="Поиск по названию заведения">
+            <input type="hidden" name="sort" value="{{ current_sort }}">
+            <button class="btn btn-outline-secondary" type="submit">Поиск</button>
+          </div>
+        </form>
+    </div>
     <div class="row mb-4 mt-4">
         <div class="col-md-6 col-lg-4 mb-2">
             <form method="GET" class="d-flex gap-2">

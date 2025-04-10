@@ -11,6 +11,8 @@ from django.template.defaultfilters import first
 import logging
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
+from django.db.models import Q
+from django.db.models.functions import Lower
 
 from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
     EventCreateForm
@@ -338,18 +340,29 @@ def create_event(request):
     return render(request, "events/create.html", {"form": form})
 
 
+from django.db.models import Q
+from django.core.paginator import Paginator
+
 def places(request):
+    query = request.GET.get('q', '').strip() # Поисковый запрос
+    sort_by = request.GET.get('sort', 'id')
+
     places_list = Place.objects.all()
 
+    # Фильтрация по поисковому запросу
+    if query:
+        places_list = places_list.filter(Q(name__icontains=query))
+
+
     # Сортировка
-    sort_by = request.GET.get('sort', 'id')
     if sort_by == 'name':
         places_list = places_list.order_by('name')
     elif sort_by == 'rating':
-        places_list = places_list.order_by('-rating')  # По убыванию
+        places_list = places_list.order_by('-rating')
     else:
         places_list = places_list.order_by('id')
 
+    # Пагинация
     paginator = Paginator(places_list, 12)
     page_number = request.GET.get('page')
     places_page = paginator.get_page(page_number)
@@ -358,6 +371,7 @@ def places(request):
         'places': places_page,
         'user': request.user,
         'current_sort': sort_by,
+        'query': query,
     })
 
 

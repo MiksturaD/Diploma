@@ -6,7 +6,7 @@
     <div class="full d-xl-none mt-5">
         <h1 class="mb-3 pt-5 pt-sm-5 pt-md-5 pt-xl-4 custom-text-color">{{ place.name }} {{ place.rating }} <span class="text-warning">★</span></h1>
     </div>
-    <div class="card bg-dark text-white shadow">
+    <div class="card bg-dark text-white shadow mt-4">
         {% if place.images.exists %}
             <div class="row g-2 p-3">
                 {% for image in place.images.all %}

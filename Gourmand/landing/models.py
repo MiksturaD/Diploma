@@ -6,7 +6,7 @@ from django.db.models import Sum
 from django.utils.text import slugify
 from pytils.translit import slugify as pytils_slugify  # Для транслитерации кириллицы
 from decimal import Decimal
-from Gourmand import settings
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):

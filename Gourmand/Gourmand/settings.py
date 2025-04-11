@@ -12,21 +12,25 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-unr6iyykf=tu7s0hue0k4(cgq_1v(olf0&-pncg#wiq%(p2y@m'
-
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG') == 'True'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0','212.192.217.30']
+CSRF_TRUSTED_ORIGINS = ['http://212.192.217.30',]
 
 
 # Application definition
@@ -166,7 +170,7 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True  # Яндекс использует SSL на порту 465
 EMAIL_USE_TLS = False  # TLS не нужен, так как мы используем SSL
 EMAIL_HOST_USER = 'aagubanoff@yandex.ru'  # Твой email на Яндексе
-EMAIL_HOST_PASSWORD = 'mqtksdpfvmddzutb'  # Пароль приложения (не обычный пароль)
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Пароль приложения (не обычный пароль)
 DEFAULT_FROM_EMAIL = 'aagubanoff@yandex.ru'  # Отправитель по умолчанию
 
 # Имя сайта и домен для писем
@@ -174,10 +178,10 @@ SITE_NAME = 'Gourmand'
 DOMAIN = 'gourmand-project.com'
 
 # Яндекс SmartCaptcha ключи
-YANDEX_CAPTCHA_CLIENT_KEY = 'ysc1_pbO7E6hkijLzojtcxfkeNw6iAn4NlWuXtojC3sIE75e23a80'
-YANDEX_CAPTCHA_SERVER_KEY = 'ysc2_pbO7E6hkijLzojtcxfke1V2CgANhcSaQ2inCvYuN81cc485d'
+YANDEX_CAPTCHA_CLIENT_KEY = os.getenv('YANDEX_CAPTCHA_CLIENT_KEY')
+YANDEX_CAPTCHA_SERVER_KEY = os.getenv('YANDEX_CAPTCHA_SERVER_KEY')
 
-OPENAI_API_KEY = 'your-openai-api-key'  # Замени на свой ключ
+OPENAI_API_KEY = os.getenv('your-openai-api-key')  # Замени на свой ключ
 
 CACHES = {
     'default': {

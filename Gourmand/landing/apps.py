@@ -5,4 +5,4 @@ class LandingConfig(AppConfig):
     name = 'Gourmand.landing'
 
     def ready(self):
-        import landing.signals  # Подключаем сигналы
+        import Gourmand.landing.signals  # Подключаем сигналы

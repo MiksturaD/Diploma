@@ -71,7 +71,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         'libraries': {
-                'review_tags': 'landing.templatetags.review_tags',  # Регистрируем теги
+                'review_tags': 'landing.templatetags.review_tags',
                 'math_filters':'landing.templatetags.math_filters',
             },
         },
@@ -142,7 +142,7 @@ STATICFILES_FINDERS = [
 ]
 # Добавьте путь к статическим файлам вашего приложения
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'landing/static'),
+    os.path.join(BASE_DIR, 'landing'),
 ]
 
 # Default primary key field type

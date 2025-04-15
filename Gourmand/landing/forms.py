@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 import requests
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile, NPSTag, NPSResponse
+from Gourmand.landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile, NPSTag, NPSResponse
 
 
 class YandexCaptchaField(forms.Field):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from landing.models import Review, Place, Event, User, GourmandProfile, OwnerProfile
+from Gourmand.landing.models import Review, Place, Event, User, GourmandProfile, OwnerProfile
 
 admin.site.register(Place)
 admin.site.register(Review)

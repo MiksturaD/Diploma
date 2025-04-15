@@ -133,7 +133,13 @@ MEDIA_URL = "/media/"  # URL-префикс для медиа-файлов
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Укажем, какие модули Django использует для поиска статики (это уже есть по умолчанию, но добавим для ясности)
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 # Добавьте путь к статическим файлам вашего приложения
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'landing/static'),

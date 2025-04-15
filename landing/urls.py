@@ -1,5 +1,5 @@
 from django.urls import path
-from Gourmand.landing import views
+from landing import views
 
 urlpatterns = [
     path('', views.index, name='index'),

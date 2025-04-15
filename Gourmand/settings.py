@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Gourmand.Gourmand.urls'
+ROOT_URLCONF = 'Gourmand.urls'
 
 TEMPLATES = [
     {

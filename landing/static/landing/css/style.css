@@ -666,9 +666,10 @@ header .container-fluid {
     bottom: -40px;
 }
 
+
 #mobile_slider .carousel-indicators button {
-    width: 10px;
-    height: 10px;
+    width: 10px!important;
+    height: 10px!important;
     border-radius: 50%;
     background-color: #ccc;
     margin: 0 5px;

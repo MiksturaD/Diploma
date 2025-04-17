@@ -1,0 +1,969 @@
+{% load static %}
+
+
+
+body {
+    background-color: #1c1c1c;
+    color: white;
+    font-family: 'LXGW WenKai Mono TC', 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+footer {
+    flex-shrink: 0;
+}
+
+a {
+    color: #1f1f1f;
+    text-decoration: none !important;
+    outline: none !important;
+    transition: all 0.3s ease-in-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0;
+    font-weight: normal;
+    position: relative;
+    padding: 0 0 10px 0;
+    line-height: normal;
+    color: #111111;
+    margin: 0;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 22px;
+}
+
+h5 {
+    font-size: 20px;
+}
+
+h6 {
+    font-size: 18px;
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-info li {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+
+
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+}
+
+.hero-text {
+    max-width: 50%;
+}
+
+.hero-image {
+    max-width: 50%;
+    height: auto;
+}
+
+.custom-btn {
+    background-color: #f1c40f;
+    border: none;
+    color: white;
+}
+
+button {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.button_user a:hover, .button_user a:focus, .button_user a.active {
+    background: #e3d105;
+    color: #fff;
+    border-color: #e3d105;
+    color: #222;
+}
+
+.button_user a {
+    float: left;
+    min-width: 75px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    position: relative;
+    padding: 0 15px;
+    margin: 0 2px;
+}
+
+header {
+    min-height: 70px;
+    background: #111111;
+    padding: 0 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+header .container-fluid {
+    max-width: 1850px;
+}
+
+.right_header_info {
+    padding-top: 10px;
+    width: 100%;
+}
+
+.right_header_info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+}
+
+.right_header_info ul li {
+    display: inline;
+    font-size: 16px;
+    margin-left: 45px;
+    color: #eaeaea;
+    font-weight: 400;
+}
+
+.right_header_info ul li a {
+    color: #eaeaea;
+    font-weight: 300;
+}
+
+/** slider section **/
+#main_slider {
+    padding: 45px 0 30px;
+}
+
+.slider_section .container {
+    width: 90%;
+    max-width: 1920px;
+    max-height: 90vh;
+}
+
+.vert .carousel-item-next.carousel-item-left, .vert .carousel-item-prev.carousel-item-right {
+    transform: translate3d(0, 0, 0);
+}
+
+.vert .carousel-item-next, .vert .active.carousel-item-right {
+    transform: translate3d(0, 100%, 0);
+}
+
+.vert .carousel-item-prev, .vert .active.carousel-item-left {
+    transform: translate3d(0, -100%, 0);
+}
+
+.slider_cont {
+    padding-left: 10px;
+    float: left;
+    margin: 10px 0 0;
+}
+
+.slider_cont h3 {
+    font-size: 50px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 50px;
+    letter-spacing: -2px;
+}
+
+.slider_cont p {
+    font-size: 18px;
+    color: #999;
+    line-height: normal;
+    font-weight: 300;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-right: 30px;
+}
+
+#main_slider .carousel-control-prev, #main_slider .carousel-control-next {
+    width: 67px;
+    height: 67px;
+    background: #fcfcfc;
+    opacity: 1;
+    font-size: 10px;
+    color: #212020;
+    border-radius: 200%;
+}
+
+#main_slider a.carousel-control-prev {
+    position: absolute;
+}
+
+#main_slider a.carousel-control-next {
+    position: absolute;
+}
+
+.main_bt_border {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 300;
+    min-width: 150px;
+    border: solid #fff 1px;
+    /*float: left;*/
+    text-align: center;
+    min-height: 50px;
+    line-height: 50px;
+    margin-top: 20px;
+}
+
+.main_bt_border:hover, .main_bt_border:focus {
+    background: #e3d105;
+    border-color: #e3d105;
+    color: #222;
+}
+
+.theme_color {
+    color: #f8c90d !important;
+}
+
+.resip_section {
+    background: #212020;
+    margin-top: 0;
+    padding: 60px 0px 50px 0px;
+    border-top: solid rgba(255, 255, 255, 0.1) 1px;
+    box-shadow: inset 0 10px 30px -16px #000;
+}
+
+.ourheading h2 {
+    font-size: 45px;
+    font-weight: 500;
+    line-height: 40px;
+    color: #fff;
+    padding-bottom: 38px;
+}
+
+.product_blog_cont {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.product_blog_cont h3 {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.product_blog_cont h4 {
+    color: #fff;
+    font-size: 18px;
+}
+
+.bgbg {
+    font-size: 33px !important;
+}
+
+.carousel-control-prev:focus, .carousel-control-prev:hover {
+    background: #e3d105;
+    /*color: #000;*/
+    /*border-radius: 100%;*/
+}
+
+
+.carousel-control-next:focus, .carousel-control-next:hover {
+    background: #e3d105;
+    /*color: #000;*/
+    /*border-radius: 100%;*/
+}
+
+.owl-prev span {
+    display: none;
+}
+
+.owl-prev {
+    width: 50px;
+    height: 45px;
+    background: url(../img/icon.jpg) !important;
+    float: left;
+    opacity: 1;
+    color: #000;
+}
+
+.owl-next {
+    width: 50px;
+    height: 45px;
+    background: url(../img/-2.jpg) !important;
+    float: right;
+    opacity: 1;
+    color: #000;
+}
+
+.owl-next:hover {
+    background: #e3d105;
+    color: #000;
+}
+
+.owl-dots {
+    display: none;
+}
+
+.owl-next span {
+    display: none;
+}
+
+.slider_image img {
+    width: 100%;
+    height: auto;
+}
+.product_blog_img{
+    max-height: 50px;
+    max-width: 50px;
+}
+.hero-section {
+  min-height: 50vh; /* Высота блока */
+  display: flex;
+  align-items: center; /* Вертикальное центрирование */
+  justify-content: center; /* Горизонтальное центрирование */
+  color: white; /* Цвет текста */
+  padding: 1rem;
+}
+.event-image:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease;
+}
+.button_user .custom-button {
+    display: inline-block;
+    min-width: 120px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    padding: 0 20px;
+    margin: 0 5px;
+    color: #eaeaea;
+    border: 2px solid #eaeaea;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.button_user .custom-button:hover {
+    background: #e3d105;
+    color: #222;
+    border-color: #e3d105;
+    transform: translateY(-2px);
+}
+.custom-text-color {
+    color: #eaeaea;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+.nav-link.active {
+    background: #e3d105 !important;
+    color: #222 !important;
+    border-color: #e3d105 !important;
+}
+.nav-link{
+    border-top: none!important;
+    border-left: none!important;
+    border-right: none!important;
+}
+
+.carousel-controls-bottom {
+    position: relative;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+    display: inline-block;
+    background-color: #fcfcfc;
+    margin: 0 100px;
+    transition: all 2s ease;
+}
+
+.carousel-control-prev:hover i,
+.carousel-control-next:hover i   {
+    transform: scale(1.1);
+    color: #e3d105;
+    border-color: #e3d105;
+    background: #111111;
+
+}
+
+
+.carousel-control-prev i,
+.carousel-control-next i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.carousel-controls-bottom {
+    position: absolute;
+    bottom: 14%;
+    left: 20%;
+    transform: translateX(-80%);
+    z-index: 10;
+}
+@media (max-width: 768px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-controls-bottom {
+        margin-top: 10px;
+    }
+}
+.button_user a.active {
+    background: #e3d105;
+    color: #000000;
+    border: none !important;
+}
+
+
+@media (max-width: 992px) {
+    .button.nav-link {
+        font-size: 0.95rem;
+    }
+}
+
+.link_yellow {
+    color: #e3d105;
+}
+
+.bg_dark {
+    color: #eaeaea;
+    background: #111111;
+}
+.element.style {
+    fill: yellow;
+}
+.pag_size {
+    display: flex;
+    min-width: 10px;
+    height: 36px;
+    text-align: center;
+    line-height: 36px;
+    padding: 0 10px!important;
+    border: thin;
+
+}
+.page-link{
+    min-width: 40px!important;
+    fill: #fcfcfc;
+    border: none;
+}
+
+.zero-mp {
+    gap: 2px;
+}
+
+.dropdown-item.active{
+    background-color: #e3d105;
+    color: #1c1c1c;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+@media (max-width: 576px) {
+    .dropdown-item {
+        font-size: 0.95rem;
+    }
+}
+.navbar{
+    display: flex;
+    justify-content: start;
+}
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: none;
+}
+
+.navbar-toggler {
+    padding: 0.75rem;
+}
+.navbar-nav{
+    display: flex;
+    justify-content: start;
+}
+/* Базовые стили для всех form-select */
+.form-select {
+    background-color: #2a2a2a; /* Тёмный фон в твоём стиле */
+    color: #f8f9fa; /* Цвет текста как custom-text-color */
+    border: 1px solid #444; /* Обводка в неактивном состоянии */
+    font-size: 1rem;
+}
+@media (max-width: 576px) {
+    .form-select {
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Стили при фокусе для всех form-select */
+.form-select:focus {
+    border-color: #e3d105 !important; /* Оранжевая обводка */
+    outline: 0 !important; /* Убираем стандартный outline */
+    box-shadow: none !important; /* Тень */
+    background-color: #333 !important; /* Лёгкое затемнение фона */
+    color: #f8f9fa !important; /* Цвет текста не меняется */
+}
+
+/* Серый фон для инпутов */
+.form-control, .form-select, .form-check-input {
+    background-color: #333; /* Серый фон (Bootstrap bg-secondary) */
+    color: #fff; /* Белый текст для контраста */
+    border: 1px solid #333; /* Тёмная рамка */
+}
+.form-control:focus, .form-select:focus  {
+    background-color: #333; /* Сохраняем серый фон при фокусе */
+    color: #fff;
+    border-color: #e3d105; /* Светлая рамка при фокусе */
+    box-shadow: none !important; /* Тень Bootstrap */
+}
+/* Стили для placeholder в форме */
+.form-control::placeholder {
+    color: #ffffff; /* Белый цвет для placeholder */
+    opacity: 0.7; /* Лёгкая прозрачность, чтобы placeholder не сливался с введённым текстом */
+}
+
+/* Для поддержки старых браузеров (например, Edge) */
+.form-control::-webkit-input-placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+.form-control::-moz-placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+.form-control:-ms-input-placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+}
+
+.footer .row {
+        display: flex;
+        justify-content: space-between;
+    }
+.footer .col {
+    flex: 1; /* Колонки растягиваются поровну */
+    min-width: 200px; /* Минимальная ширина для читаемости */
+}
+
+.btn-primary:hover{
+    color: #111111;
+    background: #e3d105;
+}
+.footer-link a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+.footer-link a:hover {
+    color: yellow;
+    text-decoration: none;
+}
+
+/* Кастомный чекбокс: жёлтый фон и чёрная галочка */
+.form-check-input {
+    position: absolute;
+    opacity: 0;
+}
+.form-check-label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+}
+.form-check-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: #2a2a2a   ; /* Белый фон для неотмеченного */
+    border: 1px solid #495057;
+    border-radius: 3px;
+}
+.form-check-input:checked + .form-check-label::before {
+    background-color: #ffc107; /* Жёлтый фон при выборе */
+    border-color: #ffc107;
+}
+.form-check-input:checked + .form-check-label::after {
+    content: '✔'; /* Чёрная галочка */
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    color: #000; /* Чёрный цвет галочки */
+    font-size: 12px;
+}
+.form-check-input:focus + .form-check-label::before {
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+/* Жёлтый ползунок */
+.form-range::-webkit-slider-thumb {
+    background: #ffc107; /* Жёлтый цвет (Bootstrap warning) */
+}
+.form-range::-moz-range-thumb {
+    background: #ffc107; /* Для Firefox */
+}
+.form-range::-ms-thumb {
+    background: #ffc107; /* Для Edge/IE */
+}
+.form-range::-webkit-slider-runnable-track {
+    background-color: #495057; /* Тёмный трек для контраста */
+}
+.form-range::-moz-range-track {
+    background-color: #495057; /* Для Firefox */
+}
+.form-range::-ms-track {
+    background-color: #495057; /* Для Edge/IE */
+}
+
+/* Стили для упрощённой карусели */
+#mobile_slider .carousel-item {
+    padding: 15px;
+}
+
+/* Индикаторы */
+#mobile_slider .carousel-indicators {
+    bottom: -40px;
+}
+
+
+#mobile_slider .carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin: 0 5px;
+}
+.carousel-indicators [data-bs-target]{
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    margin: 0 5px;
+    border: none;
+}
+
+#mobile_slider .carousel-indicators .active {
+    background-color: #007bff;
+}
+
+/* Кнопки управления */
+#mobile_slider .custom-carousel-control {
+    width: 40px; /* Уменьшаем ширину кнопок */
+    height: 40px; /* Уменьшаем высоту кнопок */
+    top: 50%; /* Центрируем по вертикали */
+    transform: translateY(-50%);
+    background: none; /* Полупрозрачный фон */
+    border-radius: 50%; /* Делаем кнопки круглыми */
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+#mobile_slider .custom-carousel-control:hover {
+    opacity: 1;
+}
+
+/* Иконки внутри кнопок */
+#mobile_slider .custom-carousel-control .carousel-control-prev-icon,
+#mobile_slider .custom-carousel-control .carousel-control-next-icon {
+    width: 20px; /* Уменьшаем размер иконок */
+    height: 20px;
+}
+
+/* Убедимся, что кнопки не перекрывают контент */
+#mobile_slider .carousel-control-prev {
+    left: 10px; /* Отступ слева */
+}
+
+#mobile_slider .carousel-control-next {
+    right: 10px; /* Отступ справа */
+}
+
+/* Текст и изображения */
+#mobile_slider .slider_image img {
+    margin: 0 auto; /* Центрируем изображение */
+}
+
+#mobile_slider h3 {
+    font-size: 1.25rem; /* Уменьшаем заголовок для маленьких экранов */
+    margin-bottom: 0.5rem;
+}
+
+#mobile_slider p {
+    font-size: 0.9rem; /* Уменьшаем текст описания */
+    margin-bottom: 1rem;
+}
+
+#mobile_slider .main_bt_border {
+    font-size: 0.9rem; /* Уменьшаем размер кнопки */
+    padding: 0.5rem 1rem;
+}
+
+.foot-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.card-body{
+    padding-top: 1rem!important;
+    padding-right: 1rem!important;
+}
+
+/* Стили для Swiper */
+.mySwiper {
+    width: 100%;
+    padding: 20px 0;
+    position: relative;
+}
+
+.swiper-slide {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 15px;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Стили для стрелок Swiper */
+.swiper-button-next,
+.swiper-button-prev {
+    width: 50px;
+    height: 50px;
+    background: #fcfcfc; /* Белый фон */
+    color: #212020; /* Чёрный цвет иконки */
+    border-radius: 5px; /* Закруглённые углы */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: #e3d105; /* Жёлтый фон при наведении */
+}
+
+/* Убираем стандартные иконки Swiper */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    display: none; /* Убираем стандартные стрелки Swiper */
+}
+
+/* Стили для иконок */
+.swiper-button-next i,
+.swiper-button-prev i {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Позиционирование стрелок */
+.swiper-button-prev {
+    left: 10px;
+}
+
+.swiper-button-next {
+    right: 10px;
+}
+
+/* Стили для пагинации */
+.pagination {
+    margin-top: 2rem;
+}
+
+.page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.page-item .page-link:hover  {
+    background: #e3d105; /* Жёлтый фон при наведении */
+    fill: #111111;
+}
+
+/* Стили для SVG-иконок */
+.pagination-icon:hover{
+    fill: #111111;
+}
+.pagination-icon {
+    width: 20px;
+    height: 20px;
+    transition: fill 0.3s ease;
+}
+
+
+.swiper-pagination-bullet {
+    background: #ccc;
+}
+.swiper-pagination{
+    position: relative;
+}
+
+.swiper-pagination-bullet-active {
+    background: #e3d105;
+}
+
+/* Убедимся, что Swiper отображается только на маленьких экранах */
+@media (min-width: 1200px) {
+    .mySwiper {
+        display: none;
+    }
+}
+
+/* Убедимся, что основная карусель отображается только на больших экранах */
+@media (max-width: 1199.98px) {
+    #main_slider {
+        display: none;
+    }
+}
+
+/* Адаптивные стили для контента внутри слайдов */
+.slider_cont h3 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.slider_cont p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 576px) {
+    .slider_cont h3 {
+        font-size: 20px;
+    }
+    .slider_cont p {
+        font-size: 14px;
+    }
+    .main_bt_border {
+        min-width: 120px;
+        min-height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+    }
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+    }
+    .swiper-button-next i,
+    .swiper-button-prev i {
+        font-size: 20px;
+    }
+}
+
+.carousel-indicators button {
+    background-color: #fff;
+    opacity: 0.5;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+.carousel-indicators .active {
+    opacity: 1;
+    background-color: #FFC107;
+}
+
+.slider_cont {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.swiper-slide-active .slider_cont,
+.carousel-item.active .slider_cont {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.swiper-slide, .carousel-item {
+    transition: opacity 0.5s ease-in-out;
+}
+.swiper-slide img, .carousel-item img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.main_bt_border {
+    padding: 10px 20px;
+    border: 2px solid #FFC107;
+    color: #FFC107;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.main_bt_border:hover {
+    background-color: #FFC107;
+    color: #000;
+}
+.custom-text-color {
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.custom-text-color span {
+    color: #FFC107!important;
+}

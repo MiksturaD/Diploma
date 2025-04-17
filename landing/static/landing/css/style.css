@@ -668,11 +668,15 @@ header .container-fluid {
 
 
 #mobile_slider .carousel-indicators button {
-    width: 10px!important;
-    height: 10px!important;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background-color: #ccc;
     margin: 0 5px;
+}
+.carousel-indicators button{
+    width: 15px;
+    height: 15px;
 }
 
 #mobile_slider .carousel-indicators .active {

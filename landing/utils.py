@@ -4,62 +4,69 @@ from django.utils import timezone
 from .models import Review
 import openai
 from django.conf import settings
+from dotenv import load_dotenv
+import os
+
+# Загружаем переменные окружения
+load_dotenv()
+
+# Создаём клиент OpenAI с настройками для OpenRouter
+client = openai.OpenAI(
+    api_key=os.getenv('openai-api-key'),
+    base_url="https://openrouter.ai/api/v1"  # Используем OpenRouter
+)
 
 def get_reviews_for_last_month(place, days=30):
-  """
-  Собирает отзывы за указанный период (по умолчанию 30 дней) для конкретного заведения.
-  """
-  now = timezone.now()
-  start_date = now - timedelta(days=days)
-  reviews = Review.objects.filter(
-    place=place,
-    review_date__gte=start_date,
-    review_date__lte=now
-  )
-  return reviews
-
+    """
+    Собирает отзывы за указанный период (по умолчанию 30 дней) для конкретного заведения.
+    """
+    now = timezone.now()
+    start_date = now - timedelta(days=days)
+    reviews = Review.objects.filter(
+        place=place,
+        review_date__gte=start_date,
+        review_date__lte=now
+    )
+    return reviews
 
 def prepare_reviews_data(reviews):
-  """
-  Подготавливает данные отзывов для отправки в ChatGPT.
-  Включает текст отзыва, NPS-оценку, теги и рейтинги.
-  """
-  if not reviews.exists():
-    return "Нет отзывов за выбранный период."
+    """
+    Подготавливает данные отзывов для отправки в ChatGPT.
+    Включает текст отзыва, NPS-оценку, теги и рейтинги.
+    """
+    if not reviews.exists():
+        return "Нет отзывов за выбранный период."
 
-  reviews_data = []
-  for review in reviews:
-    nps = review.nps if hasattr(review, 'nps') else None
-    nps_score = nps.score if nps else "не указана"
-    nps_tags = ", ".join(tag.label for tag in nps.tags.all()) if nps and nps.tags.exists() else "нет тегов"
+    reviews_data = []
+    for review in reviews:
+        nps = review.nps if hasattr(review, 'nps') else None
+        nps_score = nps.score if nps else "не указана"
+        nps_tags = ", ".join(tag.label for tag in nps.tags.all()) if nps and nps.tags.exists() else "нет тегов"
 
-    review_info = (
-      f"Отзыв: {review.description}\n"
-      f"NPS-оценка: {nps_score}\n"
-      f"Теги: {nps_tags}\n"
-      f"Положительный рейтинг: {review.positive_rating}, Отрицательный рейтинг: {review.negative_rating}\n"
-    )
-    reviews_data.append(review_info)
+        review_info = (
+            f"Отзыв: {review.description}\n"
+            f"NPS-оценка: {nps_score}\n"
+            f"Теги: {nps_tags}\n"
+            f"Положительный рейтинг: {review.positive_rating}, Отрицательный рейтинг: {review.negative_rating}\n"
+        )
+        reviews_data.append(review_info)
 
-  return "\n---\n".join(reviews_data)
-
+    return "\n---\n".join(reviews_data)
 
 def get_tag_stats(reviews):
-  """
-  Собирает статистику по тегам из NPS-ответов.
-  """
-  tag_counts = {}
-  for review in reviews:
-    if hasattr(review, 'nps'):
-      for tag in review.nps.tags.all():
-        tag_counts[tag.label] = tag_counts.get(tag.label, 0) + 1
-  return tag_counts
-
-openai.api_key = settings.OPENAI_API_KEY
+    """
+    Собирает статистику по тегам из NPS-ответов.
+    """
+    tag_counts = {}
+    for review in reviews:
+        if hasattr(review, 'nps'):
+            for tag in review.nps.tags.all():
+                tag_counts[tag.label] = tag_counts.get(tag.label, 0) + 1
+    return tag_counts
 
 def analyze_reviews_with_chatgpt(reviews_data, place_name):
     """
-    Отправляет данные отзывов в ChatGPT и возвращает сводку.
+    Отправляет данные отзывов в модель через OpenRouter и возвращает сводку.
     """
     if reviews_data == "Нет отзывов за выбранный период.":
         return reviews_data
@@ -77,16 +84,15 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
     )
 
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+        response = client.chat.completions.create(
+            model="mistralai/mistral-7b-instruct",  # Модель для OpenRouter
             messages=[
                 {"role": "system", "content": "Ты аналитик, который помогает владельцам ресторанов понимать отзывы клиентов."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=300,
+            max_tokens=500,
             temperature=0.7,
         )
-        summary = response.choices[0].message['content'].strip()
-        return summary
+        return response.choices[0].message.content.strip()
     except Exception as e:
-        return f"Ошибка при анализе отзывов: {str(e)}"
+        return f"Ошибка при анализе через OpenRouter: {str(e)}"

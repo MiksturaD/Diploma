@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db.models.functions import Lower
 
-from landing.forms import SignupForm, PlaceCreateForm, GourmandProfileForm, OwnerProfileForm, ReviewCreateForm, \
+from landing.forms import SignupForm, PlaceCreateForm, ReviewCreateForm, \
     EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage, PlaceImage, \
     ReviewVote, EventImage, NPSResponse

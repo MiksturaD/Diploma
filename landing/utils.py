@@ -77,7 +77,7 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
             max_tokens=500,
             temperature=0.7,
             extra_headers={
-                "HTTP-Referer": "http://http://212.192.217.30/",  
+                "HTTP-Referer": "http://http://212.192.217.30/",
                 "X-Title": "Gourmand",  # название проекта
             },
             extra_body={}

@@ -49,6 +49,9 @@ def get_tag_stats(reviews):
     return tag_counts
 
 def analyze_reviews_with_chatgpt(reviews_data, place_name):
+    """
+    Отправляет данные отзывов в модель через OpenRouter и возвращает сводку.
+    """
     if reviews_data == "Нет отзывов за выбранный период.":
         return reviews_data
 
@@ -66,13 +69,18 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
 
     try:
         response = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",  # или любая поддерживаемая модель
+            model="microsoft/mai-ds-r1:free",  # Выбранная модель
             messages=[
                 {"role": "system", "content": "Ты аналитик, который помогает владельцам ресторанов понимать отзывы клиентов."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=500,
             temperature=0.7,
+            extra_headers={
+                "HTTP-Referer": "http://http://212.192.217.30/",  
+                "X-Title": "Gourmand",  # название проекта
+            },
+            extra_body={}
         )
         return response.choices[0].message.content.strip()
     except Exception as e:

@@ -5,14 +5,14 @@ from django.conf import settings
 from dotenv import load_dotenv
 import os
 
-from openai import OpenAI  # <-- ВАЖНО: правильный импорт
+from openai import OpenAI
 
 # Загружаем переменные окружения
 load_dotenv()
 
 # Создаём клиент OpenAI для OpenRouter
 client = OpenAI(
-    api_key=os.getenv("OPENROUTER_API_KEY"),  # Убедись, что переменная названа корректно
+    api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1"
 )
 
@@ -78,7 +78,7 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
             temperature=0.7,
             extra_headers={
                 "HTTP-Referer": "http://http://212.192.217.30/",
-                "X-Title": "Gourmand",  # название проекта
+                "X-Title": "Gourmand",
             },
             extra_body={}
         )

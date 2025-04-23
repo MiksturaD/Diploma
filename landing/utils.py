@@ -13,7 +13,7 @@ load_dotenv()
 # Создаём клиент OpenAI для OpenRouter
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="https://openrouter.ai/api/v1"
+    base_url="mistralai/mistral-7b-instruct"
 )
 
 def get_reviews_for_last_month(place, days=30):

@@ -142,7 +142,7 @@ STATICFILES_FINDERS = [
 ]
 # Добавьте путь к статическим файлам вашего приложения
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'landing'),
+    os.path.join(BASE_DIR, 'landing/static'),
 ]
 
 # Default primary key field type

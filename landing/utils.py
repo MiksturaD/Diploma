@@ -13,7 +13,7 @@ load_dotenv()
 # Создаём клиент OpenAI для OpenRouter
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="mistralai/mistral-7b-instruct"
+    base_url="https://openrouter.ai/api/v1"
 )
 
 def get_reviews_for_last_month(place, days=30):
@@ -69,7 +69,7 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
 
     try:
         response = client.chat.completions.create(
-            model="microsoft/mai-ds-r1:free",  # Выбранная модель
+            model="mistralai/mistral-7b-instruct",  # Выбранная модель
             messages=[
                 {"role": "system", "content": "Ты аналитик, который помогает владельцам ресторанов понимать отзывы клиентов."},
                 {"role": "user", "content": prompt}

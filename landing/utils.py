@@ -29,7 +29,7 @@ def prepare_reviews_data(reviews):
     for review in reviews:
         nps = getattr(review, "nps", None)
         nps_score = getattr(nps, "score", "не указана")
-        nps_tags = ", ".join(tag.label for tag in getattr(nps, "tags", [])) if nps and hasattr(nps, "tags") else "нет тегов"
+        nps_tags = ", ".join(tag.label for tag in getattr(nps, "tags", []).all()) if nps and hasattr(nps, "tags") else "нет тегов"
 
         reviews_data.append(
             f"Отзыв: {review.description}\n"

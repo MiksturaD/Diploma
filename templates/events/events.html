@@ -40,7 +40,7 @@
                         "addressCountry": "RU"
                     }
                 },
-                "image": "{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}",
+                "image": "{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'landing/img/default.png' %}{% endif %}",
                 "url": "{% url 'event' event.slug %}"
             }{% if not forloop.last %},{% endif %}
             {% endfor %}
@@ -86,7 +86,7 @@
             {% for event in events %}
             <div class="col">
                 <div class="card h-100 shadow   ">
-                    <img src="{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}" 
+                    <img src="{% if event.images.exists %}{{ event.images.first.image.url }}{% else %}{% static 'landing/img/default.png' %}{% endif %}" 
                          class="ratio ratio-4x3"
                          alt="{{ event.name }}"
                          style="height: 150px; object-fit: cover;">

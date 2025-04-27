@@ -37,7 +37,7 @@
             {% for review in reviews %}
             <div class="col">
                 <div class="card h-100 shadow">
-                    <img src="{% if review.images.exists %}{{ review.images.first.image.url }}{% else %}{% static 'img/default.png' %}{% endif %}"
+                    <img src="{% if review.images.exists %}{{ review.images.first.image.url }}{% else %}{% static 'landing/img/default.png' %}{% endif %}"
                          class="card-img-top img-fluid"
                          alt="{{ review.name }}"
                          style="height: 150px; object-fit: cover;">

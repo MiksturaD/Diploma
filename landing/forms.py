@@ -35,7 +35,7 @@ class SignupForm(UserCreationForm):
     captcha = YandexCaptchaField(required=False)  # временно фолс
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'captcha']
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role']
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',

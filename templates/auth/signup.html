@@ -72,6 +72,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         window.smartCaptchaCallback = function(token) {
+            console.log("📌 Капча сработала, токен:", token);
             document.getElementById('captcha-token').value = token;
         };
     });

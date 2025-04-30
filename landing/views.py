@@ -50,6 +50,8 @@ def signup(request):
             return redirect("profile")
         else:
             print("Form errors:", form.errors)
+            print("Form is NOT valid")
+            print(form.errors.as_data())  # Покажет типы ошибок
             return render(request, "auth/signup.html", {"form": form, "errors": form.errors})
     else:
         form = SignupForm()

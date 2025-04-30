@@ -6,6 +6,7 @@ from django.conf import settings
 from landing.models import User, Review, Place, Event, OwnerProfile, GourmandProfile, NPSTag, NPSResponse
 
 
+
 class YandexCaptchaField(forms.Field):
     widget = forms.HiddenInput
     def validate(self, value):
@@ -32,10 +33,10 @@ class SignupForm(UserCreationForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Выберите роль"
     )
-    captcha = YandexCaptchaField(required=False)  # временно фолс
+
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role']
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'captcha']
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',

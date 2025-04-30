@@ -32,8 +32,7 @@ class SignupForm(UserCreationForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Выберите роль"
     )
-    captcha = YandexCaptchaField()  # Добавляем поле капчи
-
+    captcha = YandexCaptchaField(required=False)  # временно фолс
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'captcha']

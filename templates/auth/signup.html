@@ -49,14 +49,13 @@
                         </select>
                         {{ form.role.errors }}
                     </div>
-
                     <div class="mb-3">
                         <label class="form-label">Проверка</label>
                         <div id="captcha-container" class="smart-captcha" data-sitekey="{{ settings.YANDEX_CAPTCHA_CLIENT_KEY }}"></div>
+                    
+                        <input type="hidden" name="captcha" id="captcha-token">  <!-- ОБЯЗАТЕЛЬНО -->
                         {{ form.captcha.errors }}
-                        {{ form.captcha }}  <!-- ВАЖНО! -->
                     </div>
-
                     <div class="button_user pt-4 d-flex justify-content-center">
                         <button type="submit" class="custom-button custom-text-color bg_dark">Зарегистрироваться</button>
                     </div>

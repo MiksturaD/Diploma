@@ -33,10 +33,11 @@ class SignupForm(UserCreationForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Выберите роль"
     )
+    captcha = YandexCaptchaField(required=False)
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'captcha']
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role']
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',

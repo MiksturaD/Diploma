@@ -36,9 +36,6 @@ logger = logging.getLogger(__name__)
 def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
-        print("POST DATA:", request.POST)  # ← покажет данные формы
-        print("FORM VALID:", form.is_valid())  # ← покажет результат валидации
-        print("FORM ERRORS:", form.errors)  # ← покажет, что не так
         if form.is_valid():
             user = form.save()
             try:

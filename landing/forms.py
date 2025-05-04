@@ -8,23 +8,26 @@ from landing.models import User, Review, Place, Event, OwnerProfile, GourmandPro
 
 
 class YandexCaptchaField(forms.Field):
-    widget = forms.HiddenInput
+    def __init__(self, *args, **kwargs):
+        kwargs['widget'] = forms.HiddenInput()
+        super().__init__(*args, **kwargs)
+
     def validate(self, value):
         super().validate(value)
         if not value:
             raise forms.ValidationError("Пожалуйста, пройдите проверку капчи.")
-
-        # Отправляем запрос к API Яндекса для проверки капчи
         response = requests.post(
-            'https://smartcaptcha.yandexcloud.net/validate',  # Исправленный URL
+            'https://smartcaptcha.yandexcloud.net/validate',
             data={
                 'secret': settings.YANDEX_CAPTCHA_SERVER_KEY,
                 'token': value,
             }
         )
         result = response.json()
-        if not result.get('status') == 'ok':
+        print("CAPTCHA API response:", result)  # DEBUG
+        if result.get('status') != 'ok':
             raise forms.ValidationError("Ошибка проверки капчи. Попробуйте снова.")
+
 
 
 class SignupForm(UserCreationForm):
@@ -33,7 +36,7 @@ class SignupForm(UserCreationForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label="Выберите роль"
     )
-    captcha = YandexCaptchaField(required=False)
+    captcha = YandexCaptchaField(required=True)
 
     class Meta:
         model = User

@@ -50,7 +50,7 @@ def signup(request):
                 return render(
                     request,
                     "auth/signup.html",
-                    {"form": form, "error": "Ошибка при создании профиля.", "settings": settings}  # добавлено
+                    {"form": form, "error": "Ошибка при создании профиля.", "settings": settings}
                 )
             login(request, user)
             return redirect("profile")
@@ -61,12 +61,12 @@ def signup(request):
             return render(
                 request,
                 "auth/signup.html",
-                {"form": form, "errors": form.errors, "settings": settings}  # добавлено
+                {"form": form, "errors": form.errors, "settings": settings}
             )
     else:
         form = SignupForm()
         print("Form created:", form)
-    return render(request, "auth/signup.html", {"form": form, "settings": settings})  # уже было 👍
+    return render(request, "auth/signup.html", {"form": form, "settings": settings})
 
 
 

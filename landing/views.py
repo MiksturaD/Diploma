@@ -33,6 +33,8 @@ def main(request):
 
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
@@ -45,18 +47,27 @@ def signup(request):
                     OwnerProfile.objects.create(user=user)
             except Exception as e:
                 logger.error(f"Error creating profile: {e}")
-                return render(request, "auth/signup.html", {"form": form, "error": "Ошибка при создании профиля."})
+                return render(
+                    request,
+                    "auth/signup.html",
+                    {"form": form, "error": "Ошибка при создании профиля.", "settings": settings}  # добавлено
+                )
             login(request, user)
             return redirect("profile")
         else:
             print("Form errors:", form.errors)
             print("Form is NOT valid")
-            print(form.errors.as_data())  # Покажет типы ошибок
-            return render(request, "auth/signup.html", {"form": form, "errors": form.errors})
+            print(form.errors.as_data())
+            return render(
+                request,
+                "auth/signup.html",
+                {"form": form, "errors": form.errors, "settings": settings}  # добавлено
+            )
     else:
         form = SignupForm()
         print("Form created:", form)
-    return render(request, "auth/signup.html", {"form": form, "settings": settings})
+    return render(request, "auth/signup.html", {"form": form, "settings": settings})  # уже было 👍
+
 
 
 def signin(request):

@@ -15,18 +15,26 @@ class YandexCaptchaField(forms.Field):
     def validate(self, value):
         super().validate(value)
         if not value:
+            print("DEBUG: Captcha value is empty")
             raise forms.ValidationError("Пожалуйста, пройдите проверку капчи.")
-        response = requests.post(
-            'https://smartcaptcha.yandexcloud.net/validate',
-            data={
-                'secret': settings.YANDEX_CAPTCHA_SERVER_KEY,
-                'token': value,
-            }
-        )
-        result = response.json()
-        print("CAPTCHA API response:", result)  # DEBUG
-        if result.get('status') != 'ok':
-            raise forms.ValidationError("Ошибка проверки капчи. Попробуйте снова.")
+        try:
+            response = requests.post(
+                'https://smartcaptcha.yandexcloud.net/validate',
+                data={
+                    'secret': settings.YANDEX_CAPTCHA_SERVER_KEY,
+                    'token': value,
+                },
+                timeout=5  # Добавляем таймаут
+            )
+            response.raise_for_status()  # Проверяем HTTP-ошибки
+            result = response.json()
+            print("DEBUG: CAPTCHA API response:", result)
+            if result.get('status') != 'ok':
+                print("DEBUG: CAPTCHA validation failed")
+                raise forms.ValidationError("Ошибка проверки капчи. Попробуйте снова.")
+        except requests.RequestException as e:
+            print("DEBUG: CAPTCHA API request failed:", str(e))
+            raise forms.ValidationError("Ошибка связи с сервером капчи.")
 
 
 
@@ -80,8 +88,8 @@ class SignupForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Добавляем атрибуты для поля капчи
-        self.fields['captcha'].widget.attrs['class'] = 'yandex-captcha'
-        self.fields['captcha'].widget.attrs['data-sitekey'] = settings.YANDEX_CAPTCHA_CLIENT_KEY
+        # self.fields['captcha'].widget.attrs['class'] = 'yandex-captcha'
+        # self.fields['captcha'].widget.attrs['data-sitekey'] = settings.YANDEX_CAPTCHA_CLIENT_KEY
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

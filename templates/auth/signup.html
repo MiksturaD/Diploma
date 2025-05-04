@@ -68,13 +68,11 @@
         </div>
     </div>
 </div>
-<script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.smartCaptchaCallback = function(token) {
-            console.log("📌 Капча сработала, токен:", token);
-            document.getElementById('captcha-token').value = token;
-        };
-    });
+    window.smartCaptchaCallback = function(token) {
+        console.log("📌 Капча сработала, токен:", token);
+        document.getElementById('captcha-token').value = token;
+    };
 </script>
+<script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 {% endblock %}

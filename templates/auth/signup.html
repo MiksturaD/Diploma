@@ -70,12 +70,16 @@
     </div>
 </div>
 <script>
+    window.smartCaptchaCallback = function(token) {
+        console.log("📌 Капча сработала, токен:", token);
+        document.getElementById('id_captcha').value = token;
+    };
+
     document.querySelector('form').addEventListener('submit', function(event) {
         const captchaToken = document.getElementById('id_captcha').value;
         if (!captchaToken) {
             event.preventDefault();
             alert('Пожалуйста, пройдите проверку капчи.');
-            return;
         }
         // Отключаем кнопку отправки
         const submitButton = this.querySelector('button[type="submit"]');
@@ -83,4 +87,5 @@
         submitButton.textContent = 'Отправка...';
     });
 </script>
+<script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 {% endblock %}

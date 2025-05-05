@@ -2,6 +2,7 @@ from datetime import datetime
 from django.core.cache import cache
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg
@@ -44,11 +45,19 @@ def signup(request):
             print("DEBUG: User created:", user, "is_active:", user.is_active)
             try:
                 if user.role == "gourmand":
-                    print("DEBUG: Creating GourmandProfile for user", user)
-                    GourmandProfile.objects.create(user=user)
+                    print("DEBUG: Checking GourmandProfile for user", user)
+                    if not GourmandProfile.objects.filter(user=user).exists():
+                        print("DEBUG: Creating GourmandProfile")
+                        GourmandProfile.objects.create(user=user)
+                    else:
+                        print("DEBUG: GourmandProfile already exists")
                 elif user.role == "owner":
-                    print("DEBUG: Creating OwnerProfile for user", user)
-                    OwnerProfile.objects.create(user=user)
+                    print("DEBUG: Checking OwnerProfile for user", user)
+                    if not OwnerProfile.objects.filter(user=user).exists():
+                        print("DEBUG: Creating OwnerProfile")
+                        OwnerProfile.objects.create(user=user)
+                    else:
+                        print("DEBUG: OwnerProfile already exists")
             except Exception as e:
                 print("DEBUG: Error creating profile:", str(e))
                 logger.error(f"Error creating profile: {e}")

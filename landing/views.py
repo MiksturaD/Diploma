@@ -53,7 +53,7 @@ def signup(request):
                     {"form": form, "error": "Ошибка при создании профиля.", "settings": settings}
                 )
             login(request, user)
-            return redirect("profile")
+            return redirect("index")
         else:
             print("Form errors:", form.errors)
             print("Form is NOT valid")

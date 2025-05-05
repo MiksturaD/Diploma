@@ -66,7 +66,7 @@ def signup(request):
     else:
         form = SignupForm()
         print("Form created:", form)
-    return render(request, "auth/signin.html", {"form": form, "settings": settings})
+    return render(request, "auth/signup.html", {"form": form, "settings": settings})
 
 
 

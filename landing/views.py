@@ -39,24 +39,31 @@ def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
         if form.is_valid():
+            print("DEBUG: Form is valid")
             user = form.save()
+            print("DEBUG: User created:", user, "is_active:", user.is_active)
             try:
                 if user.role == "gourmand":
+                    print("DEBUG: Creating GourmandProfile for user", user)
                     GourmandProfile.objects.create(user=user)
                 elif user.role == "owner":
+                    print("DEBUG: Creating OwnerProfile for user", user)
                     OwnerProfile.objects.create(user=user)
             except Exception as e:
+                print("DEBUG: Error creating profile:", str(e))
                 logger.error(f"Error creating profile: {e}")
                 return render(
                     request,
                     "auth/signup.html",
-                    {"form": form, "error": "Ошибка при создании профиля.", "settings": settings}
+                    {"form": form, "error": f"Ошибка при создании профиля: {str(e)}", "settings": settings}
                 )
             login(request, user)
-            return redirect("index")
+            print("DEBUG: User authenticated:", request.user.is_authenticated)
+            print("DEBUG: Redirecting to profile")
+            return redirect("profile")
         else:
-            print("Form errors:", form.errors)
-            print("Form is NOT valid")
+            print("DEBUG: Form errors:", form.errors)
+            print("DEBUG: Form is NOT valid")
             print(form.errors.as_data())
             return render(
                 request,
@@ -65,7 +72,7 @@ def signup(request):
             )
     else:
         form = SignupForm()
-        print("Form created:", form)
+        print("DEBUG: Form created:", form)
     return render(request, "auth/signup.html", {"form": form, "settings": settings})
 
 

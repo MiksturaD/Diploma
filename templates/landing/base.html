@@ -5,10 +5,23 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Проект Гурман</title>
+
+    <title>{% block title %}Проект Гурман{% endblock %}</title>
+
     <meta name="keywords" content="Поесть в Красноярске, отзывы о рестроранах, кафе и рестрораны Красноярск">
-    <meta name="description" content="Отзывы и обзоры ресторанов и кафе в г. Красноярске">
+
+    <meta name="description" content="{% block meta_description %}Отзывы и обзоры ресторанов и кафе в г. Красноярске{% endblock %}">
+
     <meta name="author" content="Губанов Алексей">
+    <!-- OpenGraph и Twitter-теги -->
+    <meta property="og:title" content="{% block og_title %}Проект Гурман{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Отзывы и обзоры ресторанов Красноярска{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}/static/landing/img/social-preview.jpg{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Стили и бустрап -->
     <link rel="icon" type="image/x-icon" href="{% static 'landing/favicon.ico' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +35,7 @@
     {% include 'includes/header.html' %}
 <main class="pt-header foot-card">
     {% block content %}
-        <div style="height: 100px" id="captcha-container" class="smart-captcha" data-sitekey="ysc1_pbO7E6hkijLzojtcxfkeNw6iAn4NlWuXtojC3sIE75e23a80"></div>
+        
     {% endblock %}
 </main >
     

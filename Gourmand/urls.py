@@ -19,10 +19,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.conf import settings
+from django.contrib.sitemaps import views as sitemap_views
+from landing.sitemaps import StaticViewSitemap, EventSitemap, PlaceSitemap
+
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'events': EventSitemap,
+    'places': PlaceSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('landing.urls')),
+# Маршрут для sitemap
+    path('sitemap.xml', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 # Маршруты для восстановления пароля
     path('password_reset/', auth_views.PasswordResetView.as_view(
         template_name='auth/password_reset_form.html',

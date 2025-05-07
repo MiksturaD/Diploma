@@ -1,25 +1,27 @@
-from datetime import datetime
-
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from django.utils import timezone  # Используем Django-версию timezone
-from .models import Event, Place  # Убрали дубликат Event и User
+from django.utils import timezone
+from .models import Event, Place
 
 class StaticViewSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
 
     def items(self):
-        return ['home', 'contact', 'events', 'reviews', 'gourmands', 'places']  # Список статических URL
+        # Исправляем имена маршрутов в соответствии с urls.py
+        return ['index', 'contacts', 'events', 'reviews', 'gourmands', 'places']
 
     def location(self, item):
-        return reverse(item)
+        try:
+            return reverse(item)
+        except Exception as e:
+            print(f"Error reversing URL {item}: {e}")
+            return "/"
 
     def lastmod(self, item):
-        # Можно задать разные даты или проверять обновления
         last_mod_dates = {
-            'home': timezone.now(),
-            'contact': timezone.make_aware(datetime(2025, 4, 1)),  # Пример даты
+            'index': timezone.now(),
+            'contacts': timezone.make_aware(datetime(2025, 4, 1)),
             'events': timezone.now(),
             'reviews': timezone.now(),
             'gourmands': timezone.now(),
@@ -35,7 +37,12 @@ class EventSitemap(Sitemap):
         return Event.objects.all()
 
     def lastmod(self, obj):
-        return obj.created_at  # Убедись, что поле created_at существует
+        # Поля created_at нет, используем дату создания или текущую дату
+        return timezone.now()
+
+    def location(self, obj):
+        # Указываем маршрут для события (по slug)
+        return reverse('event', args=[obj.slug])
 
 class PlaceSitemap(Sitemap):
     priority = 0.6
@@ -45,4 +52,9 @@ class PlaceSitemap(Sitemap):
         return Place.objects.all()
 
     def lastmod(self, obj):
-        return obj.updated_at  # Убедись, что поле updated_at существует
+        # Поля updated_at нет, используем текущую дату
+        return timezone.now()
+
+    def location(self, obj):
+        # Указываем маршрут для места (по slug)
+        return reverse('place', args=[obj.slug])

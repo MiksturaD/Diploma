@@ -4,8 +4,12 @@ from .models import Review
 from django.conf import settings
 from dotenv import load_dotenv
 import os
+import logging
 
 from openai import OpenAI
+
+# Логгер для ошибок
+logger = logging.getLogger(__name__)
 
 # Загружаем переменные окружения
 load_dotenv()
@@ -55,6 +59,10 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
     if reviews_data == "Нет отзывов за выбранный период.":
         return reviews_data
 
+    # Ограничим объём данных
+    if len(reviews_data) > 3500:
+        reviews_data = reviews_data[:3500] + "... (обрезано)"
+
     prompt = (
         f"Проанализируй отзывы о заведении '{place_name}' за выбранный период. "
         "Каждый отзыв включает текст, NPS-оценку (от 1 до 10), теги (например, 'Кухня', 'Обслуживание') и рейтинги (положительный и отрицательный). "
@@ -69,7 +77,7 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
 
     try:
         response = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",  # Выбранная модель
+            model="mistralai/mistral-7b-instruct",
             messages=[
                 {"role": "system", "content": "Ты аналитик, который помогает владельцам ресторанов понимать отзывы клиентов."},
                 {"role": "user", "content": prompt}
@@ -77,11 +85,12 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
             max_tokens=500,
             temperature=0.7,
             extra_headers={
-                "HTTP-Referer": "http://http://212.192.217.30/",
+                "HTTP-Referer": "http://212.192.217.30/",
                 "X-Title": "Gourmand",
             },
             extra_body={}
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        return f"Ошибка при анализе через OpenRouter: {str(e)}"
+        logger.exception(f"Ошибка при анализе отзывов через OpenRouter: {e}")
+        return "Не удалось получить сводку по отзывам. Попробуйте позже."

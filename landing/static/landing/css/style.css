@@ -970,36 +970,24 @@ header .container-fluid {
 
 
 .custom-indicators {
-  /* Стандартное значение margin-bottom для .carousel-indicators в Bootstrap 5 - это 1rem. */
-  /* Чтобы опустить индикаторы, нужно уменьшить это значение. */
-  /* Чем меньше значение, тем ниже будут расположены индикаторы. */
-
-  /* Попробуйте значение 0.5rem для начала: */
-  margin-bottom: 0.5rem;
-
-  /* Если хотите еще ниже, можете использовать меньшее значение, например: */
-  /* margin-bottom: 0.25rem; */
-
-  /* Если хотите, чтобы они были почти у самого нижнего края (минимальный отступ): */
-  /* margin-bottom: 0.1rem; */
-
-  /* Если стили Bootstrap по какой-то причине переопределяют ваши (например, из-за специфичности селекторов),
-     вам может понадобиться добавить !important. Старайтесь избегать этого, если возможно,
-     но если другие способы не работают: */
-  /* margin-bottom: 0.5rem !important; */
+  bottom: -10px; /* Опускает индикаторы на 10px ниже нижней границы карусели */
+  margin-bottom: 0; /* Убираем стандартный отступ, так как управляем через bottom */
+  /* При необходимости: */
+  /* bottom: -10px !important; */
+  /* margin-bottom: 0 !important; */
 }
 
-/* Кастомный вид кружков (по желанию) */
-.carousel-indicators button {
-    background-color: #f1c40f;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: none;
-    opacity: 0.7;
-}
+/*!* Кастомный вид кружков (по желанию) *!*/
+/*.carousel-indicators button {*/
+/*    background-color: #f1c40f;*/
+/*    width: 12px;*/
+/*    height: 12px;*/
+/*    border-radius: 50%;*/
+/*    border: none;*/
+/*    opacity: 0.7;*/
+/*}*/
 
-.carousel-indicators .active {
-    opacity: 1;
-    background-color: #f39c12;
-}
+/*.carousel-indicators .active {*/
+/*    opacity: 1;*/
+/*    background-color: #f39c12;*/
+/*}*/

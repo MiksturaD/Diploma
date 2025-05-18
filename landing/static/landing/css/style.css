@@ -968,13 +968,13 @@ header .container-fluid {
     color: #FFC107!important;
 }
 
-/* Чтобы indicators вышли вверх */
+
 .carousel-indicators.custom-indicators {
     position: absolute;
-    top: -40px; /* регулируй отступ вверх */
+    bottom: -40px; /* ← регулируй здесь: можно -50px, -60px и т.п. */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 999;
+    z-index: 10;
     justify-content: center;
 }
 

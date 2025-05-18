@@ -969,7 +969,7 @@ header .container-fluid {
 }
 
 .carousel_indicators{
-    margin-top: 10px;
+    margin-top: 10px!important;
 }
 
 .swiper_slide{

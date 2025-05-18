@@ -970,11 +970,8 @@ header .container-fluid {
 
 
 .custom-indicators {
-  bottom: -10px; /* Опускает индикаторы на 10px ниже нижней границы карусели */
-  margin-bottom: 0; /* Убираем стандартный отступ, так как управляем через bottom */
-  /* При необходимости: */
-  /* bottom: -10px !important; */
-  /* margin-bottom: 0 !important; */
+   bottom: -10px !important;
+   margin-bottom: 0 !important;
 }
 
 /*!* Кастомный вид кружков (по желанию) *!*/

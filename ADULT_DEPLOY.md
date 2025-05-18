@@ -7,7 +7,7 @@
 
 ## Шаг 1. Подключаемся, создаем пользователя и устанавливаем всякие штуки
 ```bash
-ssh username@your.server.ip
+ssh  mascap@212.192.217.30
 ```
 
 ```bash
@@ -175,5 +175,5 @@ sudo systemctl restart nginx
 
 Если что-то изменили в коде, нужно перезапустить сервис
 ```bash
-sudo systemctl restart taskmanager
+sudo systemctl restart Gourmand
 ```

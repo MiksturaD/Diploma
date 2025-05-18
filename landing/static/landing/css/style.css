@@ -967,3 +967,11 @@ header .container-fluid {
 .custom-text-color span {
     color: #FFC107!important;
 }
+
+.carousel_indicators{
+    margin-top: 10px;
+}
+
+.swiper_slide{
+    margin-left: 20px;
+}

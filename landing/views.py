@@ -739,19 +739,23 @@ def analyze_reviews(request, place_id):
     user = request.user
     period = request.GET.get('period', '1m') # period передается как GET-параметр в action формы
     days = {'1m': 30, '3m': 90, '6m': 180}.get(period, 30)
-    logger.info(f"ANALYZE_REVIEWS: Called for place_id: {place_id}, owner: {user.last_name}, period: {period}")
+    logger.info(f"ANALYZE_REVIEWS: Called for place_id: {place_id}, owner: {user.last_name}, period: {period}") # Используйте user.username или user.id для более уникальной идентификации
 
     try:
         place = Place.objects.get(id=place_id, owner=user)
     except Place.DoesNotExist:
         logger.warning(f"ANALYZE_REVIEWS: Place with id {place_id} not found for owner {user.last_name}")
-        # Можно добавить сообщение для пользователя
-        # messages.error(request, "Заведение не найдено.")
+        # messages.error(request, "Заведение не найдено.") # Раскомментируйте, если хотите показывать сообщение
         return redirect('profile')
 
     reviews_qs = get_reviews_for_last_month(place, days=days)
     reviews_data_str = prepare_reviews_data(reviews_qs)
+
+    # ---> ВОТ СЮДА ВСТАВЛЯЕМ ЛОГИРОВАНИЕ ПОЛНЫХ ДАННЫХ <---
+    logger.info(f"ANALYZE_REVIEWS: Full reviews_data for {place.name} (ID: {place.id}):\n{reviews_data_str}")
+    # Можно также оставить и предыдущий debug-лог с длиной и срезом, если он полезен
     logger.debug(f"ANALYZE_REVIEWS: Prepared reviews data for {place.name} (length: {len(reviews_data_str)}): '{reviews_data_str[:200]}...'")
+
 
     summary_text = analyze_reviews_with_chatgpt(reviews_data_str, place.name)
     logger.info(f"ANALYZE_REVIEWS: Received summary for {place.name}: '{summary_text[:100]}...'")
@@ -760,6 +764,4 @@ def analyze_reviews(request, place_id):
     cache.set(cache_key, summary_text, timeout=60 * 60 * 24)
     logger.info(f"ANALYZE_REVIEWS: Summary for {place.name} (key: {cache_key}) saved to cache.")
 
-    # Редирект обратно на страницу профиля с сохранением параметра периода
-    # sort_by здесь не передается, т.к. он управляется GET-формой на странице профиля
     return redirect(f"{reverse('profile')}?period={period}")

@@ -57,7 +57,7 @@
                     {% if place_stats %}
                         <ul class="list-group">
                             {% for place_id, stats in place_stats.items %}
-                                <li class="list-group-item bg-dark text-white mb-3">
+                                <li class="list-group-item bg-dark text-white mb-3 mt-3">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         {% if stats.place.slug %}
                                             <a href="{% url 'place' stats.place.slug %}" class="text-white">{{ stats.place.name }}</a>

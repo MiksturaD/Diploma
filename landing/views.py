@@ -125,10 +125,10 @@ def profile(request):
         else:
             days = 30
 
-        today = datetime.today()
+        today = timezone.now()
         current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         last_month_start = current_month_start - relativedelta(months=1)
-        last_month_end = current_month_start - relativedelta(seconds=1)
+        last_month_end = current_month_start - timezone.timedelta(seconds=1)
 
         # Получаем заведения владельца
         places = Place.objects.filter(owner=user)

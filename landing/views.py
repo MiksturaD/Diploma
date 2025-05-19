@@ -6,7 +6,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg
-from django.db.models.query.QuerySet import reverse
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
@@ -15,6 +14,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db.models.functions import Lower
+from django.urls import reverse
 
 from landing.forms import SignupForm, PlaceCreateForm, ReviewCreateForm, \
     EventCreateForm

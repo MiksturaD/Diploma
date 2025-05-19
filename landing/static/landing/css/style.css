@@ -992,7 +992,7 @@ header .container-fluid {
     background-color: #f39c12;
 }
 .owner-profile-places .list-group-item {
-    border-top: 3px solid rgb(255, 255, 255) !important;
+    border-top: 2px solid rgb(255, 255, 255) !important;
     border-top-left-radius: inherit!important;
     border-top-right-radius: inherit!important;
     border-radius: 0.375rem!important;

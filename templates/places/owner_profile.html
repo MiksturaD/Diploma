@@ -37,7 +37,6 @@
                     </form>
                 </div>
 
-
                 <!-- Сортировка -->
                 <div class="mb-4 text-center">
                     <form method="GET">
@@ -84,7 +83,7 @@
                                             {% endif %}
                                         </span>
                                     </div>
-    
+
                                     <!-- Дополнительная информация о заведении -->
                                     <div class="mb-2">
                                         <p><strong>Адрес:</strong> {{ stats.place.address }}</p>
@@ -155,8 +154,7 @@
                                             <li>Нет данных</li>
                                         {% endfor %}
                                     </ul>
-
-                                    <!-- Сводка от ChatGPT -->
+                                    <!-- Сводка от ChatGPT запрос-->
                                     <h5 class="custom-text-color">Анализ отзывов за выбранный период:</h5>
                                     
                                     {% if stats.summary %}
@@ -167,6 +165,9 @@
                                             <button type="submit" class="btn btn-warning">Проанализировать отзывы</button>
                                         </form>
                                     {% endif %}
+                                    <!-- Сводка от ChatGPT результат-->
+                                    <h5 class="custom-text-color">Анализ отзывов за выбранный период:</h5>
+                                    <p>{{ stats.summary }}</p>
 
                                     <!-- Статистика по тегам за выбранный период -->
                                     <h5 class="custom-text-color">Статистика по тегам за выбранный период:</h5>

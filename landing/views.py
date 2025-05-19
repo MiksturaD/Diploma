@@ -16,6 +16,9 @@ from django.db.models import Q
 from django.db.models.functions import Lower
 from django.urls import reverse
 
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
+
 from landing.forms import SignupForm, PlaceCreateForm, ReviewCreateForm, \
     EventCreateForm
 from landing.models import Review, Event, Place, User, GourmandProfile, OwnerProfile, ReviewImage, PlaceImage, \

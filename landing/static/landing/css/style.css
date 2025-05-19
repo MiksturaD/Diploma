@@ -991,3 +991,6 @@ header .container-fluid {
     opacity: 1;
     background-color: #f39c12;
 }
+.owner-profile-places .list-group-item {
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+}

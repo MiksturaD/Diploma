@@ -36,17 +36,7 @@
                         <input type="hidden" name="sort_by" value="{{ sort_by }}">
                     </form>
                 </div>
-                <!-- Сводка от ChatGPT -->
-                <h5 class="custom-text-color">Анализ отзывов за выбранный период:</h5>
-                
-                {% if stats.summary %}
-                    <p>{{ stats.summary }}</p>
-                {% else %}
-                    <form method="post" action="{% url 'analyze_reviews' stats.place.id %}?period={{ period }}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-warning">Проанализировать отзывы</button>
-                    </form>
-                {% endif %}
+
 
                 <!-- Сортировка -->
                 <div class="mb-4 text-center">
@@ -94,7 +84,7 @@
                                             {% endif %}
                                         </span>
                                     </div>
-
+    
                                     <!-- Дополнительная информация о заведении -->
                                     <div class="mb-2">
                                         <p><strong>Адрес:</strong> {{ stats.place.address }}</p>
@@ -168,7 +158,15 @@
 
                                     <!-- Сводка от ChatGPT -->
                                     <h5 class="custom-text-color">Анализ отзывов за выбранный период:</h5>
-                                    <p>{{ stats.summary }}</p>
+                                    
+                                    {% if stats.summary %}
+                                        <p>{{ stats.summary }}</p>
+                                    {% else %}
+                                        <form method="post" action="{% url 'analyze_reviews' stats.place.id %}?period={{ period }}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-warning">Проанализировать отзывы</button>
+                                        </form>
+                                    {% endif %}
 
                                     <!-- Статистика по тегам за выбранный период -->
                                     <h5 class="custom-text-color">Статистика по тегам за выбранный период:</h5>

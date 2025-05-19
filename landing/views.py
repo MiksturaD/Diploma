@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg
+from django.db.models.query.QuerySet import reverse
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import first
@@ -23,6 +24,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 
 from landing.utils import get_reviews_for_last_month, analyze_reviews_with_chatgpt, prepare_reviews_data, get_tag_stats
+
 
 
 def index(request):
@@ -706,3 +708,25 @@ def test_email(request):
         return HttpResponse("Письмо успешно отправлено!")
     except Exception as e:
         return HttpResponse(f"Ошибка при отправке письма: {str(e)}")
+
+
+@require_POST
+@login_required
+def analyze_reviews(request, place_id):
+    user = request.user
+    period = request.GET.get('period', '1m')
+    days = {'1m': 30, '3m': 90, '6m': 180}.get(period, 30)
+
+    try:
+        place = Place.objects.get(id=place_id, owner=user)
+    except Place.DoesNotExist:
+        return redirect('profile')
+
+    reviews = get_reviews_for_last_month(place, days=days)
+    reviews_data = prepare_reviews_data(reviews)
+    summary = analyze_reviews_with_chatgpt(reviews_data, place.name)
+
+    cache_key = f"review_summary_{place.id}_{period}"
+    cache.set(cache_key, summary, timeout=60 * 60 * 24)  # кэшируем на 1 сутки
+
+    return redirect(f"{reverse('profile')}?period={period}")

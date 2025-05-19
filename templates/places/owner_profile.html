@@ -174,33 +174,6 @@
                                             <li>Нет тегов за выбранный период</li>
                                         {% endfor %}
                                     </ul>
-
-                                    <!-- График упоминаний тегов -->
-                                    <h5 class="custom-text-color">График упоминаний тегов за выбранный период:</h5>
-                                    <canvas id="tagChart-{{ place_id }}" height="100"></canvas>
-                                    <script>
-                                        const ctx{{ place_id }} = document.getElementById('tagChart-{{ place_id }}').getContext('2d');
-                                        new Chart(ctx{{ place_id }}, {
-                                            type: 'bar',
-                                            data: {
-                                                labels: [{% for tag, count in stats.period_tag_stats.items %}'{{ tag }}',{% endfor %}],
-                                                datasets: [{
-                                                    label: 'Упоминания',
-                                                    data: [{% for tag, count in stats.period_tag_stats.items %}{{ count }},{% endfor %}],
-                                                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                                                    borderColor: 'rgba(255, 159, 64, 1)',
-                                                    borderWidth: 1
-                                                }]
-                                            },
-                                            options: {
-                                                scales: {
-                                                    y: {
-                                                        beginAtZero: true
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    </script>
                                 </li>
                             {% endfor %}
                         </ul>

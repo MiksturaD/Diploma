@@ -75,10 +75,7 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
     )
 
     try:
-        # РАССМОТРИТЕ УДАЛЕНИЕ extra_headers, ЕСЛИ ЕСТЬ ПРОБЛЕМЫ С API
-        # OpenRouter обычно требует только API-ключ.
-        # Если Referer обязателен, убедитесь, что IP 212.192.217.30 - это IP вашего сервера,
-        # с которого идут запросы к OpenRouter.
+
         response = client.chat.completions.create(
             model="mistralai/mistral-7b-instruct",
             messages=[
@@ -87,11 +84,11 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
             ],
             max_tokens=500,
             temperature=0.7,
-            # extra_headers={ # Попробуйте закомментировать, если есть сомнения
-            #     "HTTP-Referer": "http://212.192.217.30/",
-            #     "X-Title": "Gourmand",
-            # },
-            # extra_body={} # Обычно не требуется
+            extra_headers={ # Попробуйте закомментировать, если есть сомнения
+                "HTTP-Referer": "http://212.192.217.30/",
+                "X-Title": "Gourmand",
+            },
+            extra_body={} # Обычно не требуется
         )
         summary_content = response.choices[0].message.content.strip()
         logger.info(f"CHATGPT_UTIL: Successfully received summary for '{place_name}': '{summary_content[:100]}...'")

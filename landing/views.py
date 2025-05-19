@@ -215,17 +215,6 @@ def profile(request):
                         'change': current_count - last_count
                     }
 
-                # Анализ отзывов через ChatGPT
-                cache_key = f"review_summary_{place.id}_{period}"
-                cached_summary = cache.get(cache_key)
-
-                if cached_summary:
-                    summary = cached_summary
-                else:
-                    reviews = get_reviews_for_last_month(place, days=days)
-                    reviews_data = prepare_reviews_data(reviews)
-                    summary = analyze_reviews_with_chatgpt(reviews_data, place.name)
-                    cache.set(cache_key, summary, timeout=60*60*24)
 
                 # Статистика по тегам за выбранный период
                 period_reviews = get_reviews_for_last_month(place, days=days)
@@ -239,7 +228,6 @@ def profile(request):
                     'last_nps': last_nps,
                     'tag_stats': tag_stats,
                     'tag_dynamics': tag_dynamics,
-                    'summary': summary,  # Добавляем сводку от ChatGPT
                     'period_tag_stats': period_tag_stats,  # Статистика тегов за выбранный период
                 }
 

@@ -29,7 +29,13 @@ DEBUG = os.getenv('DEBUG') == 'True'
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0','212.192.217.30']
+ALLOWED_HOSTS = ['проектгурман.рф',       # Кириллический вариант
+                    'www.проектгурман.рф',   # Кириллический www
+                    'xn--80affulhbhjeun.xn--p1ai',  # Punycode вариант
+                    'www.xn--80affulhbhjeun.xn--p1ai', # Punycode www
+                    '127.0.0.1',             # Для локального доступа Gunicorn/uWSGI
+                    'localhost','212.192.217.30']
+
 CSRF_TRUSTED_ORIGINS = ['http://212.192.217.30',]
 
 

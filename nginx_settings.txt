@@ -1,0 +1,83 @@
+# Блок для HTTP (порт 80) - будет перенаправлять на HTTPS
+server {
+    listen 80;
+    listen [::]:80; # Для IPv6, если используется
+
+    # Укажите здесь ваши реальные домены, для которых получен сертификат
+    server_name проектгурман.рф www.проектгурман.рф;
+
+    # Для ACME challenge (обновление сертификатов Let's Encrypt)
+    # Убедитесь, что эта директория существует и Nginx имеет к ней доступ на чтение
+    # или настройте ваш бэкенд на обслуживание этого пути.
+    # Если Certbot настроил это иначе (например, через --nginx плагин), этот блок может быть изменен Certbot'ом.
+    location /.well-known/acme-challenge/ {
+        allow all;
+        root /var/www/html; # Или другой специальный путь для челленджей, например /var/www/letsencrypt
+    }
+
+    # Перенаправление всего остального на HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# Блок для HTTPS (порт 443)
+server {
+    # Убираем лишний listen 80 отсюда
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2; # Для IPv6, если используется
+
+    server_name проектгурман.рф www.проектгурман.рф;
+
+    ssl_certificate /etc/letsencrypt/live/xn--80affulhbhjeun.xn--p1ai/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/xn--80affulhbhjeun.xn--p1ai/privkey.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/letsencrypt/live/xn--80affulhbhjeun.xn--p1ai/chain.pem;
+
+    # HSTS - включайте после полной проверки работоспособности HTTPS
+    # add_header Strict-Transport-Security "max-age=15768000; includeSubDomains" always;
+
+    # Обслуживание статики
+    location /static/ {
+        # Убедитесь, что это правильный путь к вашей статике
+        alias /home/mascap/Gourmand/static/;
+        expires 30d; # Добавим кэширование для статики
+        add_header Cache-Control "public";
+    }
+
+    # Обслуживание медиафайлов (если они нужны)
+    location /media/ {
+        # Убедитесь, что это правильный путь к вашим медиафайлам
+        alias /home/mascap/Diploma/landing/media/; # Или /home/mascap/Gourmand/media/ если путь изменился
+        expires 30d; # Добавим кэширование для медиа
+        add_header Cache-Control "public";
+    }
+
+    # Проксирование на ваш Django/Gunicorn бэкенд
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        include proxy_params; # Убедитесь, что этот файл содержит нужные proxy_set_header
+        # Важные заголовки для проксирования, если их нет в proxy_params:
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Защита от доступа к скрытым файлам
+    location ~ /\. {
+        deny all;
+    }
+
+    access_log /var/log/nginx/gourmand.access.log;
+    error_log /var/log/nginx/gourmand.error.log;
+}

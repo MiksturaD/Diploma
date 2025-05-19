@@ -53,29 +53,26 @@ def get_tag_stats(reviews):
     return tag_counts
 
 def analyze_reviews_with_chatgpt(reviews_data, place_name):
-    """
-    Отправляет данные отзывов в модель через OpenRouter и возвращает сводку.
-    """
+    logger.info(f"CHATGPT_UTIL: Analyzing reviews for '{place_name}'")
     if reviews_data == "Нет отзывов за выбранный период.":
+        logger.info(f"CHATGPT_UTIL: No reviews for '{place_name}'. Returning message.")
         return reviews_data
 
-    # Ограничим объём данных
-    if len(reviews_data) > 3500:
+    if len(reviews_data) > 3500: # Ограничение по длине
         reviews_data = reviews_data[:3500] + "... (обрезано)"
+        logger.debug(f"CHATGPT_UTIL: Review data for '{place_name}' was truncated.")
 
     prompt = (
         f"Проанализируй отзывы о заведении '{place_name}' за выбранный период. "
-        "Каждый отзыв включает текст, NPS-оценку (от 1 до 10), теги (например, 'Кухня', 'Обслуживание') и рейтинги (положительный и отрицательный). "
-        "Составь краткую сводку в следующем формате:\n"
-        "- Средняя NPS-оценка: [укажи среднюю оценку]\n"
-        "- Положительные моменты: [что хвалят, какие теги чаще]\n"
-        "- Отрицательные моменты: [на что жалуются, какие теги связаны]\n"
-        "- Рекомендации: [1-2 рекомендации для улучшения]\n\n"
-        "Вот данные:\n\n{reviews_data}\n\n"
-        "Ответ должен быть на русском языке и не превышать 200 слов."
+        # ... (остальной ваш промпт) ...
     )
+    # logger.debug(f"CHATGPT_UTIL: Prompt for '{place_name}': {prompt}") # Может быть слишком длинным для лога
 
     try:
+        # РАССМОТРИТЕ УДАЛЕНИЕ extra_headers, ЕСЛИ ЕСТЬ ПРОБЛЕМЫ С API
+        # OpenRouter обычно требует только API-ключ.
+        # Если Referer обязателен, убедитесь, что IP 212.192.217.30 - это IP вашего сервера,
+        # с которого идут запросы к OpenRouter.
         response = client.chat.completions.create(
             model="mistralai/mistral-7b-instruct",
             messages=[
@@ -84,13 +81,15 @@ def analyze_reviews_with_chatgpt(reviews_data, place_name):
             ],
             max_tokens=500,
             temperature=0.7,
-            extra_headers={
-                "HTTP-Referer": "http://212.192.217.30/",
-                "X-Title": "Gourmand",
-            },
-            extra_body={}
+            # extra_headers={ # Попробуйте закомментировать, если есть сомнения
+            #     "HTTP-Referer": "http://212.192.217.30/",
+            #     "X-Title": "Gourmand",
+            # },
+            # extra_body={} # Обычно не требуется
         )
-        return response.choices[0].message.content.strip()
+        summary_content = response.choices[0].message.content.strip()
+        logger.info(f"CHATGPT_UTIL: Successfully received summary for '{place_name}': '{summary_content[:100]}...'")
+        return summary_content
     except Exception as e:
-        logger.exception(f"Ошибка при анализе отзывов через OpenRouter: {e}")
+        logger.exception(f"CHATGPT_UTIL: Error analyzing reviews for '{place_name}' via OpenRouter: {e}")
         return "Не удалось получить сводку по отзывам. Попробуйте позже."

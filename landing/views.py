@@ -113,41 +113,53 @@ def profile(request):
     user = request.user
 
     if user.is_gourmand():
-        profile, _ = GourmandProfile.objects.get_or_create(user=user)
-        return render(request, "gourmands/gourmand_profile.html", {"profile": profile})
+        gourmand_profile_obj, _ = GourmandProfile.objects.get_or_create(user=user) # Переименовал для ясности
+        return render(request, "gourmands/gourmand_profile.html", {"profile": gourmand_profile_obj})
 
     elif user.is_owner():
-        profile, _ = OwnerProfile.objects.get_or_create(user=user)
+        owner_profile_obj, _ = OwnerProfile.objects.get_or_create(user=user) # Переименовал для ясности
 
-        # Получаем период из GET-параметра (по умолчанию 1 месяц)
         period = request.GET.get('period', '1m')
+        sort_by = request.GET.get('sort_by', 'name') # Получаем параметр сортировки
+
         if period == '3m':
             days = 90
         elif period == '6m':
             days = 180
-        else:
+        else: # '1m' или значение по умолчанию
             days = 30
 
         today = timezone.now()
         current_month_start = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         last_month_start = current_month_start - relativedelta(months=1)
-        last_month_end = current_month_start - timezone.timedelta(seconds=1)
+        # Корректное определение конца прошлого месяца
+        last_month_end = current_month_start - timezone.timedelta(microseconds=1)
 
-        # Получаем заведения владельца
-        places = Place.objects.filter(owner=user)
-        place_stats = {}
 
-        if places.exists():
-            for place in places:
-                # Общее количество ответов
+        places_query = Place.objects.filter(owner=user)
+
+        # Применение сортировки
+        if sort_by == 'rating':
+            places_query = places_query.order_by('-rating') # От большего к меньшему
+        elif sort_by == 'reviews':
+            # Аннотируем количество отзывов для каждого заведения и сортируем
+            places_query = places_query.annotate(num_reviews_calculated=Count('review')).order_by('-num_reviews_calculated')
+        else: # 'name' или значение по умолчанию
+            places_query = places_query.order_by('name')
+
+
+        place_stats_data = {} # Используем другое имя для словаря статистики
+
+        if places_query.exists():
+            for place in places_query:
+                # ... (ваш существующий код для NPS и тегов остается здесь) ...
                 total_responses = NPSResponse.objects.filter(review__place=place).count()
                 promoters = NPSResponse.objects.filter(review__place=place, score__gte=9).count()
                 detractors = NPSResponse.objects.filter(review__place=place, score__lte=6).count()
                 nps = (
-                    promoters / total_responses * 100 - detractors / total_responses * 100
+                    (promoters / total_responses * 100) - (detractors / total_responses * 100)
                 ) if total_responses > 0 else 0
 
-                # NPS за текущий месяц
                 current_total = NPSResponse.objects.filter(
                     review__place=place,
                     created_at__gte=current_month_start
@@ -163,10 +175,9 @@ def profile(request):
                     score__lte=6
                 ).count()
                 current_nps = (
-                    current_promoters / current_total * 100 - current_detractors / current_total * 100
+                    (current_promoters / current_total * 100) - (current_detractors / current_total * 100)
                 ) if current_total > 0 else None
 
-                # NPS за прошлый месяц
                 last_total = NPSResponse.objects.filter(
                     review__place=place,
                     created_at__gte=last_month_start,
@@ -185,22 +196,21 @@ def profile(request):
                     score__lte=6
                 ).count()
                 last_nps = (
-                    last_promoters / last_total * 100 - last_detractors / last_total * 100
+                    (last_promoters / last_total * 100) - (last_detractors / last_total * 100)
                 ) if last_total > 0 else None
 
-                # Топ-теги за всё время
-                tag_stats = NPSResponse.objects.filter(review__place=place).values('tags__label').annotate(
+                tag_stats_list = NPSResponse.objects.filter(review__place=place).values('tags__label').annotate(
                     tag_count=Count('tags__label')
                 ).order_by('-tag_count')[:3]
-                # Теги за текущий месяц
-                current_month_tags = NPSResponse.objects.filter(
+
+                current_month_tags_list = NPSResponse.objects.filter(
                     review__place=place,
                     created_at__gte=current_month_start
                 ).values('tags__label').annotate(
                     tag_count=Count('tags__label')
                 ).order_by('-tag_count')
-                # Теги за прошлый месяц
-                last_month_tags = NPSResponse.objects.filter(
+
+                last_month_tags_list = NPSResponse.objects.filter(
                     review__place=place,
                     created_at__gte=last_month_start,
                     created_at__lte=last_month_end
@@ -208,54 +218,64 @@ def profile(request):
                     tag_count=Count('tags__label')
                 ).order_by('-tag_count')
 
-                # Динамика тегов
-                tag_dynamics = {}
-                for tag in set(
-                        [t['tags__label'] for t in current_month_tags] + [t['tags__label'] for t in last_month_tags]):
-                    current_count = next((t['tag_count'] for t in current_month_tags if t['tags__label'] == tag), 0)
-                    last_count = next((t['tag_count'] for t in last_month_tags if t['tags__label'] == tag), 0)
-                    tag_dynamics[tag] = {
+                tag_dynamics_dict = {}
+                # Собираем все уникальные теги, которые были в текущем или прошлом месяце
+                all_tags_for_dynamics = set(
+                    [t['tags__label'] for t in current_month_tags_list if t['tags__label']] +
+                    [t['tags__label'] for t in last_month_tags_list if t['tags__label']]
+                )
+                for tag_label in all_tags_for_dynamics:
+                    current_count = next((t['tag_count'] for t in current_month_tags_list if t['tags__label'] == tag_label), 0)
+                    last_count = next((t['tag_count'] for t in last_month_tags_list if t['tags__label'] == tag_label), 0)
+                    tag_dynamics_dict[tag_label] = {
                         'current': current_count,
                         'last': last_count,
                         'change': current_count - last_count
                     }
 
+                period_reviews_qs = get_reviews_for_last_month(place, days=days)
+                period_tag_stats_dict = get_tag_stats(period_reviews_qs)
 
-                # Статистика по тегам за выбранный период
-                period_reviews = get_reviews_for_last_month(place, days=days)
-                period_tag_stats = get_tag_stats(period_reviews)
 
-                place_stats[place.id] = {
+                # ---> НАЧАЛО: ИЗВЛЕЧЕНИЕ СВОДКИ ИЗ КЭША <---
+                summary_cache_key = f"review_summary_{place.id}_{period}"
+                summary_from_cache = cache.get(summary_cache_key)
+                logger.debug(f"PROFILE: For place {place.name} (ID: {place.id}), period {period}, trying cache key {summary_cache_key}. Found: {summary_from_cache is not None}")
+                # ---> КОНЕЦ: ИЗВЛЕЧЕНИЕ СВОДКИ ИЗ КЭША <---
+
+                place_stats_data[place.id] = {
                     'place': place,
                     'nps': nps,
                     'total_responses': total_responses,
                     'current_nps': current_nps,
                     'last_nps': last_nps,
-                    'tag_stats': tag_stats,
-                    'tag_dynamics': tag_dynamics,
-                    'period_tag_stats': period_tag_stats,  # Статистика тегов за выбранный период
+                    'tag_stats': tag_stats_list,
+                    'tag_dynamics': tag_dynamics_dict,
+                    'period_tag_stats': period_tag_stats_dict,
+                    'summary': summary_from_cache,  # <--- ДОБАВЛЯЕМ СВОДКУ В КОНТЕКСТ ЗАВЕДЕНИЯ
                 }
 
-        # Средний NPS по всем заведениям
-        total_responses = NPSResponse.objects.filter(review__place__owner=user).count()
-        total_promoters = NPSResponse.objects.filter(review__place__owner=user, score__gte=9).count()
-        total_detractors = NPSResponse.objects.filter(review__place__owner=user, score__lte=6).count()
-        average_nps = (
-            total_promoters / total_responses * 100 - total_detractors / total_responses * 100
-        ) if total_responses > 0 else 0
+        # Расчет среднего NPS
+        avg_nps_total_responses = NPSResponse.objects.filter(review__place__owner=user).count()
+        avg_nps_total_promoters = NPSResponse.objects.filter(review__place__owner=user, score__gte=9).count()
+        avg_nps_total_detractors = NPSResponse.objects.filter(review__place__owner=user, score__lte=6).count()
+        average_nps_calculated = (
+            (avg_nps_total_promoters / avg_nps_total_responses * 100) - (avg_nps_total_detractors / avg_nps_total_responses * 100)
+        ) if avg_nps_total_responses > 0 else 0
 
         context = {
             'user': user,
-            'profile': profile,
-            'place_stats': place_stats,
-            'current_month': current_month_start.strftime('%Y-%m'),
-            'last_month': last_month_start.strftime('%Y-%m'),
-            'average_nps': average_nps,
-            'period': period,  # Передаём период для шаблона
+            'profile': owner_profile_obj, # Используем переименованную переменную
+            'place_stats': place_stats_data, # Передаем переименованный словарь
+            'current_month': current_month_start.strftime('%B %Y'), # Формат "Май 2024"
+            'last_month': last_month_start.strftime('%B %Y'),
+            'average_nps': average_nps_calculated,
+            'period': period,
+            'sort_by': sort_by, # Передаем для сохранения состояния селектора сортировки
         }
         return render(request, "places/owner_profile.html", context)
 
-    return redirect("index")
+    return redirect("index") # Для пользователей без роли гурмана или владельца
 
 
 @login_required
@@ -717,19 +737,29 @@ def test_email(request):
 @login_required
 def analyze_reviews(request, place_id):
     user = request.user
-    period = request.GET.get('period', '1m')
+    period = request.GET.get('period', '1m') # period передается как GET-параметр в action формы
     days = {'1m': 30, '3m': 90, '6m': 180}.get(period, 30)
+    logger.info(f"ANALYZE_REVIEWS: Called for place_id: {place_id}, owner: {user.username}, period: {period}")
 
     try:
         place = Place.objects.get(id=place_id, owner=user)
     except Place.DoesNotExist:
+        logger.warning(f"ANALYZE_REVIEWS: Place with id {place_id} not found for owner {user.username}")
+        # Можно добавить сообщение для пользователя
+        # messages.error(request, "Заведение не найдено.")
         return redirect('profile')
 
-    reviews = get_reviews_for_last_month(place, days=days)
-    reviews_data = prepare_reviews_data(reviews)
-    summary = analyze_reviews_with_chatgpt(reviews_data, place.name)
+    reviews_qs = get_reviews_for_last_month(place, days=days)
+    reviews_data_str = prepare_reviews_data(reviews_qs)
+    logger.debug(f"ANALYZE_REVIEWS: Prepared reviews data for {place.name} (length: {len(reviews_data_str)}): '{reviews_data_str[:200]}...'")
+
+    summary_text = analyze_reviews_with_chatgpt(reviews_data_str, place.name)
+    logger.info(f"ANALYZE_REVIEWS: Received summary for {place.name}: '{summary_text[:100]}...'")
 
     cache_key = f"review_summary_{place.id}_{period}"
-    cache.set(cache_key, summary, timeout=60 * 60 * 24)  # кэшируем на 1 сутки
+    cache.set(cache_key, summary_text, timeout=60 * 60 * 24)
+    logger.info(f"ANALYZE_REVIEWS: Summary for {place.name} (key: {cache_key}) saved to cache.")
 
+    # Редирект обратно на страницу профиля с сохранением параметра периода
+    # sort_by здесь не передается, т.к. он управляется GET-формой на странице профиля
     return redirect(f"{reverse('profile')}?period={period}")

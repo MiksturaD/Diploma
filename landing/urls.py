@@ -23,7 +23,6 @@ urlpatterns = [
     path('reviews/create/', views.create_review, name='create_review'),
     path('reviews/<slug:slug>/vote/<str:vote_type>/', views.vote_review, name='vote_review'),
     path('reviews/<slug:slug>/', views.review, name='review'),
-    path('about/', views.about, name='about'),
     path('contacts/', views.contacts, name='contacts'),
     path('gourmands/', views.gourmands, name='gourmands'),
     path('gourmands/<slug:slug>/', views.gourmand, name='gourmand'),

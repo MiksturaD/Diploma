@@ -1,6 +1,6 @@
 # Блок для HTTP (порт 80) - будет перенаправлять на HTTPS
 server {
-    listen 80;
+    listen 80 default_server;
     listen [::]:80; # Для IPv6, если используется
 
     # Укажите здесь ваши реальные домены, для которых получен сертификат
@@ -24,8 +24,8 @@ server {
 # Блок для HTTPS (порт 443)
 server {
     # Убираем лишний listen 80 отсюда
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2; # Для IPv6, если используется
+    listen 443 ssl http2 default_server;
+    listen [::]:443 ssl http2 default_server; # Для IPv6, если используется
 
     server_name проектгурман.рф www.проектгурман.рф;
 

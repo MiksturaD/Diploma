@@ -50,7 +50,15 @@
                         <input type="hidden" name="period" value="{{ period }}">
                     </form>
                 </div>
-
+                <!-- Средний NPS по всем заведениям -->
+                {% if place_stats %}
+                    <div class="mb-4">
+                        <h3 class="custom-text-color">Сводная статистика</h3>
+                        <div class="card bg-dark text-white shadow p-3">
+                            <p><strong>Средний NPS по всем заведениям:</strong> {{ average_nps|floatformat:1 }}%</p>
+                        </div>
+                    </div>
+                {% endif %}
                 <!-- Список заведений с динамикой NPS и анализом -->
                 <div class="mb-4 mt-4 owner-profile-places">
                     <h3 class="custom-text-color">Ваши заведения</h3>
@@ -182,15 +190,7 @@
                     {% endif %}
                 </div>
 
-                <!-- Средний NPS по всем заведениям -->
-                {% if place_stats %}
-                    <div class="mb-4">
-                        <h3 class="custom-text-color">Сводная статистика</h3>
-                        <div class="card bg-dark text-white shadow p-3">
-                            <p><strong>Средний NPS по всем заведениям:</strong> {{ average_nps|floatformat:1 }}%</p>
-                        </div>
-                    </div>
-                {% endif %}
+                
             </div>
         </div>
     </div>

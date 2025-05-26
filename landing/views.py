@@ -667,9 +667,32 @@ def create_review(request):
     return render(request, "review/create.html", {"form": form}) # Отображаем страницу создания отзыва
 
 
-# Представление для страницы контактов
 def contacts(request):
-  return render(request, 'landing/contacts.html') # Отображает шаблон 'landing/contacts.html'
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        subject = f"Новое сообщение с сайта от {name}"
+        body = (
+            f"Имя: {name}\n"
+            f"Email: {email}\n\n"
+            f"Сообщение:\n{message}"
+        )
+
+        try:
+            send_mail(
+                subject=subject,
+                message=body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=['aagubanoff@yandex.ru'],
+                fail_silently=False,
+            )
+            messages.success(request, 'Сообщение успешно отправлено!')
+        except Exception as e:
+            messages.error(request, f'Ошибка при отправке: {str(e)}')
+
+    return render(request, 'landing/contacts.html')
 
 # Представление для отображения списка гурманов
 def gourmands(request):
@@ -747,35 +770,6 @@ def vote_review(request, slug, vote_type): # Принимает 'slug' отзы�
 
     return redirect('review', slug=review.slug)  # Перенаправляем обратно на страницу отзыва
 
-# Отправка сообщения в разделе контакты
-def contacts_view(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-
-        # Собираем текст письма
-        email_subject = f"Новое сообщение с сайта от {name}"
-        email_body = (
-            f"Имя: {name}\n"
-            f"Email: {email}\n\n"
-            f"Сообщение:\n{message}"
-        )
-
-        try:
-            send_mail(
-                subject=email_subject,
-                message=email_body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=['aagubanoff@yandex.ru'],  # Замени на нужный email
-                fail_silently=False,
-            )
-            messages.success(request, 'Сообщение успешно отправлено!')
-            return redirect('contacts')  # Или куда нужно
-        except Exception as e:
-            messages.error(request, f'Ошибка при отправке: {str(e)}')
-
-    return render(request, 'landing/contacts.html')
 
 # Представление для анализа отзывов с помощью ChatGPT. Доступно только POST-запросами и авторизованным пользователям.
 @require_POST # Декоратор, разрешающий только POST-запросы

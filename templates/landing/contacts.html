@@ -28,6 +28,14 @@
                     <div class="button_user pt-4 d-flex justify-content-center">
                         <button type="submit" class="custom-button custom-text-color bg_dark">Отправить</button>
                     </div>
+                        <div class="mb-3">
+                            <label class="form-label">Проверка</label>
+                            <div id="captcha-container" class="smart-captcha" data-sitekey="{{ settings.YANDEX_CAPTCHA_CLIENT_KEY }}"
+                                                                            data-callback="smartCaptchaCallback"></div>
+                        
+                            <input type="hidden" name="captcha" id="id_captcha">
+                            {{ form.captcha.errors }}
+                        </div>
             </form>
         </div>
 
@@ -59,6 +67,25 @@
     </div>
 </div>
     {% include 'includes/footer.html' %}
+    <script>
+    window.smartCaptchaCallback = function(token) {
+        console.log("📌 Капча сработала, токен:", token);
+        document.getElementById('id_captcha').value = token;
+    };
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const captchaToken = document.getElementById('id_captcha').value;
+        if (!captchaToken) {
+            event.preventDefault();
+            alert('Пожалуйста, пройдите проверку капчи.');
+        }
+        // Отключаем кнопку отправки
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Отправка...';
+    });
+</script>
+<script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 {% endblock %}
 
 {% include 'includes/footer.html' %}

@@ -30,14 +30,7 @@ from landing.utils import get_reviews_for_last_month, analyze_reviews_with_chatg
 def index(request):
   return render(request, 'landing/index.html') # Отображает HTML-шаблон 'landing/index.html'
 
-# Представление 'main', которое на данный момент ничего не делает и возвращает None.
-# Возможно, это заглушка или устаревшая функция.
-def main(request):
-  return None # Ничего не возвращает, что приведет к ошибке, если этот URL будет вызван. Следует вернуть HttpResponse или отрендерить шаблон.
-
 logger = logging.getLogger(__name__) # Инициализация логгера для текущего модуля (views.py)
-
-# from django.conf import settings # Этот импорт уже был выше, дублируется
 
 # Представление для регистрации нового пользователя
 def signup(request):
@@ -692,7 +685,9 @@ def contacts(request):
         except Exception as e:
             messages.error(request, f'Ошибка при отправке: {str(e)}')
 
-    return render(request, 'landing/contacts.html')
+    return render(request, 'landing/contacts.html', {
+        'YANDEX_CAPTCHA_CLIENT_KEY': settings.YANDEX_CAPTCHA_CLIENT_KEY
+    })
 
 # Представление для отображения списка гурманов
 def gourmands(request):

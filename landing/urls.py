@@ -3,7 +3,6 @@ from landing import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('main/', views.main, name='main'),
     path('profile/', views.profile, name='profile'),
     path("profile/edit/", views.edit_profile, name="edit_profile"),
     path('signup/', views.signup, name='signup'),

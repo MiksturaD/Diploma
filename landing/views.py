@@ -12,6 +12,7 @@ from django.core.paginator import Paginator # Класс для разбиени
 from django.views.decorators.http import require_POST # Декоратор для ограничения доступа к представлению только POST-запросами
 from django.db.models import Q # Объект Q для создания сложных ORM-запросов с условиями ИЛИ/И
 from django.urls import reverse # Функция для получения URL по имени маршрута (name в urls.py)
+from django.contrib import messages # Функция для отправки сообщений
 
 from django.utils import timezone # Утилиты Django для работы с часовыми поясами, предпочтительнее datetime.datetime
 # from dateutil.relativedelta import relativedelta # Этот импорт уже был выше, дублируется
@@ -746,18 +747,35 @@ def vote_review(request, slug, vote_type): # Принимает 'slug' отзы�
 
     return redirect('review', slug=review.slug)  # Перенаправляем обратно на страницу отзыва
 
-# Тестовое представление для проверки отправки email
-def test_email(request):
-    try:
-        send_mail(
-            subject='Тестовое письмо от Проекта Гурман', # Тема письма
-            message='Это тестовое письмо. Если ты его получил, значит всё работает!', # Тело письма
-            from_email=None,  # Используется DEFAULT_FROM_EMAIL из settings.py
-            recipient_list=['thereal@mail.ru'],  # ЗАМЕНИТЬ НА РЕАЛЬНЫЙ EMAIL ДЛЯ ТЕСТА
+# Отправка сообщения в разделе контакты
+def contacts_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        # Собираем текст письма
+        email_subject = f"Новое сообщение с сайта от {name}"
+        email_body = (
+            f"Имя: {name}\n"
+            f"Email: {email}\n\n"
+            f"Сообщение:\n{message}"
         )
-        return HttpResponse("Письмо успешно отправлено!") # Сообщение об успехе
-    except Exception as e: # Ловим любые ошибки при отправке
-        return HttpResponse(f"Ошибка при отправке письма: {str(e)}") # Сообщение об ошибке
+
+        try:
+            send_mail(
+                subject=email_subject,
+                message=email_body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=['aagubanoff@yandex.ru'],  # Замени на нужный email
+                fail_silently=False,
+            )
+            messages.success(request, 'Сообщение успешно отправлено!')
+            return redirect('contacts')  # Или куда нужно
+        except Exception as e:
+            messages.error(request, f'Ошибка при отправке: {str(e)}')
+
+    return render(request, 'landing/contacts.html')
 
 # Представление для анализа отзывов с помощью ChatGPT. Доступно только POST-запросами и авторизованным пользователям.
 @require_POST # Декоратор, разрешающий только POST-запросы

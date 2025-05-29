@@ -194,7 +194,7 @@ DOMAIN = 'gourmand-project.com'
 YANDEX_CAPTCHA_CLIENT_KEY = os.getenv('YANDEX_CAPTCHA_CLIENT_KEY')
 YANDEX_CAPTCHA_SERVER_KEY = os.getenv('YANDEX_CAPTCHA_SERVER_KEY')
 
-OPENAI_API_KEY = os.getenv('your-openai-api-key')  # Замени на свой ключ
+OPENAI_API_KEY = os.getenv('your-openai-api-key')
 
 CACHES = {
     'default': {

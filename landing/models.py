@@ -1,27 +1,19 @@
 # Импорт базового класса пользователя и менеджера из Django для кастомной аутентификации.
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-
 # Импорт миксина PermissionsMixin для работы с правами доступа.
 from django.contrib.auth.models import PermissionsMixin
-
 # Импорт базовых моделей и полей из Django для создания структуры базы данных.
 from django.db import models
-
 # Импорт валидатора для проверки расширений файлов.
 from django.core.validators import FileExtensionValidator
-
 # Импорт функции Sum для агрегации данных (например, подсчёт рейтингов).
 from django.db.models import Sum
-
 # Импорт утилиты slugify для генерации slug на основе текста.
 from django.utils.text import slugify
-
 # Импорт pytils_slugify для транслитерации кириллических символов в slug.
 from pytils.translit import slugify as pytils_slugify  # Для транслитерации кириллицы
-
 # Импорт Decimal для работы с десятичными числами (например, рейтингами).
 from decimal import Decimal
-
 # Импорт настроек Django для доступа к модели пользователя.
 from django.conf import settings
 
